@@ -25,15 +25,7 @@ class User {
         lastUpdated nullable: false, blank: false
     }
 
-    def beforeInsert() {
-        if (!dateCreated) {
-            dateCreated = new Date()
-        }
-    }
-
-    def beforeUpdate() {
-        if (!lastUpdated) {
-            lastUpdated = new Date()
-        }
+    static mapping = {
+        autoTimestamp true
     }
 }

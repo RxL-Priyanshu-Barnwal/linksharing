@@ -18,13 +18,18 @@ class Subscription {
     }
 
     static mapping = {
-        id composite: ['topic', 'user']
+        autoTimestamp true
     }
-
-    def beforeInsert() {
-        if (!dateCreated) {
-            dateCreated = new Date()
-        }
-    }
-
 }
+
+/*
+    static mapping = {
+        id composite: ['topic', 'user']
+    } this way is more explicit and treats user and topic combination as primary key (composite key)
+
+    Alternatively,
+    static constraints = {
+        ...
+        unique: ['topic', 'user']
+    } this will enforce uniqueness at an application level
+ */

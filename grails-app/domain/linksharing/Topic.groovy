@@ -19,15 +19,7 @@ class Topic {
         visibility nullable: false
     }
 
-    def beforeInsert() {
-        if (!dateCreated) {
-            dateCreated = new Date()
-        }
-    }
-
-    def beforeUpdate() {
-        if (!lastUpdated) {
-            lastUpdated = new Date()
-        }
+    static mapping = {
+        autoTimestamp true
     }
 }
