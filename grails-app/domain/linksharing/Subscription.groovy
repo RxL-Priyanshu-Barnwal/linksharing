@@ -10,6 +10,8 @@ class Subscription {
 
     Seriousness seriousness = Seriousness.CASUAL
 
+    static belongsTo = [topic: Topic, user: User]
+
     static constraints = {
         topic nullable: false
         user nullable: false
@@ -19,6 +21,7 @@ class Subscription {
 
     static mapping = {
         autoTimestamp true
+        id composite: ['topic', 'user']
     }
 }
 

@@ -12,6 +12,8 @@ class User {
     Date dateCreated
     Date lastUpdated
 
+    static hasMany = [resources: Resource, ratings: ResourceRating, subscriptions: Subscription]
+
     static constraints = {
         email nullable: false, blank: false, unique: true
         username nullable: false, blank: false, unique: true, minSize: 6
