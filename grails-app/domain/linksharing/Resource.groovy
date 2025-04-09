@@ -11,14 +11,16 @@ class Resource {
     static hasMany = [ratings: ResourceRating]
 
     static constraints = {
-        description blank:false, maxSize:1000
-        user nullable:false
-        topic nullable:false, unique:true
-        dateCreated nullable:false
-        lastUpdated nullable:false
+        description blank: false, maxSize: 1000, unique: 'topic'
+        user nullable: false
+        topic nullable: false
+        dateCreated nullable: false
+        lastUpdated nullable: false
     }
 
     static mapping = {
         autoTimestamp true
     }
+
+    // define methods to update descriptions
 }

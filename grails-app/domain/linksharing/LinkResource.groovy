@@ -1,9 +1,7 @@
 package linksharing
 
-class LinkResource {
+class LinkResource extends Resource {
     String url
-
-    static belongsTo = [resource: Resource]
 
     static constraints = {
         url nullable: false, blank: false

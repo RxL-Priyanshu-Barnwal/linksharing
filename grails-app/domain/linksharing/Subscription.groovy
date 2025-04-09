@@ -17,11 +17,11 @@ class Subscription {
         user nullable: false
         seriousness nullable: false
         dateCreated nullable: false
+        unique: ['topic', 'user']
     }
 
     static mapping = {
         autoTimestamp true
-        id composite: ['topic', 'user']
     }
 }
 
@@ -35,4 +35,4 @@ class Subscription {
         ...
         unique: ['topic', 'user']
     } this will enforce uniqueness at an application level
- */
+*/

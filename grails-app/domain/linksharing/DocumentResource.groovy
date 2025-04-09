@@ -1,8 +1,9 @@
 package linksharing
 
-class DocumentResource {
+class DocumentResource extends Resource{
     String filePath
 
     static constraints = {
+        filePath nullable: false, blank: false
     }
 }

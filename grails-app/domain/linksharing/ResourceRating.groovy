@@ -12,8 +12,4 @@ class ResourceRating {
         user nullable:false, unique:true
         score nullable:false, size: 1..5
     }
-
-    static mapping = {
-        id composite = ['resource', 'user']
-    }
 }
