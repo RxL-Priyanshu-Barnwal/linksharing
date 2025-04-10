@@ -1,11 +1,13 @@
 package linksharing
 
-class Subscription {
+class Subscription implements Serializable {
     Topic topic
     User user
     enum Seriousness {
         CASUAL, SERIOUS, VERY_SERIOUS
     }
+    String userName
+    String topicName
     Date dateCreated
 
     Seriousness seriousness = Seriousness.CASUAL
@@ -17,18 +19,20 @@ class Subscription {
         user nullable: false
         seriousness nullable: false
         dateCreated nullable: false
-        unique: ['topic', 'user']
+//        unique: ['topic', 'user']
     }
 
     static mapping = {
         autoTimestamp true
+        id composite: ['userName', 'topicName']
     }
 }
 
 /*
     static mapping = {
         id composite: ['topic', 'user']
-    } this way is more explicit and treats user and topic combination as primary key (composite key)
+    } this way is more explicit and treats user and topic combination as primary key (composite key).
+
 
     Alternatively,
     static constraints = {

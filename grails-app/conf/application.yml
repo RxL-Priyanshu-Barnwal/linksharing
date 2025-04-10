@@ -54,7 +54,7 @@ dataSource:
   password: ''
   pooled: true
   jmxExport: true
-  dbCreate: update
+  dbCreate: create-drop
 hibernate:
   cache:
     queries: false

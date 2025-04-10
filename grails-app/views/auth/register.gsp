@@ -64,24 +64,6 @@
             border-color: #0056b3;
         }
 
-        .common-card {
-            background-color: #2c3e50; /* Slightly darker background for common card */
-            color: #ecf0f1;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-            width: 400px;
-            max-width: 90%;
-        }
-
-        .common-card .card-header {
-            background-color: #34495e;
-            border-bottom: 1px solid #495057;
-        }
-
-        .common-card .card-title {
-            margin-bottom: 0;
-        }
     </style>
 </head>
 <body>
