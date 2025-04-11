@@ -20,6 +20,7 @@ class Resource {
 
     static mapping = {
         autoTimestamp true
+        table 'resource_table'
     }
 
     // define methods to update descriptions

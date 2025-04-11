@@ -31,6 +31,7 @@ class User {
 
     static mapping = {
         autoTimestamp true
+        table 'user_table'
     }
 
     // define methods to update firstName, lastName, photo

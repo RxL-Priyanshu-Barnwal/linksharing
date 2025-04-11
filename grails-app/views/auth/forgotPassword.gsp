@@ -15,14 +15,6 @@
             padding: 20px; /* Add some overall padding */
         }
 
-        .left-side {
-            flex: 1; /* Takes up available space */
-            display: flex;
-            justify-content: center; /* Center content horizontally */
-            align-items: center; /* Center content vertically */
-            padding-right: 20px; /* Space between cards */
-        }
-
         .right-side {
             flex: 1; /* Takes up available space */
             display: flex;

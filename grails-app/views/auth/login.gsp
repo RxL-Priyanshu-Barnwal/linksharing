@@ -67,7 +67,7 @@
 </head>
 <body>
 <div class="left-side">
-    <g:render template="/commonCard"/>
+    <g:render template="/auth/commonCard"/>
 </div>
 <div class="right-side">
     <div class="login-container">

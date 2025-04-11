@@ -1,7 +1,7 @@
 <div class="container my-4" style="width: 70%;">
 
     <div class="mb-5 shadow-lg" style="background-color: #212529; border-radius: 10px;">
-        <h2 class="text-white p-2" style="background-color: #1C1F24; border-top-left-radius: 10px; border-top-right-radius: 10px">Top Posts</h2>
+        <h2 class="text-white p-2" style="background-color: #1C1F24; border-top-left-radius: 10px; border-top-right-radius: 10px">Trending Posts</h2>
 
         <div class="row p-3"> <div class="col-12 d-flex align-items-center overflow-hidden" style="background-color: #212529; border-radius: 8px; padding: 10px;">
             <div style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; margin-right: 15px;">
