@@ -73,42 +73,58 @@
 <div class="right-side">
     <div class="register-container">
         <h2 class="text-center mb-4">Register</h2>
-        <form>
+
+<!--        show errors-->
+        <g:if test="${flash.error}">
+            <div class="alert alert-danger">${flash.error}</div>
+        </g:if>
+
+        <g:hasErrors bean="${user}">
+            <div class="alert alert-danger">
+                <ul>
+                    <g:eachError bean="${user}" var="err">
+                        <li><g:message error="${err}" /></li>
+                    </g:eachError>
+                </ul>
+            </div>
+        </g:hasErrors>
+
+        <g:form controller="auth" action="registerUser">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="firstName">First Name</label>
-                    <input type="text" class="form-control" id="firstName" placeholder="Enter first name">
+                    <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Enter first name" value="${user?.firstName}">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="lastName">Last Name</label>
-                    <input type="text" class="form-control" id="lastName" placeholder="Enter last name">
+                    <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Enter last name" value="${user?.lastName}">
                 </div>
             </div>
             <div class="form-group">
                 <label for="email">Email address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email">
             </div>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter a username">
+                <input type="text" class="form-control" name="username" id="username" placeholder="Enter a username">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password">
             </div>
             <div class="form-group">
                 <label for="confirmPassword">Confirm Password</label>
-                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
+                <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm your password">
             </div>
             <div class="form-group">
                 <label for="photo">Photo</label>
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="photo">
+                    <input type="file" class="custom-file-input" name="photo" id="photo" value="${user?.photo}">
                     <label class="custom-file-label" for="photo">Choose file</label>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Register</button>
-        </form>
+        </g:form>
         <p class="mt-2 text-center">Already have an account? <g:link uri="/auth/login" style="color: #f8f9fa;">Login</g:link></p>
     </div>
 </div>

@@ -34,7 +34,7 @@
                     <a class="nav-link dropdown-toggle profile-name " href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="profile-container">
                             <img src="" alt="Profile" class="profile-pic">
-                            John Doe
+                            ${session.user.firstName} ${session.user.lastName}
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -43,7 +43,11 @@
                         <li><a class="dropdown-item" href="#"><i class="bi bi-tags"></i> Topic</a></li>
                         <li><a class="dropdown-item" href="#"><i class="bi bi-chat-left-text"></i> Posts</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        <li>
+                            <g:link controller="auth" action="logout" class="dropdown-item">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </g:link>
+                        </li>
                     </ul>
                 </div>
             </div>

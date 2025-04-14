@@ -1,20 +1,18 @@
 package linksharing
 
-import java.sql.Blob
-
 class User {
     String email
     String username
     String password
     String firstName
     String lastName
-    Blob photo
+    byte[] photo
     Boolean admin = false
     Boolean active = true
     Date dateCreated
     Date lastUpdated
 
-    static hasMany = [topic: Topic, resources: Resource, ratings: ResourceRating, subscriptions: Subscription]
+    static hasMany = [topics: Topic, resources: Resource, ratings: ResourceRating, subscriptions: Subscription]
 
     static constraints = {
         email nullable: false, blank: false, unique: true
@@ -22,11 +20,9 @@ class User {
         password nullable: false, blank: false, minSize: 6
         firstName nullable: false, blank: false
         lastName nullable: true, blank: true
-        photo nullable: false
+        photo nullable: true
         admin nullable: false
         active nullable: false
-        dateCreated nullable: false, blank: false
-        lastUpdated nullable: false, blank: false
     }
 
     static mapping = {
@@ -35,5 +31,4 @@ class User {
     }
 
     // define methods to update firstName, lastName, photo
-
 }

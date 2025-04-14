@@ -1,51 +1,47 @@
 package linksharing
-//import org.springframework.security.crypto.password.PasswordEncoder
-//import javax.security.sasl.AuthenticationException
 
 class AuthController {
+    AuthService authService
+
     def login() { }
 
     def register() { }
 
     def forgotPassword() { }
 
-//    def authenticate() {
-//        def loginIdentifier = params.loginIdentifier // Could be username or email
-//        def password = params.password
-//
-//        if (!loginIdentifier || !password) {
-//            flash.error = message(code: 'auth.login.required')
-//            redirect action: 'login'
-//            return
-//        }
-//
-//        try {
-//            // Delegate authentication to your AuthService
-//            def user = authService.authenticateUser(loginIdentifier, password)
-//
-//            if (user) {
-//                // Authentication successful
-//                // For Spring Security integration, you might need to manually
-//                // create an Authentication object and set it in the SecurityContextHolder
-//                // based on the authenticated 'user' details.
-//
-//                // Example using a simple session flag (adjust as needed for Spring Security)
-//                session.setAttribute("loggedInUserId", user.id)
-//                redirect uri: '/dashboard' // Redirect to a protected area
-//                return
-//            } else {
-//                // Authentication failed
-//                flash.error = message(code: 'auth.login.failed')
-//                redirect action: 'login'
-//                return
-//            }
-//
-//        } catch (AuthenticationException e) {
-//            // Handle specific authentication exceptions
-//            flash.error = message(code: 'auth.login.failed', args: [e.getMessage()])
-//            redirect action: 'login'
-//            return
-//        }
-//    }
+    def registerUser() {
+        println(params)
 
+        def res = authService.registerUser(params)
+
+        if(res.success) {
+            println("Registration Successful")
+            redirect(controller: "auth", action: "login")
+        }
+        else {
+            flash.error = res.message
+            render(view: "register", model: [user: res.user])
+        }
+    }
+
+    def authenticateUser() {
+        println(params)
+
+        def res = authService.authenticateUser(params.username, params.password, session)
+
+        if(res) {
+            println("Login Successful")
+            redirect(controller: "dashboard", action: "index")
+        }
+        else {
+            flash.message = "Invalid username or password"
+            redirect action: "login"
+        }
+    }
+
+    def logout() {
+        session.invalidate()
+        println("Logged out successfully")
+        redirect(controller:"auth", action:"login")
+    }
 }

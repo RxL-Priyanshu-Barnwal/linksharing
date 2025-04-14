@@ -10,13 +10,13 @@
 
     <style>
         body {
-            background-color: #101214; /* Slightly darker background for contrast */
+            background-color: #101214;
         }
 
-        /* Custom Card Styles */
+        /* Card Styles */
         .custom-card {
-            background-color: #212529 !important; /* Use !important to override Bootstrap if needed */
-            color: #f8f9fa; /* Light text */
+            background-color: #212529 !important; /* Use !important to override Bootstrap */
+            color: #f8f9fa;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
 
@@ -41,11 +41,6 @@
             min-width: 0; /* Prevents content overflow issues in flex item */
         }
 
-        /* Add some basic scroll for subscription posts if needed */
-        .subscription-body {
-            /* max-height: 400px; /* Example fixed height */
-            /* overflow-y: auto; /* Enable scroll if max-height is set */
-        }
 
         /* Style for individual posts within subscription card */
         .subscription-post {
@@ -77,11 +72,11 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-md-3">
-                            <img src="your-image-url.jpg" alt="User Profile Picture" class="img-fluid">
+                            <img src="" alt="User Profile Picture" class="img-fluid">
                         </div>
                         <div class="col-md-9">
-                            <h5 class="card-title">John Doe</h5>
-                            <p class="card-text small mb-4" style="color: #808080;">johndoe@example.com</p>
+                            <h5 class="card-title">${session.user.firstName} ${session.user.lastName}</h5>
+                            <p class="card-text small mb-4" style="color: #808080;">${session.user.email}</p>
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <p class="mb-0" style="color: #808080;">Subscription: <span>12</span></p>
@@ -104,7 +99,7 @@
 
                     <div class="subscription-post">
                         <div class="d-flex align-items-center">
-                            <img src="https://via.placeholder.com/150/24f355" alt="Post Author Profile Picture" class="profile-pic me-3">
+                            <img src="" alt="Post Author Profile Picture" class="profile-pic me-3">
                             <div class="profile-content">
                                 <h6 class="card-subtitle mb-1">Author One</h6>
                                 <p class="card-text small text-muted">Posted 2 hours ago</p>
@@ -115,7 +110,7 @@
 
                     <div class="subscription-post">
                         <div class="d-flex align-items-center">
-                            <img src="https://via.placeholder.com/150/d32776" alt="Post Author Profile Picture" class="profile-pic me-3">
+                            <img src="" alt="Post Author Profile Picture" class="profile-pic me-3">
                             <div class="profile-content">
                                 <h6 class="card-subtitle mb-1">Author Two</h6>
                                 <p class="card-text small text-muted">Posted 5 hours ago</p>
@@ -125,16 +120,15 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-
-        </div><div class="col-md-7 px-5">
-
+        <div class="col-md-7 px-5">
         <div class="card custom-card mb-4">
             <div class="card-header">
                 <h5 class="mb-0">Inbox</h5>
             </div>
             <div class="card-body">
-                <div class="d-flex align-items-start"> <img src="https://via.placeholder.com/150/b0f7cc" alt="Content Picture" class="profile-pic me-3">
+                <div class="d-flex align-items-start"> <img src="" alt="Content Picture" class="profile-pic me-3">
                     <div class="profile-content">
                         <h6 class="card-subtitle mb-2">Item Title</h6>
                         <p class="card-text">This is the main content area (7/12 width). You can place primary dashboard elements, charts, tables, or detailed views here.</p>
@@ -151,7 +145,7 @@
             </div>
             <div class="card-body">
                 <div class="d-flex align-items-center">
-                    <img src="https://via.placeholder.com/150/f66b97" alt="Another Picture" class="profile-pic me-3">
+                    <img src="" alt="Another Picture" class="profile-pic me-3">
                     <div class="profile-content">
                         <h6 class="card-subtitle mb-1">Another Section</h6>
                         <p class="card-text small">This card doesn't have a header, similar to the User Card, but it's in the right column.</p>

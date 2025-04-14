@@ -72,18 +72,23 @@
 <div class="right-side">
     <div class="login-container">
         <h2 class="text-center mb-4">Login</h2>
-        <form>
+
+        <g:if test="${flash.message}">
+            <p style="color: red;">${flash.message}</p>
+        </g:if>
+
+        <g:form controller="auth" action="authenticateUser">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter your username">
+                <input type="text" class="form-control" name="username" id="username" placeholder="Enter your username">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password">
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">Login</button>
-        </form>
+        </g:form>
         <p class="mt-3 text-center"><g:link uri="/auth/forgotPassword" style="color: #f8f9fa;">Forgot password?</g:link></p>
         <p class="mt-2 text-center">Don't have an account? <g:link uri="/auth/register" style="color: #f8f9fa;">Register</g:link></p>
     </div>
