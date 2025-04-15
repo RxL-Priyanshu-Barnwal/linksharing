@@ -17,13 +17,14 @@ class Subscription implements Serializable {
         topic nullable: false
         user nullable: false
         seriousness nullable: false
-        dateCreated nullable: false
-//        unique: ['topic', 'user']
+        unique: ['topic', 'user']
     }
 
     static mapping = {
         autoTimestamp true
-        id composite: ['user', 'topic']
+//        id composite: ['user', 'topic']
+        user column: 'user_id'
+        topic column: 'topic_id'
     }
 }
 

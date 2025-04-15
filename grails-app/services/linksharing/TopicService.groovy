@@ -5,6 +5,8 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class TopicService {
 
+    SubscribeService subscribeService
+
     def createTopic(params, User user) {
         if (!params.name) {
             println("Topic name not defined.")
@@ -20,6 +22,7 @@ class TopicService {
         def topic = new Topic(name: params.name, visibility: visibility, user: user)
 
         if (topic.save(flush: true)) {
+            subscribeService.createSubscription(user, topic, Subscription.Seriousness.VERY_SERIOUS)
             return topic
         } else {
             topic.errors.allErrors.each {

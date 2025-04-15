@@ -6,20 +6,13 @@ class TopicController {
 
     def createTopic() {
         println(params)
-//
-//        if (!params.name?.trim()) {
-//            flash.message = "Topic name cannot be blank"
-//            flash.showCreateModal = true
-//            render(view: '/dashboard/index')
-//            return
-//        }
 
         def res = topicService.createTopic(params, session.user)
 
         if (res instanceof String) {
             flash.message = res
             flash.showCreateModal = true
-            render(view: '/dashboard/index')
+            render(view: '/dashboard/index', model: [showCreateModal: true])
             return
         }
         else if (res instanceof Topic) {
@@ -28,7 +21,7 @@ class TopicController {
         else {
             flash.message = res
             flash.showCreateModal = true
-            render(view: '/dashboard/index')
+            render(view: '/dashboard/index', model: [showCreateModal: true])
         }
         redirect(controller: 'dashboard', action: 'index')
     }
