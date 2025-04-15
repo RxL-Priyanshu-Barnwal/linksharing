@@ -13,21 +13,30 @@
                     <input class="form-control rounded-pill bg-secondary text-white border-0" type="search" placeholder="Search" aria-label="Search" style="width: 400px;">
                 </form>
 
-                <!--                </div>-->
+                <!-- </div> -->
 
                 <ul class="icon-container text-white">
                     <li class="nav-item">
-                        <a href="#" class="icon-button"><i class="bi bi-pencil-square"></i></a>
+                        <button class="icon-button" data-bs-toggle="modal" data-bs-target="#createTopic">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="icon-button"><i class="bi bi-envelope"></i></a>
+                        <button class="icon-button" data-bs-toggle="modal" data-bs-target="#sendInvite">
+                            <i class="bi bi-envelope"></i>
+                        </button>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="icon-button"><i class="bi bi-link-45deg"></i></a>
+                        <button class="icon-button" data-bs-toggle="modal" data-bs-target="#createLinkResource">
+                            <i class="bi bi-link-45deg"></i>
+                        </button>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="icon-button"><i class="bi bi-file-earmark-text"></i></a>
+                        <button class="icon-button" data-bs-toggle="modal" data-bs-target="#createDocResource">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </button>
                     </li>
+
                 </ul>
 
                 <div class="nav-item dropdown">
@@ -98,6 +107,10 @@
     .icon-button {
         color: white;
         margin-right: 10px;
+        font-size: 1.75rem;
+        padding: 10px;
+        background: none;
+        border: none;
     }
 
     .icon-container {
@@ -106,11 +119,6 @@
         align-items: center;
         width: 60%;
         margin-left: 5rem;
-    }
-
-    .icon-button {
-        font-size: 1.75rem;
-        padding: 10px;
     }
 
     .profile-container{

@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <script type="text/javascript" src="${resource(dir: 'assets/javascripts', file: 'modal.js')}"></script>
+
     <style>
         body {
             background-color: #101214;
@@ -58,102 +60,51 @@
 </head>
 <body>
 
-<div class="navigation-bar">
-    <g:render template="/dashboard/navbar"/>
-</div>
+<!-- Navbar -->
 
+    <div class="navigation-bar">
+        <g:render template="/dashboard/navbar"/>
+    </div>
 
-<div class="container-fluid " style="padding: 4rem;">
-    <div class="row gx-5">
+<!-- Modal starts -->
 
-        <div class="col-md-5 px-5">
+    <div class="modal-body">
+        <g:render template="/dashboard/modals"/>
+    </div>
 
-            <div class="card custom-card mb-4">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-md-3">
-                            <img src="" alt="User Profile Picture" class="img-fluid">
-                        </div>
-                        <div class="col-md-9">
-                            <h5 class="card-title">${session.user.firstName} ${session.user.lastName}</h5>
-                            <p class="card-text small mb-4" style="color: #808080;">${session.user.email}</p>
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <p class="mb-0" style="color: #808080;">Subscription: <span>12</span></p>
-                                </div>
-                                <div>
-                                    <p class="mb-0" style="color: #808080;">Topic: <span>5</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<!-- Modal ends -->
+
+    <div class="container-fluid " style="padding: 4rem;">
+
+        <div class="row gx-5">
+
+            <div class="col-md-5 px-5">
+
+                <div class="user-body">
+                    <g:render template="/dashboard/userCard"/>
                 </div>
+
+                <div class="subscription-body">
+                    <g:render template="/dashboard/subscriptionCard"/>
+                </div>
+
             </div>
 
+            <div class="col-md-7 px-5">
 
-            <div class="card custom-card mt-5">
-                <div class="card-header">
-                    <h5 class="mb-0">Subscriptions</h5>
+                <div class="inbox-body">
+                    <g:render template="/dashboard/inboxCard"/>
                 </div>
-                <div class="card-body subscription-body py-5">
 
-                    <div class="subscription-post">
-                        <div class="d-flex align-items-center">
-                            <img src="" alt="Post Author Profile Picture" class="profile-pic me-3">
-                            <div class="profile-content">
-                                <h6 class="card-subtitle mb-1">Author One</h6>
-                                <p class="card-text small text-muted">Posted 2 hours ago</p>
-                                <p class="card-text small mb-0">This is the content of the first subscription post. It can be longer.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="subscription-post">
-                        <div class="d-flex align-items-center">
-                            <img src="" alt="Post Author Profile Picture" class="profile-pic me-3">
-                            <div class="profile-content">
-                                <h6 class="card-subtitle mb-1">Author Two</h6>
-                                <p class="card-text small text-muted">Posted 5 hours ago</p>
-                                <p class="card-text small mb-0">Another post from someone the user subscribed to.</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="inbox-body">
+                    <g:render template="/dashboard/inboxCard"/>
                 </div>
+
             </div>
         </div>
+    </div>
 
-        <div class="col-md-7 px-5">
-        <div class="card custom-card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">Inbox</h5>
-            </div>
-            <div class="card-body">
-                <div class="d-flex align-items-start"> <img src="" alt="Content Picture" class="profile-pic me-3">
-                    <div class="profile-content">
-                        <h6 class="card-subtitle mb-2">Item Title</h6>
-                        <p class="card-text">This is the main content area (7/12 width). You can place primary dashboard elements, charts, tables, or detailed views here.</p>
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        <a href="#" class="btn btn-primary btn-sm">View Details</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-        <div class="card custom-card mt-5">
-            <div class="card-header">
-                <h5 class="mb-0">Trending Posts</h5>
-            </div>
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <img src="" alt="Another Picture" class="profile-pic me-3">
-                    <div class="profile-content">
-                        <h6 class="card-subtitle mb-1">Another Section</h6>
-                        <p class="card-text small">This card doesn't have a header, similar to the User Card, but it's in the right column.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div></div></div><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

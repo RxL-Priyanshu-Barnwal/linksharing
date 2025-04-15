@@ -6,8 +6,7 @@ class Subscription implements Serializable {
     enum Seriousness {
         CASUAL, SERIOUS, VERY_SERIOUS
     }
-    String userName
-    String topicName
+
     Date dateCreated
 
     Seriousness seriousness = Seriousness.CASUAL
