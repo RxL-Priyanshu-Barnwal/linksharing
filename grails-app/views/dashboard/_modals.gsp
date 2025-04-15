@@ -2,33 +2,51 @@
 <div class="modal fade" id="createTopic" tabindex="-1" aria-labelledby="createTopicLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createTopicLabel">Create Topic</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
 
-                <div class="mb-3">
-                    <label for="topicName" class="form-label">Name:</label>
-                    <input type="text" class="form-control" id="topicName" placeholder="Enter topic name">
+            <g:form controller="topic" action="createTopic">
+
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="createTopicLabel">Create Topic</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="mb-3">
-                    <label for="topicVisibility" class="form-label">Visibility:</label>
-                    <select class="form-select" id="topicVisibility">
-                        <option value="public">Public</option>
-                        <option value="private">Private</option>
-                    </select>
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="topicName" class="form-label">Name:</label>
+                        <input type="text" class="form-control" id="topicName" name="name" placeholder="Enter topic name">
+                        <g:if test="${flash.message}">
+                            <p style="color: red;">${flash.message}</p>
+                        </g:if>
+                    </div>
+                    <div class="mb-3">
+                        <label for="topicVisibility" class="form-label">Visibility:</label>
+                        <select class="form-select" id="topicVisibility" name="visibility">
+                            <option value="public">Public</option>
+                            <option value="private">Private</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Save</button>
-            </div>
+            </g:form>
         </div>
     </div>
 </div>
 
+
+<g:if test="${flash.showCreateModal}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initialize the modal using Bootstrap's JavaScript API
+            var myModal = new bootstrap.Modal(document.getElementById('createTopic'));
+            myModal.show();  // This will open the modal if the condition is true
+        });
+    </script>
+</g:if>
 
 
 <!-- sendInvite Modal -->
@@ -61,7 +79,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
             </div>
         </div>
     </div>
@@ -103,7 +121,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
             </div>
         </div>
     </div>
@@ -145,7 +163,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
             </div>
         </div>
     </div>

@@ -17,8 +17,6 @@ class Topic {
     static constraints = {
         name nullable: false, blank: false, unique: 'user'
         user nullable: false, blank: false
-        dateCreated nullable: false
-        lastUpdated nullable: false
         visibility nullable: false
     }
 

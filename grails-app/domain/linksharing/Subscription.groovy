@@ -23,7 +23,7 @@ class Subscription implements Serializable {
 
     static mapping = {
         autoTimestamp true
-        id composite: ['userName', 'topicName']
+        id composite: ['user', 'topic']
     }
 }
 
