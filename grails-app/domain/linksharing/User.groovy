@@ -28,6 +28,8 @@ class User {
     static mapping = {
         autoTimestamp true
         table 'user_table'
+        subscriptions lazy: false
+        topics lazy: false
     }
 
     // define methods to update firstName, lastName, photo

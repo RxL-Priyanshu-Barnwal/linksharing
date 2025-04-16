@@ -28,7 +28,9 @@ class TopicService {
             topic.errors.allErrors.each {
                 println "Validation error: ${it}"
             }
-            return topic.errors.allErrors.collect { it.defaultMessage }.join(', ')
+            return topic.errors.allErrors.collect {
+                it.defaultMessage
+            }.join(', ')
         }
     }
 }

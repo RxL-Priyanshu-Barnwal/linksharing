@@ -85,7 +85,7 @@
                 </div>
 
                 <div class="subscription-body">
-                    <g:render template="/dashboard/subscriptionCard"/>
+                    <g:render template="/dashboard/subscriptionCard" model="[subscribedTopics: subscribedTopics]"/>
                 </div>
 
             </div>
@@ -97,7 +97,7 @@
                 </div>
 
                 <div class="inbox-body">
-                    <g:render template="/dashboard/inboxCard"/>
+                    <g:render template="/dashboard/trendingTopicsCard"/>
                 </div>
 
             </div>

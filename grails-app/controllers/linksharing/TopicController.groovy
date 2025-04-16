@@ -9,19 +9,12 @@ class TopicController {
 
         def res = topicService.createTopic(params, session.user)
 
-        if (res instanceof String) {
-            flash.message = res
-            flash.showCreateModal = true
-            render(view: '/dashboard/index', model: [showCreateModal: true])
-            return
-        }
-        else if (res instanceof Topic) {
+        if (res instanceof Topic) {
             println("Topic '${params.name}' created successfully")
         }
         else {
-            flash.message = res
-            flash.showCreateModal = true
-            render(view: '/dashboard/index', model: [showCreateModal: true])
+            flash.topicMessage = res
+            flash.showTopicModal = true
         }
         redirect(controller: 'dashboard', action: 'index')
     }

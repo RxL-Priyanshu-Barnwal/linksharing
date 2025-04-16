@@ -14,8 +14,6 @@ class Resource {
         description blank: false, maxSize: 1000, unique: 'topic'
         user nullable: false
         topic nullable: false
-        dateCreated nullable: false
-        lastUpdated nullable: false
     }
 
     static mapping = {

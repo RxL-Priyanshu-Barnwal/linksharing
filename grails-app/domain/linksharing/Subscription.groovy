@@ -1,6 +1,6 @@
 package linksharing
 
-class Subscription implements Serializable {
+class Subscription {
     Topic topic
     User user
     enum Seriousness {
@@ -25,6 +25,7 @@ class Subscription implements Serializable {
 //        id composite: ['user', 'topic']
         user column: 'user_id'
         topic column: 'topic_id'
+//        dateCreated sort: 'desc'
     }
 }
 
