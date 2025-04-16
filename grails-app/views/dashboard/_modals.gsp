@@ -117,7 +117,7 @@
                     <!-- Link Field -->
                     <div class="mb-3">
                         <label for="linkInput" class="form-label">Link:</label>
-                        <input type="url" class="form-control" id="linkInput" name="url" placeholder="Enter URL">
+                        <input type="text" class="form-control" id="linkInput" name="url" placeholder="Enter URL">
                     </div>
 
                     <!-- Description Field -->
@@ -194,7 +194,7 @@
                     <!-- Topic Dropdown -->
                     <div class="mb-3">
                         <label for="topicSelectDoc" class="form-label">Topic:</label>
-                        <select class="form-select" id="topicSelectDoc" name="topicId">
+                        <select class="form-select" id="topicSelectDoc" name="topic">
                             <option selected disabled>Select a topic</option>
                             <g:each in="${subscribedTopics?.topic}" var="topic">
                                 <option value="${topic.name}">${topic.name}</option>
@@ -205,7 +205,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
                 </div>
 
             </g:form>
@@ -213,3 +213,14 @@
         </div>
     </div>
 </div>
+
+
+<g:if test="${flash.showDocModal}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initialize the modal using Bootstrap's JavaScript API
+            var createDocModal = new bootstrap.Modal(document.getElementById('createDocResource'));
+            createDocModal.show();  // This will open the modal if the condition is true
+        });
+    </script>
+</g:if>

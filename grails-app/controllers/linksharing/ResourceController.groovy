@@ -23,7 +23,17 @@ class ResourceController {
     def createDocResource() {
         println(params)
 
-        def res = resource
+        def res = resourceService.createDocResource(params, session.user)
+
+        if(res instanceof DocumentResource) {
+            println("Link Resource created successfully.")
+        }
+        else {
+            flash.docResourceMessage = res
+            flash.showDocModal = true
+        }
+
+        redirect(controller: 'dashboard', action: 'index')
 
     }
 }
