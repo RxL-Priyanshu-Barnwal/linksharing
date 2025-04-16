@@ -63,16 +63,12 @@
 <!-- Navbar -->
 
     <div class="navigation-bar">
-        <g:render template="/dashboard/navbar"/>
+        <g:render template="/navbar"/>
     </div>
 
-<!-- Modal starts -->
-
-    <div class="modal-body">
-        <g:render template="/dashboard/modals"/>
+    <div class="modals">
+        <g:render template="/modals"/>
     </div>
-
-<!-- Modal ends -->
 
     <div class="container-fluid " style="padding: 4rem;">
 
@@ -81,7 +77,7 @@
             <div class="col-md-5 px-5">
 
                 <div class="user-body">
-                    <g:render template="/dashboard/userCard"/>
+                    <g:render template="/userCard"/>
                 </div>
 
                 <div class="subscription-body">

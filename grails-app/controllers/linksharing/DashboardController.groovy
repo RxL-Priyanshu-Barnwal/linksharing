@@ -9,7 +9,7 @@ class DashboardController {
 
         def subscribedTopics = Subscription.findAllByUser(session.user, [sort: 'dateCreated', order: 'desc'])
 
-        [user: user, subscribedTopics: subscribedTopics]
+        [user: user, subscribedTopics: subscribedTopics, dashboard: true]
     }
 
 }

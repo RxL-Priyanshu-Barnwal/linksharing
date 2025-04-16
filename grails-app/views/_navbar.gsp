@@ -16,16 +16,22 @@
                 <!-- </div> -->
 
                 <ul class="icon-container text-white">
-                    <li class="nav-item">
-                        <button class="icon-button" data-bs-toggle="modal" data-bs-target="#createTopic">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="icon-button" data-bs-toggle="modal" data-bs-target="#sendInvite">
-                            <i class="bi bi-envelope"></i>
-                        </button>
-                    </li>
+
+                    <g:if test="${dashboard}">
+
+                        <li class="nav-item">
+                            <button class="icon-button" data-bs-toggle="modal" data-bs-target="#createTopic">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="icon-button" data-bs-toggle="modal" data-bs-target="#sendInvite">
+                                <i class="bi bi-envelope"></i>
+                            </button>
+                        </li>
+
+                    </g:if>
+
                     <li class="nav-item">
                         <button class="icon-button" data-bs-toggle="modal" data-bs-target="#createLinkResource">
                             <i class="bi bi-link-45deg"></i>
@@ -47,10 +53,24 @@
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item text-white" href="#"><i class="bi bi-person"></i> Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-people"></i> Users</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-tags"></i> Topic</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-chat-left-text"></i> Posts</a></li>
+                        <li>
+                            <g:link uri="/profile/editProfile" class="dropdown-item text-white">
+                                <i class="bi bi-person"></i> Profile
+                            </g:link>
+                        </li>
+
+                        <g:if test="${dashboard}">
+
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-people"></i> Users
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-tags"></i> Topic</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-chat-left-text"></i> Posts</a></li>
+
+                        </g:if>
+
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <g:link controller="auth" action="logout" class="dropdown-item">
