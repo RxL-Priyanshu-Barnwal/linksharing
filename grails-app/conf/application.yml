@@ -4,6 +4,14 @@ info:
     version: '@info.app.version@'
     grailsVersion: '@info.app.grailsVersion@'
 grails:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: rxl.priyanshu.barnwal@gmail.com
+    password: Priyanshu@2004
+    props:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
   plugin:
     console:
       enabled: true

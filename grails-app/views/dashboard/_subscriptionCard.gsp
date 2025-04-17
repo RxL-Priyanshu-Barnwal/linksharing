@@ -38,10 +38,16 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <g:each in="${linksharing.Subscription.Seriousness.values()}" var="seriousness">
-                                        <li><a class="dropdown-item" href="#">${seriousness}</a></li>
+                                        <li><a class="dropdown-item change-seriousness" data-id="${subscribedTopic.topic.id}" data-value="${seriousness}" href="#">${seriousness}</a></li>
                                     </g:each>
                                 </ul>
                             </div>
+
+                            <!-- Hidden form to send data -->
+                            <form id="seriousnessForm" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
+                                <input type="hidden" name="id" id="seriousnessTopicId">
+                                <input type="hidden" name="seriousness" id="seriousnessValue">
+                            </form>
 
                             <!-- Visibility -->
                             <div class="dropdown">
@@ -49,10 +55,16 @@
                                     ${subscribedTopic.topic.visibility ?: 'Public'}
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">PUBLIC</a></li>
-                                    <li><a class="dropdown-item" href="#">PRIVATE</a></li>
+                                    <li><a class="dropdown-item change-visibility" data-id="${subscribedTopic.topic.id}" data-value="PUBLIC" href="#">PUBLIC</a></li>
+                                    <li><a class="dropdown-item change-visibility" data-id="${subscribedTopic.topic.id}" data-value="PRIVATE" href="#">PRIVATE</a></li>
                                 </ul>
                             </div>
+
+                            <!-- Hidden form to send data -->
+                            <form id="visibilityForm" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
+                                <input type="hidden" name="id" id="visibilityTopicId">
+                                <input type="hidden" name="visibility" id="visibilityValue">
+                            </form>
 
                             <!-- Icons -->
                             <i class="bi bi-envelope fs-5" title="Invite" role="button"></i>
@@ -103,6 +115,39 @@
                 });
             }
         });
+
+        $('body').on('click', '.change-visibility', function (e) {
+            e.preventDefault();
+
+            var topicId = $(this).data('id');
+            var newVisibility = $(this).data('value');
+
+            if (confirm('Are you sure you want to change visibility to ' + newVisibility + '?')) {
+                // Set values in the hidden form
+                $('#visibilityTopicId').val(topicId);
+                $('#visibilityValue').val(newVisibility);
+
+                // Submit the form
+                $('#visibilityForm')[0].submit();
+            }
+        });
+
+        $('body').on('click', '.change-seriousness', function (e) {
+            e.preventDefault();
+
+            var topicId = $(this).data('id');
+            var newSeriousness = $(this).data('value');
+
+            if (confirm('Are you sure you want to change visibility to ' + newSeriousness + '?')) {
+                // Set values in the hidden form
+                $('#seriousnessTopicId').val(topicId);
+                $('#seriousnessValue').val(newSeriousness);
+
+                // Submit the form
+                $('#seriousnessForm')[0].submit();
+            }
+        });
+
 
     });
 

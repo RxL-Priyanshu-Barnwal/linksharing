@@ -43,17 +43,6 @@ class TopicService {
         }
     }
 
-    def updateTopicName(Long id, String name) {
-        def topic = Topic.get(id)
-        if(topic) {
-            topic.name = name
-            topic.save(flush: true, failOnError: true)
-        }
-        else {
-            throw new Exception("Topic not found")
-        }
-    }
-
     def deleteTopic(Topic topic) {
         if(!topic) {
             println("Topic not found")
@@ -61,5 +50,26 @@ class TopicService {
         }
 
         topic.delete(flush: true, failOnError: true)
+    }
+
+    def updateVisibility(Long topicId, String newVisibility) {
+        try {
+            // Find the topic by ID
+            Topic topic = Topic.get(topicId)
+            println("Topic fetched: ${topicId}")
+
+            if (!topic) {
+                throw new Exception("Topic not found")
+            }
+
+            // Convert the string value to the enum type (PUBLIC or PRIVATE)
+            topic.visibility = Topic.Visibility.valueOf(newVisibility.toUpperCase())
+            topic.save(flush: true, failOnError: true)
+
+            return topic
+        } catch (Exception e) {
+            println("cannot update visibility in service. Error: $e.message")
+            throw new RuntimeException("Error updating visibility", e)
+        }
     }
 }

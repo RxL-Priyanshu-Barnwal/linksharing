@@ -70,6 +70,8 @@ dependencies {
     runtimeOnly 'org.grails.plugins:grails-console:2.1.1'
 
     implementation(group: 'org.codehaus.groovy', name: 'groovy-dateutil', version: '3.0.13')
+
+    implementation 'org.grails.plugins:mail:4.0.1'
 }
 
 application {

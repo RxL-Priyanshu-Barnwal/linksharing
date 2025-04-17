@@ -64,7 +64,6 @@ class AuthService {
             topic {
                 eq("visibility", Topic.Visibility.PUBLIC)
             }
-
         }
     }
 }

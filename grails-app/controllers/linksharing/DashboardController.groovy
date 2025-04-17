@@ -3,6 +3,7 @@ package linksharing
 class DashboardController {
 
     TopicService topicService
+    SubscribeService subscribeService
 
     def index() {
         def currentUser = session.user
@@ -16,21 +17,6 @@ class DashboardController {
         println "Trending Topics are: ${trendingTopics}"
 
         [user: user, subscribedTopics: subscribedTopics, dashboard: true, trendingTopics: trendingTopics]
-    }
-
-    def updateTopicName(Long id, String name) {
-        if (!request.xhr) {
-            render status: 400, text: "Bad Request"
-            return
-        }
-
-        try {
-            topicService.updateTopicName(id, name)
-            render status: 200, text: "OK"
-        } catch (Exception e) {
-            log.error("Error updating topic name", e)
-            render status: 500, text: "Internal Server Error"
-        }
     }
 
     def deleteTopic() {
@@ -54,5 +40,39 @@ class DashboardController {
             render status: 500, text: "Error deleting topic"
         }
     }
+
+    def updateVisibility() {
+        Long topicId = params.id as Long
+        String newVisibility = params.visibility?.toUpperCase()
+
+        try {
+            topicService.updateVisibility(topicId, newVisibility)
+            flash.message = "Visibility updated successfully."
+        }
+        catch (Exception e) {
+            flash.error = "Error updating visibility: ${e.message}"
+        }
+
+        redirect(action: "index")
+    }
+
+
+    def updateSeriousness() {
+        println(params)
+
+        String newSeriousness = params.seriousness?.toUpperCase()
+        Long topicId = params.id as Long
+
+        try {
+            subscribeService.updateSeriousness(topicId, newSeriousness, session.user)
+            flash.message = "Seriousness updated successfully."
+        }
+        catch (Exception e) {
+            flash.error = "Error updating seriousness: ${e.message}"
+        }
+
+        redirect(action: "index")
+    }
+
 
 }

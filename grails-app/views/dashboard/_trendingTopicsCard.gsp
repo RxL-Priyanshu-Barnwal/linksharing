@@ -31,13 +31,14 @@
                         <!-- Seriousness -->
                         <div class="dropdown">
                             <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                ${topic.subscriptions.seriousness ?: 'Seriousness'}
+                                ${topic.subscriptions.seriousness?.first()?.toString()}
                             </button>
                             <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">CASUAL</a></li>
-                                    <li><a class="dropdown-item" href="#">SERIOUS</a></li>
-                                    <li><a class="dropdown-item" href="#">VERY_SERIOUS</a></li>
+                                <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="CASUAL" href="#">CASUAL</a></li>
+                                <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="SERIOUS" href="#">SERIOUS</a></li>
+                                <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="VERY_SERIOUS" href="#">VERY_SERIOUS</a></li>
                             </ul>
+
                         </div>
 
                         <!-- Visibility -->
@@ -46,15 +47,28 @@
                                 ${topic.visibility ?: 'Visibility'}
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">PUBLIC</a></li>
-                                <li><a class="dropdown-item" href="#">PRIVATE</a></li>
+                                <li><a class="dropdown-item change-visibility" data-id="${topic.id}" data-value="PUBLIC" href="#">PUBLIC</a></li>
+                                <li><a class="dropdown-item change-visibility" data-id="${topic.id}" data-value="PRIVATE" href="#">PRIVATE</a></li>
                             </ul>
                         </div>
+
+                        <!-- Unique form per topic for visibility -->
+                        <form id="visibilityForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
+                            <input type="hidden" name="id" value="${topic.id}">
+                            <input type="hidden" name="visibility" class="visibility-value">
+                        </form>
+
+                        <!-- Unique form per topic for seriousness -->
+                        <form id="seriousnessForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
+                            <input type="hidden" name="id" value="${topic.id}">
+                            <input type="hidden" name="seriousness" class="seriousness-value">
+                        </form>
+
 
                         <!-- Icons -->
                         <i class="bi bi-envelope fs-5" title="Invite" role="button"></i>
                         <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
-                        <i class="bi bi-trash fs-5 text-danger" title="Delete" role="button"></i>
+                        <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${topic.id}" title="Delete" role="button"></i>
                     </div>
                 </div>
             </div>
@@ -63,5 +77,63 @@
 
     </div>
 
-
 </div>
+
+<script>
+
+    $(document).ready(function() {
+
+        $('body').on('click', '.delete-topic', function() {
+            var topicId = $(this).data('id');
+
+            console.log("topicID from Javascript: " + topicId);
+
+            if (confirm('Are you sure you want to delete this topic?')) {
+                $.ajax({
+                    url: '/dashboard/deleteTopic',
+                    type: 'POST',
+                    data: { id: topicId },
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        alert('Error deleting topic: ' + xhr.responseText);
+                    }
+                });
+            }
+        });
+
+        $('body').on('click', '.change-visibility', function (e) {
+            e.preventDefault();
+
+            var topicId = $(this).data('id');
+            var newVisibility = $(this).data('value');
+
+            if (confirm('Are you sure you want to change visibility to ' + newVisibility + '?')) {
+                var form = $('#visibilityForm-' + topicId);
+                form.find('.visibility-value').val(newVisibility);
+                form[0].submit();
+            }
+        });
+
+        $('body').on('click', '.change-seriousness', function (e) {
+            e.preventDefault();
+
+            var topicId = $(this).data('id');
+            var newSeriousness = $(this).data('value');
+
+            if (confirm('Are you sure you want to change seriousness to ' + newSeriousness + '?')) {
+                var form = $('#seriousnessForm-' + topicId);
+                form.find('.seriousness-value').val(newSeriousness);
+                form[0].submit();
+            }
+        });
+
+
+    })
+
+</script>
