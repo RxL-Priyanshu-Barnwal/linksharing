@@ -54,7 +54,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li>
-                            <g:link uri="/profile/editProfile" class="dropdown-item text-white">
+                            <g:link uri="/profile" class="dropdown-item text-white">
                                 <i class="bi bi-person"></i> Profile
                             </g:link>
                         </li>

@@ -58,6 +58,15 @@ class AuthService {
             return false
         }
     }
+
+    def getRecentPosts(int max = 2) {
+        Resource.createCriteria().list(max: max, sort: "dateCreated", order: "desc") {
+            topic {
+                eq("visibility", Topic.Visibility.PUBLIC)
+            }
+
+        }
+    }
 }
 
 

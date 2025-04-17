@@ -1,13 +1,15 @@
 package linksharing
 
-
 class ProfileController {
 
     def index() {
-        render(view: "editProfile", model: [user: session.user])
+        def currentUser = session.user
+
+        def user = User.get(currentUser?.id)
+
+        println("Session user: ${session.user}")
+        render(view: "editProfile", model: [user: user])
     }
 
     def userProfile() { }
-
-
 }

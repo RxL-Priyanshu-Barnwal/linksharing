@@ -37,7 +37,7 @@
     </div>
 
     <div class="modal-body">
-        <g:render template="/dashboard/modals"/>
+        <g:render template="/modals"/>
     </div>
 
 
@@ -48,28 +48,31 @@
             <div class="col-md-5 px-5">
 
                 <div class="user-body">
-                    <g:render template="/userCard"/>
+                    <g:render template="/userCard" model="[user: user]"/>
                 </div>
 
-                <div class="custom-card subscription-body mt-5 p-3">
-
+                <div class="card custom-card mt-5">
+                    <div class="card-header">
+                        <h5 class="mb-0">Topics</h5>
+                    </div>
 
                     <div class="card-body subscription-body py-3">
+
                         <div class="row align-items-center">
 
                             <!-- Profile Image -->
                             <div class="col-md-3 mb-3 mb-md-0">
-                                <img src="/images/profile.jpeg" alt="Profile Picture" class="img-fluid rounded">
+                                <img src="" alt="Profile Picture" class="img-fluid rounded">
                             </div>
 
                             <div class="col-md-9">
-                                <h5 class="card-title mb-1">Example Topic Name</h5>
+                                <h5 class="card-title mb-1">Topic Name</h5>
 
-                                <p class="text-secondary small mb-3">example_user</p>
+                                <p class="text-secondary small mb-3">username</p>
 
                                 <div class="d-flex justify-content-between mb-3">
-                                    <p class="mb-0 text-secondary">Subscriptions: <span>42</span></p>
-                                    <p class="mb-0 text-secondary">Posts: <span>17</span></p>
+                                    <p class="mb-0 text-secondary">Subscriptions: <span>12</span></p>
+                                    <p class="mb-0 text-secondary">Posts: <span>5</span></p>
                                 </div>
 
                                 <!-- Bottom Controls -->
@@ -77,19 +80,19 @@
                                     <!-- Seriousness -->
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            SERIOUS
+
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#">CASUAL</a></li>
-                                            <li><a class="dropdown-item" href="#">SERIOUS</a></li>
-                                            <li><a class="dropdown-item" href="#">VERY_SERIOUS</a></li>
+
+                                            <li><a class="dropdown-item" href="#"></a></li>
+
                                         </ul>
                                     </div>
 
                                     <!-- Visibility -->
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            PUBLIC
+                                            Visibility
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" href="#">PUBLIC</a></li>
@@ -104,10 +107,8 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
-
-
-
                 </div>
 
             </div>

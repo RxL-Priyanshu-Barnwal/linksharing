@@ -13,7 +13,7 @@
 
                     <div class="mb-3">
                         <label for="topicName" class="form-label">Name:</label>
-                        <input type="text" class="form-control" id="topicName" name="name" placeholder="Enter topic name">
+                        <input type="text" class="form-control" id="topicName" name="name" placeholder="Enter topic name" required>
                         <g:if test="${flash.topicMessage}">
                             <p style="color: red;">${flash.topicMessage}</p>
                         </g:if>
@@ -67,13 +67,13 @@
                     <!-- Email Field -->
                     <div class="mb-3">
                         <label for="emailInput" class="form-label">Email:</label>
-                        <input type="email" class="form-control" id="emailInput" placeholder="Enter email address">
+                        <input type="email" class="form-control" id="emailInput" placeholder="Enter email address" required>
                     </div>
 
                     <!-- Topic Dropdown -->
                     <div class="mb-3">
                         <label for="topicSelectInvite" class="form-label">Topic:</label>
-                        <select class="form-select" id="topicSelectInvite">
+                        <select class="form-select" id="topicSelectInvite" required>
                             <option selected disabled>Select a topic</option>
                             <g:each in="${subscribedTopics?.topic}" var="topic">
                                 <option value="${topic.name}">${topic.name}</option>
@@ -85,7 +85,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                <button type="submit" class="btn btn-primary">Save</button>
             </div>
 
 
@@ -117,19 +117,19 @@
                     <!-- Link Field -->
                     <div class="mb-3">
                         <label for="linkInput" class="form-label">Link:</label>
-                        <input type="text" class="form-control" id="linkInput" name="url" placeholder="Enter URL">
+                        <input type="text" class="form-control" id="linkInput" name="url" placeholder="Enter URL" required>
                     </div>
 
                     <!-- Description Field -->
                     <div class="mb-3">
                         <label for="descriptionInput" class="form-label">Description:</label>
-                        <textarea class="form-control" id="descriptionInput" name="description" rows="4" placeholder="Enter description"></textarea>
+                        <textarea class="form-control" id="descriptionInput" name="description" rows="4" placeholder="Enter description" required></textarea>
                     </div>
 
                     <!-- Topic Dropdown -->
                     <div class="mb-3">
                         <label for="topicSelectLink" class="form-label">Topic:</label>
-                        <select class="form-select" id="topicSelectLink" name="topic">
+                        <select class="form-select" id="topicSelectLink" name="topic" required>
                             <option selected disabled>Select a topic</option>
                             <g:each in="${subscribedTopics?.topic}" var="topic">
                                 <option value="${topic.name}">${topic.name}</option>
@@ -140,7 +140,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
 
             </g:form>
@@ -182,19 +182,19 @@
                     <!-- Document Upload Field -->
                     <div class="mb-3">
                         <label for="documentInput" class="form-label">Document:</label>
-                        <input type="file" class="form-control" id="documentInput" name="filePath" accept=".pdf,.doc,.docx,.txt,.rtf,.odt">
+                        <input type="file" class="form-control" id="documentInput" name="filePath" accept=".pdf,.doc,.docx,.txt,.rtf,.odt" required>
                     </div>
 
                     <!-- Description Field -->
                     <div class="mb-3">
                         <label for="descriptionInputDoc" class="form-label">Description:</label>
-                        <textarea class="form-control" id="descriptionInputDoc" rows="4" name="description" placeholder="Enter description"></textarea>
+                        <textarea class="form-control" id="descriptionInputDoc" rows="4" name="description" placeholder="Enter description" required></textarea>
                     </div>
 
                     <!-- Topic Dropdown -->
                     <div class="mb-3">
                         <label for="topicSelectDoc" class="form-label">Topic:</label>
-                        <select class="form-select" id="topicSelectDoc" name="topic">
+                        <select class="form-select" id="topicSelectDoc" name="topic" required>
                             <option selected disabled>Select a topic</option>
                             <g:each in="${subscribedTopics?.topic}" var="topic">
                                 <option value="${topic.name}">${topic.name}</option>
@@ -205,7 +205,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
 
             </g:form>

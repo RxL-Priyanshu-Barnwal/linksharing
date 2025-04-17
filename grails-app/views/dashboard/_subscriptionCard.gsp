@@ -13,11 +13,14 @@
 
                     <!-- Profile Image -->
                     <div class="col-md-3 mb-3 mb-md-0">
-                        <img src="${subscribedTopic.topic.user.photo ?: '/images/profile.jpeg'}" alt="Profile Picture" class="img-fluid rounded">
+                        <img src="${subscribedTopic.topic.user.photo}" alt="Profile Picture" class="img-fluid rounded">
                     </div>
 
                     <div class="col-md-9">
-                        <h5 class="card-title mb-1">${subscribedTopic.topic.name}</h5>
+                        <h5 class="card-title mb-1">
+                            <span id="topicName-${subscribedTopic.topic.id}">${subscribedTopic.topic.name}</span>
+                            <input type="text" id="topicNameInput-${subscribedTopic.topic.id}" value="${subscribedTopic.topic.name}" style="display: none;">
+                        </h5>
 
                         <p class="text-secondary small mb-3">${subscribedTopic.topic.user.username}</p>
 
@@ -53,8 +56,12 @@
 
                             <!-- Icons -->
                             <i class="bi bi-envelope fs-5" title="Invite" role="button"></i>
+
                             <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
-                            <i class="bi bi-trash fs-5 text-danger" title="Delete" role="button"></i>
+
+                            <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${subscribedTopic.topic.id}" title="Delete" role="button"></i>
+
+
                         </div>
                     </div>
                 </div>
@@ -68,3 +75,37 @@
 
     </div>
 </div>
+
+
+<script>
+
+    $(document).ready(function() {
+        $('body').on('click', '.delete-topic', function() {
+            var topicId = $(this).data('id');
+
+            console.log("topicID from Javascript: " + topicId);
+
+            if (confirm('Are you sure you want to delete this topic?')) {
+                $.ajax({
+                    url: '/dashboard/deleteTopic',
+                    type: 'POST',
+                    data: { id: topicId },
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        alert('Error deleting topic: ' + xhr.responseText);
+                    }
+                });
+            }
+        });
+
+    });
+
+
+
+</script>

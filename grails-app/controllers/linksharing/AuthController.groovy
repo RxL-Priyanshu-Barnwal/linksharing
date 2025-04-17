@@ -3,9 +3,15 @@ package linksharing
 class AuthController {
     AuthService authService
 
-    def login() { }
+    def login() {
+        def getRecentPosts = authService.getRecentPosts()
+        render(view: "login", model: [getRecentPosts: getRecentPosts])
+    }
 
-    def register() { }
+    def register() {
+        def getRecentPosts = authService.getRecentPosts()
+        render(view: "register", model: [getRecentPosts: getRecentPosts])
+    }
 
     def forgotPassword() { }
 

@@ -8,10 +8,6 @@ class TopicService {
     SubscribeService subscribeService
 
     def createTopic(params, User user) {
-        if (!params.name) {
-            println("Topic name not defined.")
-            return "Topic name cannot be blank."
-        }
 
         if (Topic.findByUserAndName(user, params.name)) {
             return "You already have a topic with the name '${params.name}'."
@@ -32,5 +28,38 @@ class TopicService {
                 it.defaultMessage
             }.join(', ')
         }
+    }
+
+    List<Topic> getTrendingTopics() {
+        Topic.createCriteria().list(max: 3) {
+            eq('visibility', Topic.Visibility.PUBLIC)
+            projections {
+                groupProperty('id')
+                count('resources', 'resourceCount')
+            }
+            order('resourceCount', 'desc')
+        }?.collect { result ->
+            Topic.get(result[0]) // Fetch full Topic by its ID
+        }
+    }
+
+    def updateTopicName(Long id, String name) {
+        def topic = Topic.get(id)
+        if(topic) {
+            topic.name = name
+            topic.save(flush: true, failOnError: true)
+        }
+        else {
+            throw new Exception("Topic not found")
+        }
+    }
+
+    def deleteTopic(Topic topic) {
+        if(!topic) {
+            println("Topic not found")
+            throw new Exception("Topic not found")
+        }
+
+        topic.delete(flush: true, failOnError: true)
     }
 }
