@@ -23,4 +23,8 @@ class SubscribeService {
             println("Seriousness cannot be changed: $e.message")
         }
     }
+
+    def removeSubscription(User user, Topic topic) {
+
+    }
 }

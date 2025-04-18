@@ -17,7 +17,8 @@ class ResourceController {
             flash.showLinkModal = true
         }
 
-        redirect(controller: 'dashboard', action: 'index')
+        redirect(uri: request.getHeader("referer"))
+        //Redirects to the same page user was on
     }
 
     def createDocResource() {
@@ -33,7 +34,8 @@ class ResourceController {
             flash.showDocModal = true
         }
 
-        redirect(controller: 'dashboard', action: 'index')
+        redirect(uri: request.getHeader("referer"))
+        //Redirects to the same page user was on
 
     }
 }

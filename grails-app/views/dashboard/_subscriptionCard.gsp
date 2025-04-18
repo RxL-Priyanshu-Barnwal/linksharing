@@ -67,7 +67,7 @@
                             </form>
 
                             <!-- Icons -->
-                            <i class="bi bi-envelope fs-5" title="Invite" role="button"></i>
+                            <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>
 
                             <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
 

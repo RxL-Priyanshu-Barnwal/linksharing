@@ -50,30 +50,25 @@
 
 
 
-
 <!-- sendInvite Modal -->
 <div class="modal fade" id="sendInvite" tabindex="-1" aria-labelledby="sendInviteLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-
-
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="sendInviteLabel">Send Invitation</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-
+            <g:form controller="invite" action="sendInvite">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="sendInviteLabel">Send Invitation</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
                 <div class="modal-body">
                     <!-- Email Field -->
                     <div class="mb-3">
                         <label for="emailInput" class="form-label">Email:</label>
-                        <input type="email" class="form-control" id="emailInput" placeholder="Enter email address" required>
+                        <input type="email" class="form-control" id="emailInput" name="email" placeholder="Enter email address" required>
                     </div>
-
                     <!-- Topic Dropdown -->
                     <div class="mb-3">
                         <label for="topicSelectInvite" class="form-label">Topic:</label>
-                        <select class="form-select" id="topicSelectInvite" required>
+                        <select class="form-select" id="topicSelectInvite" name="topic" required>
                             <option selected disabled>Select a topic</option>
                             <g:each in="${subscribedTopics?.topic}" var="topic">
                                 <option value="${topic.name}">${topic.name}</option>
@@ -81,14 +76,11 @@
                         </select>
                     </div>
                 </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Send Invite</button>
+                </div>
+            </g:form>
         </div>
     </div>
 </div>

@@ -8,12 +8,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
 
             <div class="navbar-nav ms-auto align-items-center d-flex" style="gap: 1.5rem;">
-                <!--                <div class="nav-item col-4">-->
                 <form class="d-flex" style="flex-grow: 1; max-width: 400px;">
                     <input class="form-control rounded-pill bg-secondary text-white border-0" type="search" placeholder="Search" aria-label="Search" style="width: 400px;">
                 </form>
 
-                <!-- </div> -->
 
                 <ul class="icon-container text-white">
 

@@ -27,48 +27,89 @@
                     </div>
 
                     <!-- Bottom Controls -->
-                    <div class="d-flex align-items-center gap-3 flex-wrap mb-4">
-                        <!-- Seriousness -->
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                ${topic.subscriptions.seriousness?.first()?.toString()}
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="CASUAL" href="#">CASUAL</a></li>
-                                <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="SERIOUS" href="#">SERIOUS</a></li>
-                                <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="VERY_SERIOUS" href="#">VERY_SERIOUS</a></li>
-                            </ul>
 
-                        </div>
+                        <div class="d-flex align-items-center gap-3 flex-wrap mb-4">
 
-                        <!-- Visibility -->
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                ${topic.visibility ?: 'Visibility'}
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item change-visibility" data-id="${topic.id}" data-value="PUBLIC" href="#">PUBLIC</a></li>
-                                <li><a class="dropdown-item change-visibility" data-id="${topic.id}" data-value="PRIVATE" href="#">PRIVATE</a></li>
-                            </ul>
-                        </div>
+                            <g:if test="${topic.user?.id == session.user?.id}">
+                                <!-- Visibility -->
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ${topic.visibility ?: 'Visibility'}
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item change-visibility" data-id="${topic.id}" data-value="PUBLIC" href="#">PUBLIC</a></li>
+                                        <li><a class="dropdown-item change-visibility" data-id="${topic.id}" data-value="PRIVATE" href="#">PRIVATE</a></li>
+                                    </ul>
+                                </div>
 
-                        <!-- Unique form per topic for visibility -->
-                        <form id="visibilityForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
-                            <input type="hidden" name="id" value="${topic.id}">
-                            <input type="hidden" name="visibility" class="visibility-value">
-                        </form>
+                                <!-- Hidden form for visibility -->
+                                <form id="visibilityForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
+                                    <input type="hidden" name="id" value="${topic.id}">
+                                    <input type="hidden" name="visibility" class="visibility-value">
+                                </form>
 
-                        <!-- Unique form per topic for seriousness -->
-                        <form id="seriousnessForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
-                            <input type="hidden" name="id" value="${topic.id}">
-                            <input type="hidden" name="seriousness" class="seriousness-value">
-                        </form>
+                            </g:if>
 
 
-                        <!-- Icons -->
-                        <i class="bi bi-envelope fs-5" title="Invite" role="button"></i>
-                        <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
-                        <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${topic.id}" title="Delete" role="button"></i>
+                            <%
+                            // Get the subscription for the current user (if any)
+                            def userSubscription = topic.subscriptions?.find { it.user?.id == session.user?.id }
+                            def seriousnessText = userSubscription ? userSubscription.seriousness.toString() : 'CASUAL'
+
+                            %>
+
+                                <!-- Seriousness -->
+                                <div class="dropdown">
+
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ${seriousnessText}
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="CASUAL" href="#">CASUAL</a></li>
+                                        <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="SERIOUS" href="#">SERIOUS</a></li>
+                                        <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="VERY_SERIOUS" href="#">VERY_SERIOUS</a></li>
+                                    </ul>
+
+                                </div>
+
+                                <!-- Hidden form for seriousness -->
+                                <form id="seriousnessForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
+                                    <input type="hidden" name="id" value="${topic.id}">
+                                    <input type="hidden" name="seriousness" class="seriousness-value">
+                                </form>
+
+                            <g:if test="${topic.user?.id == session.user?.id}">
+
+                                <!-- Icons -->
+                                <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>
+                                <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
+                                <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${topic.id}" title="Delete" role="button"></i>
+
+                            </g:if>
+
+
+                        <g:if test="${!topic.subscriptions?.any { it.user?.id == session.user?.id }}">
+
+                            <form method="post" action="${createLink(controller: 'topic', action: 'subscribe')}" class="mb-0">
+                                <input type="hidden" name="topicId" value="${topic.id}">
+                                <button type="submit" class="btn btn-sm btn-primary">Subscribe</button>
+                            </form>
+
+                        </g:if>
+
+                        <g:else>
+
+                            <!-- Show Unsubscribe Button if User is Subscribed and not the creator -->
+                            <g:if test="${topic.user?.id != session.user?.id}">
+                                <form method="post" action="${createLink(controller: 'topic', action: 'unsubscribe')}" class="mb-0">
+                                    <input type="hidden" name="topicId" value="${topic.id}">
+                                    <button type="submit" class="btn btn-sm btn-danger">Unsubscribe</button>
+                                </form>
+                            </g:if>
+
+                        </g:else>
+
+
                     </div>
                 </div>
             </div>
@@ -79,61 +120,3 @@
 
 </div>
 
-<script>
-
-    $(document).ready(function() {
-
-        $('body').on('click', '.delete-topic', function() {
-            var topicId = $(this).data('id');
-
-            console.log("topicID from Javascript: " + topicId);
-
-            if (confirm('Are you sure you want to delete this topic?')) {
-                $.ajax({
-                    url: '/dashboard/deleteTopic',
-                    type: 'POST',
-                    data: { id: topicId },
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    success: function(response) {
-                        alert(response);
-                        location.reload();
-                    },
-                    error: function(xhr) {
-                        alert('Error deleting topic: ' + xhr.responseText);
-                    }
-                });
-            }
-        });
-
-        $('body').on('click', '.change-visibility', function (e) {
-            e.preventDefault();
-
-            var topicId = $(this).data('id');
-            var newVisibility = $(this).data('value');
-
-            if (confirm('Are you sure you want to change visibility to ' + newVisibility + '?')) {
-                var form = $('#visibilityForm-' + topicId);
-                form.find('.visibility-value').val(newVisibility);
-                form[0].submit();
-            }
-        });
-
-        $('body').on('click', '.change-seriousness', function (e) {
-            e.preventDefault();
-
-            var topicId = $(this).data('id');
-            var newSeriousness = $(this).data('value');
-
-            if (confirm('Are you sure you want to change seriousness to ' + newSeriousness + '?')) {
-                var form = $('#seriousnessForm-' + topicId);
-                form.find('.seriousness-value').val(newSeriousness);
-                form[0].submit();
-            }
-        });
-
-
-    })
-
-</script>
