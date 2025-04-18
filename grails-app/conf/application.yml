@@ -9,9 +9,12 @@ grails:
     port: 587
     username: rxl.priyanshu.barnwal@gmail.com
     password: Priyanshu@2004
-    props:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   plugin:
     console:
       enabled: true

@@ -5,6 +5,10 @@ class TopicController {
     SubscribeService subscribeService
     //bean injection: bean is a application specific instance of service
 
+    def index() {
+
+    }
+
     def createTopic() {
         println(params)
 

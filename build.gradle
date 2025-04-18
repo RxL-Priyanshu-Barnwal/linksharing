@@ -71,7 +71,7 @@ dependencies {
 
     implementation(group: 'org.codehaus.groovy', name: 'groovy-dateutil', version: '3.0.13')
 
-    implementation 'org.grails.plugins:mail:4.0.1'
+//    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 application {

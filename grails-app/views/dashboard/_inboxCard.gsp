@@ -13,7 +13,7 @@
                 <div class="inbox-item d-flex mb-2">
                     <!-- Profile photo on the left -->
                     <div class="inbox-item-avatar">
-                        <img src="item.resource?.user?.photo" alt="${item.resource?.user?.username} Photo" class="rounded-circle" width="50" height="50"/>
+                        <img src="${item.resource?.user?.photo}" alt="${item.resource?.user?.username} Photo" class="rounded-circle" width="50" height="50"/>
                     </div>
 
                     <!-- Inbox item content on the right -->
