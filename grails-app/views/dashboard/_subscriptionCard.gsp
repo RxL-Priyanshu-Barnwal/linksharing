@@ -6,87 +6,112 @@
 
     <div class="card-body subscription-body py-3">
 
-        <g:if test="${subscribedTopics}">
-            <g:each in="${subscribedTopics}" var="subscribedTopic">
+        <div class="subscription-scroll-area" style="max-height: 480px; overflow-y: auto; overflow-x: hidden; padding-right: 10px">
 
-                <div class="row align-items-center">
+            <g:if test="${subscribedTopics}">
+                <g:each in="${subscribedTopics}" var="subscribedTopic">
 
-                    <!-- Profile Image -->
-                    <div class="col-md-3 mb-3 mb-md-0">
-                        <img src="${subscribedTopic.topic.user.photo}" alt="Profile Picture" class="img-fluid rounded">
-                    </div>
+                    <div class="row align-items-center">
 
-                    <div class="col-md-9">
-                        <h5 class="card-title mb-1">
-                            <span id="topicName-${subscribedTopic.topic.id}">${subscribedTopic.topic.name}</span>
-                            <input type="text" id="topicNameInput-${subscribedTopic.topic.id}" value="${subscribedTopic.topic.name}" style="display: none;">
-                        </h5>
-
-                        <p class="text-secondary small mb-3">${subscribedTopic.topic.user.username}</p>
-
-                        <div class="d-flex justify-content-between mb-3">
-                            <p class="mb-0 text-secondary">Subscriptions: <span>${subscribedTopic.topic.subscriptions?.size() ?: 0}</span></p>
-                            <p class="mb-0 text-secondary">Posts: <span>${subscribedTopic.topic.resources?.size() ?: 0}</span></p>
+                        <!-- Profile Image -->
+                        <div class="col-md-3 mb-3 mb-md-0">
+                            <img src="${subscribedTopic.topic.user.photo}" alt="Profile Picture" class="img-fluid rounded">
                         </div>
 
-                        <!-- Bottom Controls -->
-                        <div class="d-flex align-items-center gap-3 flex-wrap mb-4">
-                            <!-- Seriousness -->
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    ${subscribedTopic.seriousness}
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <g:each in="${linksharing.Subscription.Seriousness.values()}" var="seriousness">
-                                        <li><a class="dropdown-item change-seriousness" data-id="${subscribedTopic.topic.id}" data-value="${seriousness}" href="#">${seriousness}</a></li>
-                                    </g:each>
-                                </ul>
+                        <div class="col-md-9">
+                            <h5 class="card-title mb-1">
+                                <span id="topicName-${subscribedTopic.topic.id}">${subscribedTopic.topic.name}</span>
+                                <input type="text" id="topicNameInput-${subscribedTopic.topic.id}" value="${subscribedTopic.topic.name}" style="display: none;">
+                            </h5>
+
+                            <p class="text-secondary small mb-3">${subscribedTopic.topic.user.username}</p>
+
+                            <div class="d-flex justify-content-between mb-3">
+                                <p class="mb-0 text-secondary">Subscriptions: <span>${subscribedTopic.topic.subscriptions?.size() ?: 0}</span></p>
+                                <p class="mb-0 text-secondary">Posts: <span>${subscribedTopic.topic.resources?.size() ?: 0}</span></p>
                             </div>
 
-                            <!-- Hidden form to send data -->
-                            <form id="seriousnessForm" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
-                                <input type="hidden" name="id" id="seriousnessTopicId">
-                                <input type="hidden" name="seriousness" id="seriousnessValue">
-                            </form>
+                            <!-- Bottom Controls -->
+                            <div class="d-flex align-items-center gap-3 flex-wrap mb-4">
+                                <!-- Seriousness -->
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ${subscribedTopic.seriousness}
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <g:each in="${linksharing.Subscription.Seriousness.values()}" var="seriousness">
+                                            <li><a class="dropdown-item change-seriousness" data-id="${subscribedTopic.topic.id}" data-value="${seriousness}" href="#">${seriousness}</a></li>
+                                        </g:each>
+                                    </ul>
+                                </div>
 
-                            <!-- Visibility -->
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    ${subscribedTopic.topic.visibility ?: 'Public'}
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item change-visibility" data-id="${subscribedTopic.topic.id}" data-value="PUBLIC" href="#">PUBLIC</a></li>
-                                    <li><a class="dropdown-item change-visibility" data-id="${subscribedTopic.topic.id}" data-value="PRIVATE" href="#">PRIVATE</a></li>
-                                </ul>
+                                <!-- Hidden form to send data -->
+                                <form id="seriousnessForm" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
+                                    <input type="hidden" name="id" id="seriousnessTopicId">
+                                    <input type="hidden" name="seriousness" id="seriousnessValue">
+                                </form>
+
+                                <!-- Visibility -->
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ${subscribedTopic.topic.visibility ?: 'Public'}
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item change-visibility" data-id="${subscribedTopic.topic.id}" data-value="PUBLIC" href="#">PUBLIC</a></li>
+                                        <li><a class="dropdown-item change-visibility" data-id="${subscribedTopic.topic.id}" data-value="PRIVATE" href="#">PRIVATE</a></li>
+                                    </ul>
+                                </div>
+
+                                <!-- Hidden form to send data -->
+                                <form id="visibilityForm" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
+                                    <input type="hidden" name="id" id="visibilityTopicId">
+                                    <input type="hidden" name="visibility" id="visibilityValue">
+                                </form>
+
+                                <!-- Icons -->
+                                <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>
+
+                                <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
+
+                                <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${subscribedTopic.topic.id}" title="Delete" role="button"></i>
+
+
                             </div>
-
-                            <!-- Hidden form to send data -->
-                            <form id="visibilityForm" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
-                                <input type="hidden" name="id" id="visibilityTopicId">
-                                <input type="hidden" name="visibility" id="visibilityValue">
-                            </form>
-
-                            <!-- Icons -->
-                            <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>
-
-                            <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
-
-                            <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${subscribedTopic.topic.id}" title="Delete" role="button"></i>
-
-
                         </div>
                     </div>
-                </div>
 
-            </g:each>
-        </g:if>
+                </g:each>
+            </g:if>
 
-        <g:else>
+            <g:else>
 
-        </g:else>
+            </g:else>
+
+        </div>
 
     </div>
 </div>
+
+<style>
+
+    .subscription-scroll-area::-webkit-scrollbar {
+        width: 0px;  /* Slim scrollbar */
+    }
+
+    .subscription-scroll-area:hover::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .subscription-scroll-area::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .subscription-scroll-area::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 4px;
+    }
+
+</style>
 
 
 <script>

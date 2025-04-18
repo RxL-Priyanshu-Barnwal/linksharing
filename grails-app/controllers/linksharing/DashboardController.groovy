@@ -10,7 +10,7 @@ class DashboardController {
 
         def user = User.get(currentUser?.id)
 
-        def subscribedTopics = Subscription.findAllByUser(session.user, [sort: 'lastUpdated', order: 'desc'])
+        def subscribedTopics = Subscription.findAllByUser(session.user, [sort: 'dateCreated', order: 'desc'])
 
         def trendingTopics = topicService.getTrendingTopics()
 

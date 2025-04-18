@@ -74,31 +74,22 @@
     </div>
 
     <div class="container-fluid " style="padding: 4rem;">
-
         <div class="row gx-5">
-
             <div class="col-md-5 px-5">
-
                 <div class="user-body">
                     <g:render template="/userCard"/>
                 </div>
-
                 <div class="subscription-body">
                     <g:render template="/dashboard/subscriptionCard" model="[subscribedTopics: subscribedTopics]"/>
                 </div>
-
             </div>
-
             <div class="col-md-7 px-5">
-
                 <div class="inbox-body">
                     <g:render template="/dashboard/inboxCard"/>
                 </div>
-
                 <div class="inbox-body">
                     <g:render template="/dashboard/trendingTopicsCard"/>
                 </div>
-
             </div>
         </div>
     </div>

@@ -46,8 +46,24 @@ class TopicController {
 
     def unsubscribe() {
         User user = session.user
+        Long topicId = params.long('topicId')
 
+        if(!topicId) {
+            flash.message = "Topic ID is missing"
+            println("Topic ID is missing")
+            redirect(uri: request.getHeader("referer"))
+            return
+        }
 
+        try {
+            subscribeService.removeSubscription(topicId, session.user.id)
+            flash.message = "Unsubscribed successfully"
+            println("Unsubscribed successfully")
+        }
+        catch (Exception e) {
+            flash.message = "Error while unsubscribing"
+        }
 
+        redirect(uri: request.getHeader("referer"))
     }
 }

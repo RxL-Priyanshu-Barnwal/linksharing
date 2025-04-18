@@ -24,7 +24,23 @@ class SubscribeService {
         }
     }
 
-    def removeSubscription(User user, Topic topic) {
+    def removeSubscription(Long topicId, Long userId) {
+        Topic topic = Topic.get(topicId)
+        User user = User.get(userId)
 
+        if(!topic || !user) {
+            println("Invalid topic or user.")
+            throw new IllegalArgumentException("Invalid topic or user.")
+        }
+
+        def subscription = Subscription.findByUserAndTopic(user, topic)
+
+        if(subscription) {
+            subscription.delete(flush: true)
+        }
+        else {
+            println("Subscription not found.")
+            throw new IllegalStateException("Subscription not found")
+        }
     }
 }
