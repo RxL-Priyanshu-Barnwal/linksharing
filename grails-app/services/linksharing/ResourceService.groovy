@@ -4,12 +4,15 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class ResourceService {
 
+    ReadingItemService readingItemService
+
     def createLinkResource(params, User user) {
         def topicInstance = Topic.findByName(params.topic)
 
         def linkResource = new LinkResource(url: params.url, description: params.description, topic: topicInstance, user: user)
 
         if(linkResource.save(flush: true)) {
+            readingItemService.createReadingItem(linkResource, user)
             return linkResource
         }
         else {
@@ -29,6 +32,7 @@ class ResourceService {
         def docResource = new DocumentResource(filePath: params.filePath, description: params.description, topic: topicInstance, user: user)
 
         if(docResource.save(flush: true)) {
+            readingItemService.createReadingItem(docResource, user)
             return docResource
         }
         else {

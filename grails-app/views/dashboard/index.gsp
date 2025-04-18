@@ -13,6 +13,7 @@
     <style>
         body {
             background-color: #101214;
+            overflow-y: auto
         }
 
         /* Card Styles */
@@ -73,7 +74,7 @@
         <g:render template="/modals"/>
     </div>
 
-    <div class="container-fluid " style="padding: 4rem;">
+    <div class="container-fluid " style="padding: 3rem;">
         <div class="row gx-5">
             <div class="col-md-5 px-5">
                 <div class="user-body">
@@ -87,8 +88,8 @@
                 <div class="inbox-body">
                     <g:render template="/dashboard/inboxCard"/>
                 </div>
-                <div class="inbox-body">
-                    <g:render template="/dashboard/trendingTopicsCard"/>
+                <div class="trendingTopics-body">
+                    <g:render template="/dashboard/trendingTopicsCard" model="[trendingTopics: trendingTopics]"/>
                 </div>
             </div>
         </div>

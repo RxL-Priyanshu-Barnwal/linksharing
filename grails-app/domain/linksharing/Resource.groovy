@@ -8,10 +8,10 @@ class Resource {
     Date lastUpdated
 
     static belongsTo = [user: User, topic: Topic]
-    static hasMany = [ratings: ResourceRating]
+    static hasMany = [ratings: ResourceRating, readingItems: ReadingItem]
 
     static constraints = {
-        description blank: false, maxSize: 1000, unique: 'topic'
+        description blank: false, maxSize: 1000
         user nullable: false
         topic nullable: false
     }

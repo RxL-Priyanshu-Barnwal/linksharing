@@ -2,7 +2,89 @@
     <div class="card-header">
         <h5 class="mb-0">Inbox</h5>
     </div>
-    <div class="card-body">
+    <div class="card-body" style="max-height: 260px; overflow-y: auto; overflow-x: hidden; padding-right: 15px">
+
+
+        <g:if test="${readingItems}">
+
+            <g:each in="${readingItems}" var="item">
+
+                <!-- Individual Inbox Item -->
+                <div class="inbox-item d-flex mb-2">
+                    <!-- Profile photo on the left -->
+                    <div class="inbox-item-avatar">
+                        <img src="item.resource?.user?.photo" alt="${item.resource?.user?.username} Photo" class="rounded-circle" width="50" height="50"/>
+                    </div>
+
+                    <!-- Inbox item content on the right -->
+                    <div class="inbox-item-content ms-3 w-100">
+                        <!-- Header: Creator's Name, Username, Topic Name -->
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>${item.resource.user.firstName} ${item.resource.user.lastName}</strong>
+                                <small class="text-secondary ms-2">@${item.resource.user.username}</small>
+                            </div>
+                            <div>
+                                <span class="text-secondary">Topic: </span>
+                                <span class="fw-bold">${item.resource.topic.name}</span>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <p class="mt-2">${item.resource.description.encodeAsHTML()}</p>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2 mt-3 justify-content-end">
+
+<!--                            <button class="btn btn-sm btn-outline-primary">Download</button>-->
+
+<!--                            <button class="btn btn-sm btn-outline-secondary">View Full Site</button>-->
+
+                            <g:if test="${item.resource instanceof linksharing.DocumentResource}">
+                                <g:link controller="document" action="download" params="[id: item.resource.id]" class="btn btn-sm btn-outline-primary">Download</g:link>
+                            </g:if>
+
+                            <g:if test="${item.resource instanceof linksharing.LinkResource}">
+                                <a href="${item.resource.url}" target="_blank" class="btn btn-sm btn-outline-secondary">View Full Site</a>
+                            </g:if>
+
+                            <g:form controller="resource" action="markAsRead" method="post" class="d-inline">
+                                <g:hiddenField name="id" value="${item.id}"/>
+                                <button type="submit" class="btn btn-sm btn-outline-success">Mark as Read</button>
+                            </g:form>
+
+                            <button class="btn btn-sm btn-outline-info">View Post</button>
+
+                        </div>
+                    </div>
+                </div>
+
+            </g:each>
+
+        </g:if>
+
 
     </div>
 </div>
+
+
+<style>
+
+    .card-body::-webkit-scrollbar {
+        width: 0px;  /* Slim scrollbar */
+    }
+
+    .card-body:hover::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .card-body::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .card-body::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 4px;
+    }
+
+</style>

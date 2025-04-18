@@ -31,16 +31,11 @@ class TopicService {
     }
 
     List<Topic> getTrendingTopics() {
-        Topic.createCriteria().list(max: 3) {
-            eq('visibility', Topic.Visibility.PUBLIC)
-            projections {
-                groupProperty('id')
-                count('resources', 'resourceCount')
-            }
-            order('resourceCount', 'desc')
-        }?.collect { result ->
-            Topic.get(result[0]) // Fetch full Topic by its ID
-        }
+        Topic.executeQuery("""
+        select t from Topic t
+        where t.visibility = :visibility
+        order by size(t.resources) desc
+    """, [visibility: Topic.Visibility.PUBLIC], [max: 3])
     }
 
     def deleteTopic(Topic topic) {

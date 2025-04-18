@@ -43,7 +43,6 @@ class TopicController {
         redirect(controller: 'dashboard', action: 'index')
     }
 
-
     def unsubscribe() {
         User user = session.user
         Long topicId = params.long('topicId')

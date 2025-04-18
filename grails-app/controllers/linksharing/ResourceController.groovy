@@ -3,6 +3,7 @@ package linksharing
 class ResourceController {
 
     ResourceService resourceService
+    ReadingItemService readingItemService
 
     def createLinkResource() {
         println(params)
@@ -37,5 +38,19 @@ class ResourceController {
         redirect(uri: request.getHeader("referer"))
         //Redirects to the same page user was on
 
+    }
+
+    def markAsRead() {
+        Long readingItemId = params.long("id")
+
+        if(readingItemService.markAsRead(readingItemId, session.user)) {
+            println("Marked as read successfully")
+            flash.message = "Marked as read successfully."
+        }
+        else {
+            println("Unable to mark the resource as read.")
+            flash.error = "Unable to mark the resource as read."
+        }
+        redirect(uri: request.getHeader("referer") ?: "/dashboard/index")
     }
 }

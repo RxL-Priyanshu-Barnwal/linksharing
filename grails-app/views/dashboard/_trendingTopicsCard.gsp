@@ -48,8 +48,6 @@
                                     <input type="hidden" name="visibility" class="visibility-value">
                                 </form>
 
-                            </g:if>
-
 
                             <%
                             // Get the subscription for the current user (if any)
@@ -78,7 +76,7 @@
                                     <input type="hidden" name="seriousness" class="seriousness-value">
                                 </form>
 
-                            <g:if test="${topic.user?.id == session.user?.id}">
+
 
                                 <!-- Icons -->
                                 <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>
@@ -101,6 +99,28 @@
 
                             <!-- Show Unsubscribe Button if User is Subscribed and not the creator -->
                             <g:if test="${topic.user?.id != session.user?.id}">
+
+                                <%
+                                // Get the subscription for the current user (if any)
+                                def userSubscription = topic.subscriptions?.find { it.user?.id == session.user?.id }
+                                def seriousnessText = userSubscription ? userSubscription.seriousness.toString() : 'CASUAL'
+
+                                %>
+
+                                <!-- Seriousness -->
+                                <div class="dropdown">
+
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ${seriousnessText}
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="CASUAL" href="#">CASUAL</a></li>
+                                        <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="SERIOUS" href="#">SERIOUS</a></li>
+                                        <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="VERY_SERIOUS" href="#">VERY_SERIOUS</a></li>
+                                    </ul>
+
+                                </div>
+
                                 <form method="post" action="${createLink(controller: 'topic', action: 'unsubscribe')}" class="mb-0">
                                     <input type="hidden" name="topicId" value="${topic.id}">
                                     <button type="submit" class="btn btn-sm btn-danger">Unsubscribe</button>

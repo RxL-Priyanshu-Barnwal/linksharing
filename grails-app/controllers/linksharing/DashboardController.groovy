@@ -12,9 +12,21 @@ class DashboardController {
 
         def subscribedTopics = Subscription.findAllByUser(session.user, [sort: 'dateCreated', order: 'desc'])
 
+        def readingItems = ReadingItem.createCriteria().list {
+            eq("user", currentUser)
+            eq("isRead", false)
+            resource {
+                order("dateCreated", "desc")
+            }
+        }
+
         def trendingTopics = topicService.getTrendingTopics()
 
-        [user: user, subscribedTopics: subscribedTopics, dashboard: true, trendingTopics: trendingTopics]
+        trendingTopics.each {
+            println(it.name)
+        }
+
+        [user: user, subscribedTopics: subscribedTopics, readingItems: readingItems, trendingTopics: trendingTopics, dashboard: true]
     }
 
     def deleteTopic() {
