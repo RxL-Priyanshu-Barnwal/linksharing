@@ -94,26 +94,34 @@
                 <div class="card-body users-body py-3">
 
 
-                    <div class="row align-items-center">
-                        <div class="col-md-3">
-                            <img src="" alt="User Profile Picture" class="img-fluid">
-                        </div>
-                        <div class="col-md-9">
-                            <div>
-                                <strong style="font-size:1.4em;">User's Name</strong>
-                                <small class="text-secondary ms-2">@User's Username</small>
-                            </div>
-                            <p class="card-text small mb-4" style="color: #808080;">email@email.com</p>
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <p class="mb-0" style="color: #808080;">Subscription: <span>12</span></p>
+                    <g:if test="${subscribedUsers}">
+                        <g:each in="${subscribedUsers}" var="user">
+
+
+                            <div class="row align-items-center">
+                                <div class="col-md-3">
+                                    <img src="user?.photo" alt="${user?.username} photo" class="img-fluid">
                                 </div>
-                                <div>
-                                    <p class="mb-0" style="color: #808080;">Topic: <span>5</span></p>
+                                <div class="col-md-9">
+                                    <div>
+                                        <strong style="font-size:1.4em;">${user?.firstName} ${user?.lastName}</strong>
+                                        <small class="text-secondary ms-2">@${user?.username}</small>
+                                    </div>
+                                    <p class="card-text small mb-4" style="color: #808080;">${user?.email}</p>
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <p class="mb-0" style="color: #808080;">Subscription: <span>${user?.subscriptions?.size() ?: 0}</span></p>
+                                        </div>
+                                        <div>
+                                            <p class="mb-0" style="color: #808080;">Topic: <span>${user?.topics?.size() ?: 0}</span></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+
+
+                        </g:each>
+                    </g:if>
 
 
                 </div>

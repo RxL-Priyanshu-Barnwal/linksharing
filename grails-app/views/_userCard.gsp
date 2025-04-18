@@ -15,7 +15,7 @@
                         <p class="mb-0" style="color: #808080;">Subscription: <span>${user?.subscriptions?.size() ?: 0}</span></p>
                     </div>
                     <div>
-                        <p class="mb-0" style="color: #808080;">Topic: <span>${user?.subscriptions?.size() ?: 0}</span></p>
+                        <p class="mb-0" style="color: #808080;">Topic: <span>${user?.topics?.size() ?: 0}</span></p>
                     </div>
                 </div>
             </div>

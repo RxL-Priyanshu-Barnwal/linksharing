@@ -20,8 +20,12 @@
 
                         <div class="col-md-9">
                             <h5 class="card-title mb-1">
-                                <span id="topicName-${subscribedTopic.topic.id}">${subscribedTopic.topic.name}</span>
+
+                                <g:link controller="topic" action="index" params="[id: subscribedTopic.topic.id]">
+                                    <span id="topicName-${subscribedTopic.topic.id}">${subscribedTopic.topic.name} (ID: ${subscribedTopic.topic.id})</span>
+                                </g:link>
                                 <input type="text" id="topicNameInput-${subscribedTopic.topic.id}" value="${subscribedTopic.topic.name}" style="display: none;">
+
                             </h5>
 
                             <p class="text-secondary small mb-3">${subscribedTopic.topic.user.username}</p>

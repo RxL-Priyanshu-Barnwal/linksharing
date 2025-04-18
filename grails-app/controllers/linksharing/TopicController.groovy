@@ -6,6 +6,11 @@ class TopicController {
     //bean injection: bean is a application specific instance of service
 
     def index() {
+        Topic topic = Topic.get(params.id)
+
+        List<User> subscribedUsers = topic.subscriptions*.user.unique()
+
+        [topic: topic, subscribedUsers: subscribedUsers]
 
     }
 
