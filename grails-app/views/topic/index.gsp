@@ -83,7 +83,6 @@
             </div>
 
 
-
 <!--            Users Subscribed to the topic-->
 
             <div class="card custom-card mt-5">
@@ -139,40 +138,56 @@
 
             <div class="card custom-card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0">Inbox</h5>
+                    <h5 class="mb-0">Posts</h5>
                 </div>
                 <div class="card-body" style="max-height: 260px; overflow-y: auto; overflow-x: hidden; padding-right: 15px">
-                            <!-- Individual Inbox Item -->
-                            <div class="inbox-item d-flex mb-2">
+
+                    <g:if test="${resources}">
+                        <g:each in="${resources}" var="resource">
+
+                            <!-- Individual Post Item -->
+                            <div class="post-item d-flex mb-2">
                                 <!-- Profile photo on the left -->
-                                <div class="inbox-item-avatar">
-                                    <img src="" alt="Creator's Photo" class="rounded-circle" width="50" height="50"/>
+                                <div class="post-item-avatar">
+                                    <img src="resource.user.photo" alt="Creator's Photo" class="rounded-circle" width="50" height="50"/>
                                 </div>
 
-                                <!-- Inbox item content on the right -->
-                                <div class="inbox-item-content ms-3 w-100">
+                                <!-- post item content on the right -->
+                                <div class="post-item-content ms-3 w-100">
                                     <!-- Header: Creator's Name, Username, Topic Name -->
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <strong style="font-size:1.4em;">User's Name</strong>
-                                            <small class="text-secondary ms-2">@User's Username</small>
+                                            <strong style="font-size:1.4em;">${resource.user.firstName} ${resource.user.lastName}</strong>
+                                            <small class="text-secondary ms-2">@${resource.user.username}</small>
                                         </div>
                                         <div>
                                             <span class="text-secondary">Topic: </span>
-                                            <span class="fw-bold">Topic Name of resource</span>
+                                            <span class="fw-bold">${resource.topic.name}</span>
                                         </div>
                                     </div>
                                     <!-- Description -->
-                                    <p class="mt-2">Description</p>
+                                    <p class="mt-2">${resource.description}</p>
                                     <!-- Action Buttons -->
                                     <div class="d-flex gap-2 mt-3 justify-content-end">
-                                            <button type="submit" class="btn btn-sm btn-outline-primary">Download</button>
-                                            <button type="submit" class="btn btn-sm btn-outline-secondary">View Full Site</button>
-                                            <button type="submit" class="btn btn-sm btn-outline-success">Mark as Read</button>
-                                        <button class="btn btn-sm btn-outline-info">View Post</button>
+
+                                        <g:if test="${resource instanceof linksharing.DocumentResource}">
+                                            <g:link controller="" action="" params="[id: resource.id]" class="btn btn-sm btn-outline-primary">Download</g:link>
+                                        </g:if>
+
+                                        <g:if test="${resource instanceof linksharing.LinkResource}">
+                                            <a href="${resource.url}" target="_blank" class="btn btn-sm btn-outline-secondary">View Full Site</a>
+                                        </g:if>
+
+<!--                                        <button type="submit" class="btn btn-sm btn-outline-success">Mark as Read</button>-->
+                                        <g:link controller="post" action="index" params="[id: resource.id]">
+                                            <button class="btn btn-sm btn-outline-info">View Post</button>
+                                        </g:link>
                                     </div>
                                 </div>
                             </div>
+
+                        </g:each>
+                    </g:if>
 
                 </div>
             </div>

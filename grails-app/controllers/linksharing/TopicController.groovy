@@ -10,7 +10,9 @@ class TopicController {
 
         List<User> subscribedUsers = topic.subscriptions*.user.unique()
 
-        [topic: topic, subscribedUsers: subscribedUsers]
+        def resources = topic.resources?.toList() ?: []
+
+        [topic: topic, subscribedUsers: subscribedUsers, resources: resources]
 
     }
 

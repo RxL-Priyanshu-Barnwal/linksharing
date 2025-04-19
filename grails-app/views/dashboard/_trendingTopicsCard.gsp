@@ -17,7 +17,9 @@
                 </div>
 
                 <div class="col-md-9">
-                    <h5 class="card-title mb-1">${topic?.name}</h5>
+                    <g:link controller="topic" action="index" params="[id: topic.id]" style="color: inherit; text-decoration: none;">
+                        <span class="card-title mb-1" style="font-size: 1.3em">${topic?.name}</span>
+                    </g:link>
 
                     <p class="text-secondary small mb-3">${topic?.user?.username}</p>
 

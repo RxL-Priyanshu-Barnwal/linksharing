@@ -26,7 +26,11 @@
                             </div>
                             <div>
                                 <span class="text-secondary">Topic: </span>
-                                <span class="fw-bold">${item.resource.topic.name}</span>
+
+                                <g:link controller="topic" action="index" params="[id: item.resource.topic.id]" style="color: inherit; text-decoration: none;">
+                                    <span class="fw-bold">${item.resource.topic.name}</span>
+                                </g:link>
+
                             </div>
                         </div>
 
@@ -36,12 +40,8 @@
                         <!-- Action Buttons -->
                         <div class="d-flex gap-2 mt-3 justify-content-end">
 
-<!--                            <button class="btn btn-sm btn-outline-primary">Download</button>-->
-
-<!--                            <button class="btn btn-sm btn-outline-secondary">View Full Site</button>-->
-
                             <g:if test="${item.resource instanceof linksharing.DocumentResource}">
-                                <g:link controller="document" action="download" params="[id: item.resource.id]" class="btn btn-sm btn-outline-primary">Download</g:link>
+                                <g:link controller="" action="" params="[id: resource.id]" class="btn btn-sm btn-outline-primary">Download</g:link>
                             </g:if>
 
                             <g:if test="${item.resource instanceof linksharing.LinkResource}">
@@ -53,8 +53,9 @@
                                 <button type="submit" class="btn btn-sm btn-outline-success">Mark as Read</button>
                             </g:form>
 
-                            <button class="btn btn-sm btn-outline-info">View Post</button>
-
+                            <g:link controller="post" action="index" params="[id: resource.id]">
+                                <button class="btn btn-sm btn-outline-info">View Post</button>
+                            </g:link>
                         </div>
                     </div>
                 </div>
