@@ -90,7 +90,7 @@
                     <h5 class="mb-0">Users</h5>
                 </div>
 
-                <div class="card-body users-body py-3">
+                <div class="card-body users-body py-3" style="max-height: 480px; overflow-y: auto; overflow-x: hidden; padding-right: 10px;">
 
 
                     <g:if test="${subscribedUsers}">
@@ -137,9 +137,17 @@
 
 
             <div class="card custom-card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Posts</h5>
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+
+                    <span class="mb-0" style="font-size: 1.3em">Posts</span>
+
+                    <div class="w-50">
+                        <input type="text" id="searchBox" placeholder="Search posts..." class="form-control form-control-sm rounded-pill" aria-label="Search" />
+                    </div>
+
                 </div>
+
                 <div class="card-body" style="max-height: 260px; overflow-y: auto; overflow-x: hidden; padding-right: 15px">
 
                     <g:if test="${resources}">

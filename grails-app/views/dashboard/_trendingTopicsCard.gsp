@@ -79,13 +79,10 @@
                                 </form>
 
 
-
-                                <!-- Icons -->
-                                <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>
                                 <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
                                 <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${topic.id}" title="Delete" role="button"></i>
-
                             </g:if>
+
 
 
                         <g:if test="${!topic.subscriptions?.any { it.user?.id == session.user?.id }}">
@@ -128,6 +125,9 @@
                                     <button type="submit" class="btn btn-sm btn-danger">Unsubscribe</button>
                                 </form>
                             </g:if>
+
+                            <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>
+
 
                         </g:else>
 

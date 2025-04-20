@@ -37,6 +37,27 @@
 
                             <!-- Bottom Controls -->
                             <div class="d-flex align-items-center gap-3 flex-wrap mb-4">
+
+                                <!-- Visibility -->
+                                <g:if test="${subscribedTopic.topic.user?.id == session.user?.id}">
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            ${subscribedTopic.topic.visibility ?: 'Public'}
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item change-visibility" data-id="${subscribedTopic.topic.id}" data-value="PUBLIC" href="#">PUBLIC</a></li>
+                                            <li><a class="dropdown-item change-visibility" data-id="${subscribedTopic.topic.id}" data-value="PRIVATE" href="#">PRIVATE</a></li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Hidden form to send data -->
+                                    <form id="visibilityForm" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
+                                        <input type="hidden" name="id" id="visibilityTopicId">
+                                        <input type="hidden" name="visibility" id="visibilityValue">
+                                    </form>
+
+                                </g:if>
+
                                 <!-- Seriousness -->
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -55,29 +76,25 @@
                                     <input type="hidden" name="seriousness" id="seriousnessValue">
                                 </form>
 
-                                <!-- Visibility -->
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        ${subscribedTopic.topic.visibility ?: 'Public'}
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item change-visibility" data-id="${subscribedTopic.topic.id}" data-value="PUBLIC" href="#">PUBLIC</a></li>
-                                        <li><a class="dropdown-item change-visibility" data-id="${subscribedTopic.topic.id}" data-value="PRIVATE" href="#">PRIVATE</a></li>
-                                    </ul>
-                                </div>
-
-                                <!-- Hidden form to send data -->
-                                <form id="visibilityForm" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
-                                    <input type="hidden" name="id" id="visibilityTopicId">
-                                    <input type="hidden" name="visibility" id="visibilityValue">
-                                </form>
 
                                 <!-- Icons -->
                                 <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>
 
-                                <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
+                                <g:if test="${subscribedTopic.topic.user?.id == session.user?.id}">
 
-                                <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${subscribedTopic.topic.id}" title="Delete" role="button"></i>
+                                    <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
+                                    <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${subscribedTopic.topic.id}" title="Delete" role="button"></i>
+
+                                </g:if>
+
+                                <g:else test="${subscribedTopic.user != session.user}">
+
+                                    <form method="post" action="${createLink(controller: 'topic', action: 'unsubscribe')}" class="mb-0">
+                                        <input type="hidden" name="topicId" value="${subscribedTopic.topic.id}">
+                                        <button type="submit" class="btn btn-sm btn-danger">Unsubscribe</button>
+                                    </form>
+
+                                </g:else>
 
 
                             </div>
