@@ -51,7 +51,9 @@ class TopicController {
         subscribeService.createSubscription(user, topic, Subscription.Seriousness.CASUAL)
 
         flash.message = "Successfully subscribed to ${topic.name}."
-        redirect(controller: 'dashboard', action: 'index')
+//        redirect(controller: 'dashboard', action: 'index')
+
+        redirect(uri: request.getHeader("referer"))
     }
 
     def unsubscribe() {
