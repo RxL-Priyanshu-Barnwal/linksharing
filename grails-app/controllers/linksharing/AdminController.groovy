@@ -4,7 +4,7 @@ class AdminController {
 
     AdminService adminService
 
-    def index() {
+    def users() {
 
         if(!session.user?.admin) {
             println("Unauthorized access.")

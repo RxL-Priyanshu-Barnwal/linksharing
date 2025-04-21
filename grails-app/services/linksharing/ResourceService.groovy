@@ -44,4 +44,19 @@ class ResourceService {
             }.join(', ')
         }
     }
+
+    def deleteResource(Long id) {
+        Resource resource = Resource.get(id)
+        try{
+            resource.delete(flush: true, failOnError: true)
+        }
+        catch(Exception e) {
+            println "${e.message}"
+        }
+    }
+
+    def editResource(Long id) {
+        Resource resource = Resource.get(id)
+
+    }
 }

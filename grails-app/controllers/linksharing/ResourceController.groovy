@@ -7,11 +7,17 @@ class ResourceController {
     TopicService topicService
 
     def index() {
+        Long resourceId = params.id as Long
+
+        def resource = Resource.get(resourceId)
+
+        println("${resource.user.username} created this resource in topic: ${resource.topic.name}")
+
         def trendingTopics = topicService.getTrendingTopics()
 
         def topicNames = Topic.list()*.name
 
-        [trendingTopics: trendingTopics, topicNames: topicNames]
+        [trendingTopics: trendingTopics, topicNames: topicNames, resource: resource]
     }
 
     def createLinkResource() {
@@ -61,5 +67,21 @@ class ResourceController {
             flash.error = "Unable to mark the resource as read."
         }
         redirect(uri: request.getHeader("referer") ?: "/dashboard/index")
+    }
+
+    def deleteResource() {
+        Long resourceId = params.id as Long
+
+        try {
+            resourceService.deleteResource(resourceId)
+        }
+        catch(Exception e) {
+            println "${e.message}"
+        }
+        redirect(uri: request.getHeader("referer"))
+    }
+
+    def editResource() {
+
     }
 }

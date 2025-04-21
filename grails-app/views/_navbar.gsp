@@ -58,9 +58,9 @@
 
                         <g:if test="${session.user?.admin}">
 
-                            <li><g:link class="dropdown-item" controller="admin" action="index"><i class="bi bi-people"></i> Users </g:link></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-tags"></i> Topic</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-chat-left-text"></i> Posts</a></li>
+                            <li><g:link class="dropdown-item" controller="admin" action="users"><i class="bi bi-people"></i> Users </g:link></li>
+                            <li><g:link class="dropdown-item" controller="admin" action="topics"><i class="bi bi-tags"></i> Topics</g:link></li>
+                            <li><g:link class="dropdown-item" controller="admin" action="posts"><i class="bi bi-chat-left-text"></i> Posts</g:link></li>
 
                         </g:if>
 

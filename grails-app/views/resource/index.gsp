@@ -74,23 +74,75 @@
 
 <div class="container-fluid " style="padding: 3rem;">
     <div class="row gx-5">
+
         <div class="col-md-7 px-5">
 
 
-<!--            <div class="user-body">-->
-<!--                <g:render template="/userCard"/>-->
-<!--            </div>-->
-<!--            <div class="subscription-body">-->
-<!--                <g:render template="/dashboard/subscriptionCard" model="[subscribedTopics: subscribedTopics]"/>-->
-<!--            </div>-->
+            <g:if test="resource">
+
+                <div class="card custom-card mt-5">
+                    <div class="card-body">
+                        <div class="row align-items-center mb-2">
+                            <div class="col-auto">
+                                <img src="${resource?.user?.photo}" alt="User Photo" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
+                            </div>
+                            <div class="col">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="fw-bold">${resource?.user?.firstName} ${resource?.user?.lastName}</span>
+                                    </div>
+                                    <div>
+                                        <span class="secondary">Topic: ${resource?.topic?.name}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col">
+                                <span class="text-secondary">${resource?.user?.username}</span>
+                            </div>
+                            <div class="col-auto">
+                                <span class="text-muted">${resource?.dateCreated}</span>
+                            </div>
+                        </div>
+                        <div class="m-4">
+                            ${resource?.description}
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                ★★★★★
+                            </div>
+                            <div class="p-1">
+
+                                <g:if test="${resource?.user?.id == session.user?.id || session.user?.admin}">
+                                    <g:link controller="resource" action="edit" id="${resource.id}" class="btn btn-sm btn-outline-info">Edit</g:link>
+                                    <g:link controller="resource" action="delete" id="${resource.id}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this resource?')">Delete</g:link>
+                                </g:if>
+
+                                <g:if test="${resource instanceof linksharing.DocumentResource}">
+                                    <g:link controller="" action="" params="[id: resource.id]" class="btn btn-sm btn-outline-primary">Download</g:link>
+                                </g:if>
+
+                                <g:if test="${resource instanceof linksharing.LinkResource}">
+                                    <a href="${resource.url}" target="_blank" class="btn btn-sm btn-outline-secondary">View Full Site</a>
+                                </g:if>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </g:if>
 
 
         </div>
-        <div class="col-md-5 px-5">
+
+        <div class="col-md-5">
 
             <div class="trendingTopics-body">
                 <g:render template="/dashboard/trendingTopicsCard" model="[trendingTopics: trendingTopics]"/>
             </div>
+
         </div>
 
     </div>
