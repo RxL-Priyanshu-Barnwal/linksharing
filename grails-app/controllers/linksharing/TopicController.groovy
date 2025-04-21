@@ -12,7 +12,9 @@ class TopicController {
 
         def resources = topic.resources?.toList() ?: []
 
-        [topic: topic, subscribedUsers: subscribedUsers, resources: resources]
+        def topicNames = Topic.list()*.name
+
+        [topic: topic, subscribedUsers: subscribedUsers, resources: resources, topicNames: topicNames]
 
     }
 

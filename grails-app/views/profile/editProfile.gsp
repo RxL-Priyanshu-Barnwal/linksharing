@@ -37,7 +37,7 @@
     </div>
 
     <div class="modal-body">
-        <g:render template="/modals"/>
+        <g:render template="/modals" model="topicNames: topicNames"/>
     </div>
 
 

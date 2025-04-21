@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -64,34 +64,18 @@
 
 <!-- Navbar -->
 
-    <div class="navigation-bar">
-        <g:render template="/navbar"/>
-    </div>
+<div class="navigation-bar">
+    <g:render template="/navbar"/>
+</div>
 
-    <div class="modals">
-        <g:render template="/modals" model="topicNames: topicNames"/>
-    </div>
+<div class="modals">
+    <g:render template="/modals" model="topicNames: topicNames"/>
+</div>
 
-    <div class="container-fluid " style="padding: 3rem;">
-        <div class="row gx-5">
-            <div class="col-md-5 px-5">
-                <div class="user-body">
-                    <g:render template="/userCard"/>
-                </div>
-                <div class="subscription-body">
-                    <g:render template="/dashboard/subscriptionCard" model="[subscribedTopics: subscribedTopics]"/>
-                </div>
-            </div>
-            <div class="col-md-7 px-5">
-                <div class="inbox-body">
-                    <g:render template="/dashboard/inboxCard"/>
-                </div>
-                <div class="trendingTopics-body">
-                    <g:render template="/dashboard/trendingTopicsCard" model="[trendingTopics: trendingTopics]"/>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="users-table p-5">
+    <g:render template="usersTable" model="users: users"/>
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 

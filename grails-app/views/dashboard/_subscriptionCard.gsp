@@ -8,6 +8,8 @@
 
         <div class="subscription-scroll-area" style="max-height: 480px; overflow-y: auto; overflow-x: hidden; padding-right: 10px">
 
+
+<!--        subscribedTopics is List<Subscription> -->
             <g:if test="${subscribedTopics}">
                 <g:each in="${subscribedTopics}" var="subscribedTopic">
 
@@ -39,7 +41,7 @@
                             <div class="d-flex align-items-center gap-3 flex-wrap mb-4">
 
                                 <!-- Visibility -->
-                                <g:if test="${subscribedTopic.topic.user?.id == session.user?.id}">
+                                <g:if test="${session.user?.id == subscribedTopic.topic.user?.id || session.user?.admin}">
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             ${subscribedTopic.topic.visibility ?: 'Public'}
@@ -80,21 +82,21 @@
                                 <!-- Icons -->
                                 <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>
 
-                                <g:if test="${subscribedTopic.topic.user?.id == session.user?.id}">
+                                <g:if test="${subscribedTopic.topic.user?.id == session.user?.id || session.user?.admin}">
 
                                     <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
                                     <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${subscribedTopic.topic.id}" title="Delete" role="button"></i>
 
                                 </g:if>
 
-                                <g:else test="${subscribedTopic.user != session.user}">
+                                <g:if test="${subscribedTopic.user?.id != session.user?.id}">
 
                                     <form method="post" action="${createLink(controller: 'topic', action: 'unsubscribe')}" class="mb-0">
                                         <input type="hidden" name="topicId" value="${subscribedTopic.topic.id}">
                                         <button type="submit" class="btn btn-sm btn-danger">Unsubscribe</button>
                                     </form>
 
-                                </g:else>
+                                </g:if>
 
 
                             </div>
@@ -193,10 +195,6 @@
                 $('#seriousnessForm')[0].submit();
             }
         });
-
-
     });
-
-
 
 </script>

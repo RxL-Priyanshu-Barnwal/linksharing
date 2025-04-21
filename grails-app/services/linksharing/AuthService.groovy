@@ -49,14 +49,20 @@ class AuthService {
     def authenticateUser(String username, String password, session) {
         def user = User.findByUsername(username)
 
-        if(user && user.password == password) {
-            session.user = user
-            session.userId = user.id
-            return true
+        if(!user) {
+            return [success: false, reason: 'invalid']
         }
-        else {
-            return false
+        if(!user.active) {
+            return [success: false, reason: 'inactive']
         }
+
+        if(user.password != password) {
+            return [success: false, reason: 'invalid']
+        }
+
+        session.user = user
+        session.userId = user.id
+        return [success: true]
     }
 
     def getRecentPosts(int max = 2) {

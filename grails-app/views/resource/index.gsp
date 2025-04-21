@@ -64,34 +64,37 @@
 
 <!-- Navbar -->
 
-    <div class="navigation-bar">
-        <g:render template="/navbar"/>
-    </div>
+<div class="navigation-bar">
+    <g:render template="/navbar"/>
+</div>
 
-    <div class="modals">
-        <g:render template="/modals" model="topicNames: topicNames"/>
-    </div>
+<div class="modals">
+    <g:render template="/modals" model="topicNames: topicNames"/>
+</div>
 
-    <div class="container-fluid " style="padding: 3rem;">
-        <div class="row gx-5">
-            <div class="col-md-5 px-5">
-                <div class="user-body">
-                    <g:render template="/userCard"/>
-                </div>
-                <div class="subscription-body">
-                    <g:render template="/dashboard/subscriptionCard" model="[subscribedTopics: subscribedTopics]"/>
-                </div>
-            </div>
-            <div class="col-md-7 px-5">
-                <div class="inbox-body">
-                    <g:render template="/dashboard/inboxCard"/>
-                </div>
-                <div class="trendingTopics-body">
-                    <g:render template="/dashboard/trendingTopicsCard" model="[trendingTopics: trendingTopics]"/>
-                </div>
+<div class="container-fluid " style="padding: 3rem;">
+    <div class="row gx-5">
+        <div class="col-md-7 px-5">
+
+
+<!--            <div class="user-body">-->
+<!--                <g:render template="/userCard"/>-->
+<!--            </div>-->
+<!--            <div class="subscription-body">-->
+<!--                <g:render template="/dashboard/subscriptionCard" model="[subscribedTopics: subscribedTopics]"/>-->
+<!--            </div>-->
+
+
+        </div>
+        <div class="col-md-5 px-5">
+
+            <div class="trendingTopics-body">
+                <g:render template="/dashboard/trendingTopicsCard" model="[trendingTopics: trendingTopics]"/>
             </div>
         </div>
+
     </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 

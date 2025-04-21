@@ -69,7 +69,7 @@
 </div>
 
 <div class="modals">
-    <g:render template="/modals"/>
+    <g:render template="/modals" model="topicNames: topicNames"/>
 </div>
 
 <div class="container-fluid " style="padding: 3rem;">
@@ -249,7 +249,7 @@
 
                 </div>
 
-                <div class="card-body" style="max-height: 260px; overflow-y: auto; overflow-x: hidden; padding-right: 15px">
+                <div class="card-body" style="max-height: 500px; overflow-y: auto; overflow-x: hidden; padding-right: 15px">
 
                     <g:if test="${resources}">
                         <g:each in="${resources}" var="resource">

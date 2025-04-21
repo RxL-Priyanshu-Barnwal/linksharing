@@ -53,7 +53,7 @@
                                 <button type="submit" class="btn btn-sm btn-outline-success">Mark as Read</button>
                             </g:form>
 
-                            <g:link controller="post" action="index" params="[id: item.resource.id]">
+                            <g:link controller="resource" action="index" params="[id: item.resource.id]">
                                 <button class="btn btn-sm btn-outline-info">View Post</button>
                             </g:link>
                         </div>

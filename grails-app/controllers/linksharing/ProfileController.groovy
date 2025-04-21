@@ -9,8 +9,9 @@ class ProfileController {
 
         def subscribedTopics = Subscription.findAllByUser(currentUser, [sort: 'dateCreated', order: 'desc'])
 
-        println("Session user: ${session.user}")
-        render(view: "editProfile", model: [user: user, subscribedTopics: subscribedTopics])
+        def topicNames = Topic.list()*.name
+
+        render(view: "editProfile", model: [user: user, subscribedTopics: subscribedTopics, topicNames: topicNames])
     }
 
     def userProfile() { }

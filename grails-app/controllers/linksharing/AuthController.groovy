@@ -35,12 +35,20 @@ class AuthController {
 
         def res = authService.authenticateUser(params.username, params.password, session)
 
-        if(res) {
+        if(res.success) {
             println("Login Successful")
             redirect(controller: "dashboard", action: "index")
         }
         else {
-            flash.message = "Invalid username or password"
+            switch (res.reason) {
+                case 'inactive':
+                    flash.message = "Your account is inactive."
+                    break
+                case 'invalid':
+                default:
+                    flash.message = "Invalid username or password."
+                    break
+            }
             redirect action: "login"
         }
     }

@@ -22,12 +22,11 @@ class DashboardController {
 
         def trendingTopics = topicService.getTrendingTopics()
 
-        trendingTopics.each {
-            println(it.name)
-        }
+        def topicNames = Topic.list()*.name
 
-        [user: user, subscribedTopics: subscribedTopics, readingItems: readingItems, trendingTopics: trendingTopics, dashboard: true]
+        [user: user, subscribedTopics: subscribedTopics, readingItems: readingItems, trendingTopics: trendingTopics, dashboard: true, topicNames: topicNames]
     }
+
 
     def deleteTopic() {
         println("Topic delete id is ${params.id}")
@@ -50,6 +49,7 @@ class DashboardController {
             render status: 500, text: "Error deleting topic"
         }
     }
+
 
     def updateVisibility() {
         Long topicId = params.id as Long

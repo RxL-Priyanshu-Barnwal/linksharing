@@ -4,6 +4,15 @@ class ResourceController {
 
     ResourceService resourceService
     ReadingItemService readingItemService
+    TopicService topicService
+
+    def index() {
+        def trendingTopics = topicService.getTrendingTopics()
+
+        def topicNames = Topic.list()*.name
+
+        [trendingTopics: trendingTopics, topicNames: topicNames]
+    }
 
     def createLinkResource() {
         println(params)

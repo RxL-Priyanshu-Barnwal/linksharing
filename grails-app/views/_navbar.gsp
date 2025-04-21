@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
         <g:link uri="/dashboard" class="navbar-brand p-3" style="font-size: 2rem">Link Sharing</g:link>
@@ -57,13 +56,9 @@
                             </g:link>
                         </li>
 
-                        <g:if test="${dashboard}">
+                        <g:if test="${session.user?.admin}">
 
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="bi bi-people"></i> Users
-                                </a>
-                            </li>
+                            <li><g:link class="dropdown-item" controller="admin" action="index"><i class="bi bi-people"></i> Users </g:link></li>
                             <li><a class="dropdown-item" href="#"><i class="bi bi-tags"></i> Topic</a></li>
                             <li><a class="dropdown-item" href="#"><i class="bi bi-chat-left-text"></i> Posts</a></li>
 

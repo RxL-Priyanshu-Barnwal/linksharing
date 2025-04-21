@@ -32,7 +32,7 @@
 
                         <div class="d-flex align-items-center gap-3 flex-wrap mb-4">
 
-                            <g:if test="${topic.user?.id == session.user?.id}">
+                            <g:if test="${topic.user?.id == session.user?.id || session.user?.admin}">
                                 <!-- Visibility -->
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

@@ -70,9 +70,23 @@
                         <label for="topicSelectInvite" class="form-label">Topic:</label>
                         <select class="form-select" id="topicSelectInvite" name="topic" required>
                             <option selected disabled>Select a topic</option>
-                            <g:each in="${subscribedTopics?.topic}" var="topic">
-                                <option value="${topic.name}">${topic.name}</option>
-                            </g:each>
+
+
+                            <g:if test="${session.user?.admin}">
+                                <!-- If the user is an admin, show all topics -->
+                                <g:each in="${topicNames}" var="topicName">
+                                    <option value="${topicName}">${topicName}</option>
+                                </g:each>
+                            </g:if>
+
+                            <g:else>
+                                <!-- If the user is not an admin, show only subscribed topics -->
+                                <g:each in="${subscribedTopics}" var="subscription">
+                                    <option value="${subscription.topic.name}">${subscription.topic.name}</option>
+                                </g:each>
+                            </g:else>
+
+
                         </select>
                     </div>
                 </div>
@@ -123,9 +137,23 @@
                         <label for="topicSelectLink" class="form-label">Topic:</label>
                         <select class="form-select" id="topicSelectLink" name="topic" required>
                             <option selected disabled>Select a topic</option>
-                            <g:each in="${subscribedTopics?.topic}" var="topic">
-                                <option value="${topic.name}">${topic.name}</option>
-                            </g:each>
+
+
+                            <g:if test="${session.user?.admin}">
+                                <!-- If the user is an admin, show all topics -->
+                                <g:each in="${topicNames}" var="topicName">
+                                    <option value="${topicName}">${topicName}</option>
+                                </g:each>
+                            </g:if>
+
+                            <g:else>
+                                <!-- If the user is not an admin, show only subscribed topics -->
+                                <g:each in="${subscribedTopics}" var="subscription">
+                                    <option value="${subscription.topic.name}">${subscription.topic.name}</option>
+                                </g:each>
+                            </g:else>
+
+
                         </select>
                     </div>
                 </div>
@@ -188,9 +216,23 @@
                         <label for="topicSelectDoc" class="form-label">Topic:</label>
                         <select class="form-select" id="topicSelectDoc" name="topic" required>
                             <option selected disabled>Select a topic</option>
-                            <g:each in="${subscribedTopics?.topic}" var="topic">
-                                <option value="${topic.name}">${topic.name}</option>
-                            </g:each>
+
+
+                            <g:if test="${session.user?.admin}">
+                                <!-- If the user is an admin, show all topics -->
+                                <g:each in="${topicNames}" var="topicName">
+                                    <option value="${topicName}">${topicName}</option>
+                                </g:each>
+                            </g:if>
+
+                            <g:else>
+                                <!-- If the user is not an admin, show only subscribed topics -->
+                                <g:each in="${subscribedTopics}" var="subscription">
+                                    <option value="${subscription.topic.name}">${subscription.topic.name}</option>
+                                </g:each>
+                            </g:else>
+
+
                         </select>
                     </div>
                 </div>
