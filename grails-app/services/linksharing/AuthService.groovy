@@ -72,4 +72,8 @@ class AuthService {
             }
         }
     }
+
+    def resetPassword(params) {
+
+    }
 }

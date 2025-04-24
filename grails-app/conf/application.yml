@@ -7,8 +7,8 @@ grails:
   mail:
     host: smtp.gmail.com
     port: 465
-    username: rxl.priyanshu.barnwal@gmail.com
-    password:
+    username: barnwal.priyanshu4@gmail.com
+    password: ifntnsxxlugrjdby
     props:
       mail.smtp.auth: true
       mail.smtp.socketFactory.port: 465

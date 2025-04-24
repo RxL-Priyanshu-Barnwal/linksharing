@@ -62,6 +62,11 @@
 <div class="right-side">
     <div class="login-container">
         <h2 class="text-center mb-4">Trouble Logging in?</h2>
+
+        <g:if test="${flash.message}">
+            <p style="color: red;">${flash.message}</p>
+        </g:if>
+
         <form>
             <div class="form-group">
                 <input type="text" class="form-control" id="email" placeholder="Enter your email">

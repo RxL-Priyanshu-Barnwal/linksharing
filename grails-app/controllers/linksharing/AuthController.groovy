@@ -53,6 +53,12 @@ class AuthController {
         }
     }
 
+    def resetPassword() {
+        def res = authService.resetPassword(params)
+
+
+    }
+
     def logout() {
         session.invalidate()
         println("Logged out successfully")
