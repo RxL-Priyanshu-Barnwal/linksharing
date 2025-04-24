@@ -1,5 +1,7 @@
 package linksharing
 
+import grails.converters.JSON
+
 class TopicController {
     TopicService topicService
     SubscribeService subscribeService
@@ -7,6 +9,12 @@ class TopicController {
 
     def index() {
         Topic topic = Topic.get(params.id)
+
+        if (!topic) {
+            flash.error = "Topic not found"
+            redirect(controller: 'dashboard', action: 'index')
+            return
+        }
 
         List<User> subscribedUsers = topic.subscriptions*.user.unique()
 
@@ -30,7 +38,7 @@ class TopicController {
             flash.topicMessage = res
             flash.showTopicModal = true
         }
-        redirect(controller: 'dashboard', action: 'index')
+        redirect(uri: request.getHeader("referer"))
     }
 
     def subscribe() {
@@ -79,5 +87,19 @@ class TopicController {
         }
 
         redirect(uri: request.getHeader("referer"))
+    }
+
+    def updateName() {
+        try {
+            def result = topicService.updateName(
+                    params.long('id'),
+                    params.topicName?.toString()
+            )
+
+            render([success: result.success, message: result.message] as JSON)
+        } catch (Exception e) {
+            log.error("Error in updateName", e)
+            render([success: false, message: "Server error occurred"] as JSON)
+        }
     }
 }

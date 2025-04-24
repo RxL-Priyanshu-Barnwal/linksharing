@@ -1,5 +1,7 @@
 package linksharing
 
+import grails.gorm.transactions.Transactional
+
 class ResourceController {
 
     ResourceService resourceService
@@ -11,7 +13,7 @@ class ResourceController {
 
         def resource = Resource.get(resourceId)
 
-        println("${resource.user.username} created this resource in topic: ${resource.topic.name}")
+        println("${resource?.user?.username} created this resource in topic: ${resource?.topic?.name}")
 
         def trendingTopics = topicService.getTrendingTopics()
 
@@ -69,19 +71,103 @@ class ResourceController {
         redirect(uri: request.getHeader("referer") ?: "/dashboard/index")
     }
 
+    @Transactional
     def deleteResource() {
         Long resourceId = params.id as Long
+        def resource = Resource.get(resourceId)
+
+        if (!resource) {
+            if (request.xhr) {
+                render status: 404, text: "Resource not found"
+            } else {
+                flash.error = "Resource not found"
+                redirect(controller: 'dashboard', action: 'index')
+            }
+            return
+        }
+
+        if (session.user?.id != resource.user?.id && !session.user?.admin) {
+            if (request.xhr) {
+                render status: 403, text: "Unauthorized to delete this resource"
+            } else {
+                flash.error = "Unauthorized access"
+                redirect(controller: 'dashboard', action: 'index')
+            }
+            return
+        }
 
         try {
-            resourceService.deleteResource(resourceId)
+            resource.delete(flush: true, failOnError: true)
+            if (request.xhr) {
+                render status: 200, text: "Resource deleted successfully"
+            } else {
+                flash.message = "Resource deleted successfully"
+                redirect(controller: 'dashboard', action: 'index')
+            }
+        } catch (Exception e) {
+            log.error "Error deleting resource ${resourceId}: ${e.message}", e
+            if (request.xhr) {
+                render status: 500, text: "Error deleting resource: ${e.message}"
+            } else {
+                flash.error = "Error deleting resource"
+                redirect(controller: 'dashboard', action: 'index')
+            }
         }
-        catch(Exception e) {
-            println "${e.message}"
-        }
-        redirect(uri: request.getHeader("referer"))
     }
 
     def editResource() {
+        Long resourceId = params.id as Long
+        if(session.user?.id != Resource.get(resourceId).user?.id || session.user?.admin) {
+            println("Unauthorized edit attempted")
+            return
+        }
 
+        redirect(uri: request.getHeader("referer"))
+    }
+
+    def download() {
+        Long id = params.id as Long
+        def documentResource = DocumentResource.get(id)
+        if (!documentResource) {
+            render status: 404, text: 'File not found'
+            return
+        }
+
+        File file = new File(documentResource.filePath)
+
+        if (!file.exists()) {
+            render status: 404, text: 'File not found'
+            return
+        }
+
+        // Detect content type or default to binary
+        String contentType = grailsApplication.mainContext.getResource(documentResource.filePath)?.URL?.openConnection()?.contentType
+        response.setContentType(contentType ?: "application/octet-stream")
+
+        // Serve as inline so browser opens it if supported (e.g. PDF, images)
+        response.setHeader("Content-Disposition", "inline; filename=\"${file.name}\"")
+
+        response.outputStream << new FileInputStream(file)
+        response.outputStream.flush()
+    }
+
+    def rating() {
+        // resourceId, score are expected as request parameters
+        Long resourceId = params.resourceId as Long
+        Integer score = params.score?.toInteger()
+        Long userId = session?.user?.id
+
+        if (score < 1 || score > 5) { // Assuming a 1-5 star rating
+            render status: 400, text: "Score must be between 1 and 5."
+            return
+        }
+
+        try {
+            resourceService.rating(resourceId, score, userId)
+            render status: 200, text: "Rating submitted successfully."
+        } catch (Exception e) {
+            log.error "Error saving rating for resource ID ${resourceId} by user ID ${userId}: ${e.message}", e
+            render status: 500, text: "Failed to submit rating."
+        }
     }
 }

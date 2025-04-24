@@ -3,6 +3,7 @@ package linksharing
 class AdminController {
 
     AdminService adminService
+    ResourceService resourceService
 
     def users() {
 
@@ -49,5 +50,36 @@ class AdminController {
         }
 
         redirect(uri: request.getHeader("referer"))
+    }
+
+    def topics() {
+        if(!session.user?.admin) {
+            println("Unauthorized access.")
+            flash.message = "Unauthorized access."
+            redirect(uri: request.getHeader("referer") ?: "/")
+            return
+        }
+
+        def topicNames = Topic.list()*.name
+
+        def topics = Topic.list()
+
+        [topics: topics, topicNames: topicNames]
+    }
+
+    def resources() {
+        if(!session.user?.admin) {
+            println("Unauthorized access.")
+            flash.message = "Unauthorized access."
+            redirect(uri: request.getHeader("referer") ?: "/")
+            return
+        }
+        def resources = Resource.list()
+
+        def topicNames = Topic.list()*.name
+
+        def resourceWithRating = resourceService.getResourcesWithRating()
+
+        [topicNames: topicNames, resources: resourceWithRating]
     }
 }

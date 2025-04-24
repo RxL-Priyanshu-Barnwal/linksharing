@@ -14,11 +14,9 @@
 
                 <ul class="icon-container text-white">
 
-                    <g:if test="${dashboard}">
-
                         <li class="nav-item">
                             <button class="icon-button" data-bs-toggle="modal" data-bs-target="#createTopic">
-                                <i class="bi bi-pencil-square"></i>
+                                <i class="bi bi-patch-plus"></i>
                             </button>
                         </li>
                         <li class="nav-item">
@@ -26,8 +24,6 @@
                                 <i class="bi bi-envelope"></i>
                             </button>
                         </li>
-
-                    </g:if>
 
                     <li class="nav-item">
                         <button class="icon-button" data-bs-toggle="modal" data-bs-target="#createLinkResource">
@@ -51,7 +47,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li>
-                            <g:link uri="/profile" class="dropdown-item text-white">
+                            <g:link controller="profile" action="userProfile" params="[id: session.user.id]" class="dropdown-item text-white">
                                 <i class="bi bi-person"></i> Profile
                             </g:link>
                         </li>
@@ -60,7 +56,7 @@
 
                             <li><g:link class="dropdown-item" controller="admin" action="users"><i class="bi bi-people"></i> Users </g:link></li>
                             <li><g:link class="dropdown-item" controller="admin" action="topics"><i class="bi bi-tags"></i> Topics</g:link></li>
-                            <li><g:link class="dropdown-item" controller="admin" action="posts"><i class="bi bi-chat-left-text"></i> Posts</g:link></li>
+                            <li><g:link class="dropdown-item" controller="admin" action="resources"><i class="bi bi-chat-left-text"></i> Resources</g:link></li>
 
                         </g:if>
 

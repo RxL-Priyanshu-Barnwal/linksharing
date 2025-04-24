@@ -6,8 +6,10 @@
             </div>
             <div class="col-md-9">
                 <div>
-                    <strong style="font-size:1.4em;">${user?.firstName} ${user?.lastName}</strong>
-                    <small class="text-secondary ms-2">@${user?.username}</small>
+                    <g:link controller="profile" action="userProfile" params="[id: user.id]" style="color: inherit; text-decoration: none;">
+                        <strong style="font-size:1.4em;">${user?.firstName} ${user?.lastName}</strong>
+                        <small class="text-secondary ms-2">@${user?.username}</small>
+                    </g:link>
                 </div>
                 <p class="card-text small mb-4" style="color: #808080;">${user?.email}</p>
                 <div class="d-flex justify-content-between">

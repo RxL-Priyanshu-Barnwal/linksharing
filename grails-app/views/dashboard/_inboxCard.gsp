@@ -21,9 +21,14 @@
                         <!-- Header: Creator's Name, Username, Topic Name -->
                         <div class="d-flex justify-content-between">
                             <div>
-                                <strong>${item.resource.user.firstName} ${item.resource.user.lastName}</strong>
-                                <small class="text-secondary ms-2">@${item.resource.user.username}</small>
+
+                                <g:link controller="profile" action="userProfile" params="[id: item.resource.user.id]" style="color: inherit; text-decoration: none;">
+                                    <strong>${item.resource.user.firstName} ${item.resource.user.lastName}</strong>
+                                    <small class="text-secondary ms-2">@${item.resource.user.username}</small>
+                                </g:link>
+
                             </div>
+
                             <div>
                                 <span class="text-secondary">Topic: </span>
 
@@ -41,7 +46,7 @@
                         <div class="d-flex gap-2 mt-3 justify-content-end">
 
                             <g:if test="${item.resource instanceof linksharing.DocumentResource}">
-                                <g:link controller="" action="" params="[id: resource.id]" class="btn btn-sm btn-outline-primary">Download</g:link>
+                                <g:link controller="resource" action="download" params="[id: item.resource.id]" class="btn btn-sm btn-outline-primary">Download</g:link>
                             </g:if>
 
                             <g:if test="${item.resource instanceof linksharing.LinkResource}">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Resource</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -62,8 +62,6 @@
 </head>
 <body>
 
-<!-- Navbar -->
-
 <div class="navigation-bar">
     <g:render template="/navbar"/>
 </div>
@@ -102,29 +100,36 @@
                                 <span class="text-secondary">${resource?.user?.username}</span>
                             </div>
                             <div class="col-auto">
-                                <span class="text-muted">${resource?.dateCreated}</span>
+                                <span class="text-secondary">${resource?.dateCreated}</span>
                             </div>
                         </div>
                         <div class="m-4">
                             ${resource?.description}
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                ★★★★★
+
+                            <div class="star-rating" id="resource-${resource?.id}-rating" data-resource-id="${resource?.id}">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
                             </div>
+
+
                             <div class="p-1">
 
                                 <g:if test="${resource?.user?.id == session.user?.id || session.user?.admin}">
-                                    <g:link controller="resource" action="edit" id="${resource.id}" class="btn btn-sm btn-outline-info">Edit</g:link>
-                                    <g:link controller="resource" action="delete" id="${resource.id}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this resource?')">Delete</g:link>
+                                    <g:link controller="resource" action="editResource" id="${resource?.id}" class="btn btn-sm btn-outline-info ms-2">Edit</g:link>
+                                    <g:link controller="resource" action="deleteResource" id="${resource?.id}" class="btn btn-sm btn-outline-danger ms-2" onclick="return confirm('Are you sure you want to delete this resource?')">Delete</g:link>
                                 </g:if>
 
                                 <g:if test="${resource instanceof linksharing.DocumentResource}">
-                                    <g:link controller="" action="" params="[id: resource.id]" class="btn btn-sm btn-outline-primary">Download</g:link>
+                                    <g:link controller="resource" action="download" params="[id: resource.id]" class="btn btn-sm btn-outline-primary ms-2">Download</g:link>
                                 </g:if>
 
                                 <g:if test="${resource instanceof linksharing.LinkResource}">
-                                    <a href="${resource.url}" target="_blank" class="btn btn-sm btn-outline-secondary">View Full Site</a>
+                                    <a href="${resource.url}" target="_blank" class="btn btn-sm btn-outline-secondary ms-2">View Full Site</a>
                                 </g:if>
 
                             </div>
@@ -147,6 +152,265 @@
 
     </div>
 </div>
+
+
+<style>
+
+    /* Container for inline stars */
+    .star-rating {
+        display: inline-block; /* Or flex for more control */
+        font-size: 2em; /* Adjust size as needed */
+        cursor: pointer;
+    }
+
+    /* Individual star styling */
+    .star-rating .star {
+        color: #ccc; /* Default color (light grey instead of white for visibility) */
+        transition: color 0.2s ease-in-out; /* Smooth color transition */
+        margin-right: 2px; /* Spacing between stars */
+    }
+
+    /* Hover effect: Color the hovered star and all previous stars yellow */
+    .star-rating:hover .star {
+        color: #ccc; /* Reset all stars first on container hover */
+    }
+    .star-rating .star:hover,
+    .star-rating .star:hover ~ .star {
+        /* Stars after the hovered one stay grey */
+    }
+    .star-rating .star:hover,
+        /* Selects the hovered star AND stars before it using JS (simpler than complex CSS selectors) */
+    .star-rating .star.hovered {
+        color: #ffcc00; /* Yellow color on hover */
+    }
+
+
+    /* Selected state: Keep stars yellow up to the selected one */
+    .star-rating .star.selected {
+        color: #ffcc00; /* Yellow color for selected stars */
+    }
+
+
+
+</style>
+
+
+<script>
+    $(document).ready(function() {
+
+        // Function to initialize the star rating based on existing rating
+        function initializeRating(resourceId, userRating) {
+            var ratingContainer = $('#resource-' + resourceId + '-rating');
+            ratingContainer.find('.star').each(function() {
+                if ($(this).data('value') <= userRating) {
+                    $(this).addClass('selected');
+                }
+            });
+        }
+
+        // Fetch the user's rating for the current resource on page load
+        <g:if test="${resource?.id && session?.user?.id}">
+            $.ajax({
+            url: '/resource/getUserRating', // Controller action to fetch user's rating
+            type: 'GET',
+            data: { resourceId: '${resource.id}', userId: '${session.user.id}' },
+            success: function(response) {
+            if (response.rating) {
+            initializeRating('${resource.id}', response.rating);
+            // Optionally disable further rating if already rated
+            // $('#resource-' + '${resource.id}' + '-rating').off('mouseenter mouseleave click').css('cursor', 'default');
+        }
+        },
+            error: function(xhr, status, error) {
+            console.error('Error fetching user rating:', error);
+        }
+        });
+        </g:if>
+
+
+        $('body').on('click', '.delete-topic', function() {
+            var topicId = $(this).data('id');
+
+            console.log("topicID from Javascript: " + topicId);
+
+            if (confirm('Are you sure you want to delete this topic?')) {
+                $.ajax({
+                    url: '/dashboard/deleteTopic',
+                    type: 'POST',
+                    data: { id: topicId },
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        alert('Error deleting topic: ' + xhr.responseText);
+                    }
+                });
+            }
+        });
+
+        $('body').on('click', '.change-visibility', function (e) {
+            e.preventDefault();
+
+            var topicId = $(this).data('id');
+            var newVisibility = $(this).data('value');
+
+            if (confirm('Are you sure you want to change visibility to ' + newVisibility + '?')) {
+                // Set values in the hidden form
+                $('#visibilityTopicId').val(topicId);
+                $('#visibilityValue').val(newVisibility);
+
+                // Submit the form
+                $('#visibilityForm')[0].submit();
+            }
+        });
+
+        $('body').on('click', '.change-seriousness', function (e) {
+            e.preventDefault();
+
+            var topicId = $(this).data('id');
+            var newSeriousness = $(this).data('value');
+
+            if (confirm('Are you sure you want to change visibility to ' + newSeriousness + '?')) {
+                // Set values in the hidden form
+                $('#seriousnessTopicId').val(topicId);
+                $('#seriousnessValue').val(newSeriousness);
+
+                // Submit the form
+                $('#seriousnessForm')[0].submit();
+            }
+        });
+
+        let currentlyEditingTopicId = null; // To track which topic is being edited
+
+        $('body').on('click', '.edit-topic-inline-btn', function() {
+            const topicId = $(this).data('topic-id');
+            currentlyEditingTopicId = topicId; // Set the ID of the topic being edited
+            const $row = $(this).closest('.row');
+            const $container = $row.find('.card-title');
+            const $input = $container.find('.topic-name-input[data-topic-id="' + topicId + '"]');
+            const $display = $container.find('.topic-name-display[data-topic-id="' + topicId + '"]');
+
+            $display.addClass('d-none');
+            $input.removeClass('d-none').focus().select();
+        });
+
+        // Save when clicking outside the input field
+        $(document).on('click', function(event) {
+            if (currentlyEditingTopicId !== null) {
+                const $target = $(event.target);
+                const $editInput = $('.topic-name-input[data-topic-id="' + currentlyEditingTopicId + '"]');
+
+                // Check if the click was outside the input field and the edit button
+                if (!$target.is($editInput) && !$target.closest('.edit-topic-inline-btn[data-topic-id="' + currentlyEditingTopicId + '"]').length) {
+                    const topicId = currentlyEditingTopicId;
+                    const newName = $editInput.val();
+
+                    // Reset the currently editing ID
+                    currentlyEditingTopicId = null;
+
+                    $.ajax({
+                        url: '/topic/updateName',
+                        type: 'POST',
+                        data: { id: topicId, topicName: newName },
+                        success: function(response) {
+                            if (response.success) {
+                                $('.topic-name-display[data-topic-id="' + topicId + '"]')
+                                    .text(newName)
+                                    .removeClass('d-none');
+                                $editInput.addClass('d-none');
+                                $('.trending-topic-name-display[data-trending-topic-id="' + topicId + '"]')
+                                    .text(newName);
+                            } else {
+                                alert(response.message || 'Update failed.');
+                                $('.topic-name-display[data-topic-id="' + topicId + '"]').removeClass('d-none');
+                                $editInput.addClass('d-none');
+                            }
+                        },
+                        error: function() {
+                            alert('Something went wrong while updating the topic.');
+                        }
+                    });
+                }
+            }
+        });
+
+        // Prevent immediate blur when clicking the edit button itself
+        $('body').on('mousedown', '.edit-topic-inline-btn', function(event) {
+            event.preventDefault(); // Prevent the document click from firing immediately
+        });
+
+
+        // --- Hover Handling ---
+        $('.star-rating .star').on('mouseenter', function() {
+            var ratingContainer = $(this).closest('.star-rating');
+            var hoverValue = $(this).data('value');
+
+            // Add 'hovered' class to stars up to the one hovered over
+            ratingContainer.find('.star').each(function() {
+                if ($(this).data('value') <= hoverValue) {
+                    $(this).addClass('hovered');
+                } else {
+                    $(this).removeClass('hovered'); // Ensure stars after are not hovered
+                }
+            });
+        });
+
+        // Reset hover effect when mouse leaves the rating container
+        $('.star-rating').on('mouseleave', function() {
+            $(this).find('.star').removeClass('hovered');
+        });
+
+        // --- Click Handling ---
+        $('.star-rating .star').on('click', function() {
+            var ratingContainer = $(this).closest('.star-rating');
+            var score = $(this).data('value'); // Get the integer value (1-5) [3]
+            var resourceId = ratingContainer.data('resource-id');
+
+            console.log('Clicked star:', score, 'for resource:', resourceId);
+
+            // 1. Update Visual State (Lock the rating)
+            ratingContainer.find('.star').removeClass('selected hovered'); // Clear previous selection and hover state
+            ratingContainer.find('.star').each(function() {
+                if ($(this).data('value') <= score) {
+                    $(this).addClass('selected'); // Apply selected class up to the clicked star [4]
+                }
+            });
+
+            // 2. Prepare data for the controller
+            var ratingData = {
+                resourceId: resourceId,
+                score: score // The integer 1-5 based on the clicked star
+                // user.id should be handled server-side via session
+            };
+
+            // 3. Send data via AJAX to your Grails Controller
+            $.ajax({
+                type: 'POST',
+                url: '/resource/rating', // *** CHANGE TO YOUR CONTROLLER URL ***
+                data: ratingData,
+                success: function(response) {
+                    console.log('Rating saved successfully:', response);
+                    // Add user feedback (e.g., temporary message, disable stars)
+                    // ratingContainer.off('mouseenter mouseleave click'); // Optionally disable after rating
+                    // ratingContainer.css('cursor', 'default');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error saving rating:', error);
+                    // Add error feedback (e.g., alert, restore previous state)
+                    alert('Failed to save rating. Please try again.');
+                    // Potentially revert the stars to their previous state here
+                }
+            });
+        });
+
+
+    });
+
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 

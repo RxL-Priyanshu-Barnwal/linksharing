@@ -93,9 +93,14 @@
                         </div>
                         <div class="col-md-9">
                             <g:link controller="topic" action="index" params="[id: topic.id]" style="color: inherit; text-decoration: none;">
-                                <span class="card-title mb-1" style="font-size: 1.3em">${topic?.name}</span>
+                                <span class="card-title mb-1 topic-name-display" data-topic-id="${topic.id}" style="font-size: 1.3em">${topic?.name}</span>
                             </g:link>
-                            <p class="text-secondary small mb-3">${topic?.user?.username}</p>
+                            <input type="text" class="form-control topic-name-input d-none" id="topicNameInput-${topic.id}" data-topic-id="${topic.id}" value="${topic.name}">
+
+                            <g:link controller="profile" action="userProfile" params="[id: topic?.user?.id]" style="color: inherit; text-decoration: none;">
+                                <p class="text-secondary small mb-3">@${topic?.user?.username}</p>
+                            </g:link>
+
                             <div class="d-flex justify-content-between mb-3">
                                 <p class="mb-0 text-secondary">Subscriptions: <span>${topic?.subscriptions?.size() ?: 0}</span></p>
                                 <p class="mb-0 text-secondary">Posts: <span>${topic?.resources?.size() ?: 0}</span></p>
@@ -135,12 +140,20 @@
                                         </ul>
                                     </div>
                                     <!-- Hidden form for seriousness -->
-                                    <form id="seriousnessForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
+                                    <form class="seriousnessForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
                                         <input type="hidden" name="id" value="${topic.id}">
                                         <input type="hidden" name="seriousness" class="seriousness-value">
                                     </form>
-                                    <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
-                                    <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${topic.id}" title="Delete" role="button"></i>
+
+                                    <i class="bi bi-pencil-square fs-5 edit-topic-inline-btn" title="Edit" role="button" data-topic-id="${topic.id}"></i>
+
+                                    <g:form controller="dashboard" action="deleteTopic" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this topic?');">
+                                        <input type="hidden" name="id" value="${topic.id}" />
+                                        <button type="submit" class="btn btn-link p-0 m-0" style="border: none;" title="Delete">
+                                            <i class="bi bi-trash fs-5 text-danger"></i>
+                                        </button>
+                                    </g:form>
+
                                 </g:if>
                                 <g:if test="${!topic.subscriptions?.any { it.user?.id == session.user?.id }}">
                                     <form method="post" action="${createLink(controller: 'topic', action: 'subscribe')}" class="mb-0">
@@ -167,12 +180,17 @@
                                                 <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="VERY_SERIOUS" href="#">VERY_SERIOUS</a></li>
                                             </ul>
                                         </div>
+
+                                        <form class="seriousnessForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
+                                            <input type="hidden" name="id" value="${topic.id}">
+                                            <input type="hidden" name="seriousness" class="seriousness-value">
+                                        </form>
+
                                         <form method="post" action="${createLink(controller: 'topic', action: 'unsubscribe')}" class="mb-0">
                                             <input type="hidden" name="topicId" value="${topic.id}">
                                             <button type="submit" class="btn btn-sm btn-danger">Unsubscribe</button>
                                         </form>
                                     </g:if>
-                                    <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>
                                 </g:else>
                             </div>
                         </div>
@@ -183,12 +201,11 @@
 
             </div>
 
-
 <!--            Users Subscribed to the topic-->
 
             <div class="card custom-card mt-5">
                 <div class="card-header">
-                    <h5 class="mb-0">Users</h5>
+                    <h5 class="mb-1">Users</h5>
                 </div>
 
                 <div class="card-body users-body py-3" style="max-height: 480px; overflow-y: auto; overflow-x: hidden; padding-right: 10px;">
@@ -196,16 +213,16 @@
 
                     <g:if test="${subscribedUsers}">
                         <g:each in="${subscribedUsers}" var="user">
-
-
-                            <div class="row align-items-center">
+                            <div class="row align-items-center mb-3 p-2">
                                 <div class="col-md-3">
                                     <img src="user?.photo" alt="${user?.username} photo" class="img-fluid">
                                 </div>
                                 <div class="col-md-9">
                                     <div>
-                                        <strong style="font-size:1.4em;">${user?.firstName} ${user?.lastName}</strong>
-                                        <small class="text-secondary ms-2">@${user?.username}</small>
+                                        <g:link controller="profile" action="userProfile" params="[id: user?.id]" style="color: inherit; text-decoration: none;">
+                                            <strong style="font-size:1.4em;">${user?.firstName} ${user?.lastName}</strong>
+                                            <small class="text-secondary ms-2">@${user?.username}</small>
+                                        </g:link>
                                     </div>
                                     <p class="card-text small mb-4" style="color: #808080;">${user?.email}</p>
                                     <div class="d-flex justify-content-between">
@@ -218,35 +235,24 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </g:each>
                     </g:if>
-
-
                 </div>
             </div>
-
-
         </div>
 
-
-        <!--            Subscribed users sections ends -->
+<!--            Subscribed users sections ends -->
 
 
         <div class="col-md-7 px-5">
 
-
             <div class="card custom-card mb-4">
 
                 <div class="card-header d-flex justify-content-between align-items-center">
-
                     <span class="mb-0" style="font-size: 1.3em">Posts</span>
-
                     <div class="w-50">
                         <input type="text" id="searchBox" placeholder="Search posts..." class="form-control form-control-sm rounded-pill" aria-label="Search" />
                     </div>
-
                 </div>
 
                 <div class="card-body" style="max-height: 500px; overflow-y: auto; overflow-x: hidden; padding-right: 15px">
@@ -266,8 +272,10 @@
                                     <!-- Header: Creator's Name, Username, Topic Name -->
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <strong style="font-size:1.4em;">${resource.user.firstName} ${resource.user.lastName}</strong>
-                                            <small class="text-secondary ms-2">@${resource.user.username}</small>
+                                            <g:link controller="profile" action="userProfile" params="[id: resource.user.id]" style="color: inherit; text-decoration: none;">
+                                                <strong style="font-size:1.4em;">${resource.user.firstName} ${resource.user.lastName}</strong>
+                                                <small class="text-secondary ms-2">@${resource.user.username}</small>
+                                            </g:link>
                                         </div>
 <!--                                        <div>-->
 <!--                                            <span class="text-secondary">Topic: </span>-->
@@ -280,7 +288,7 @@
                                     <div class="d-flex gap-2 mt-3 justify-content-end">
 
                                         <g:if test="${resource instanceof linksharing.DocumentResource}">
-                                            <g:link controller="" action="" params="[id: resource.id]" class="btn btn-sm btn-outline-primary">Download</g:link>
+                                            <g:link controller="resource" action="download" params="[id: resource.id]" class="btn btn-sm btn-outline-primary">Download</g:link>
                                         </g:if>
 
                                         <g:if test="${resource instanceof linksharing.LinkResource}">
@@ -288,7 +296,7 @@
                                         </g:if>
 
 <!--                                        <button type="submit" class="btn btn-sm btn-outline-success">Mark as Read</button>-->
-                                        <g:link controller="post" action="index" params="[id: resource.id]">
+                                        <g:link controller="resource" action="index" params="[id: resource.id]">
                                             <button class="btn btn-sm btn-outline-info">View Post</button>
                                         </g:link>
                                     </div>
@@ -306,6 +314,96 @@
         </div>
     </div>
 </div>
+
+
+<script>
+
+    $(document).ready(function() {
+
+        $('body').on('click', '.change-visibility', function (e) {
+            e.preventDefault();
+
+            var topicId = $(this).data('id');
+            var newVisibility = $(this).data('value');
+
+            if (confirm('Are you sure you want to change visibility to ' + newVisibility + '?')) {
+                var $form = $('#visibilityForm-' + topicId);
+                $form.find('input[name="visibility"]').val(newVisibility);
+                $form[0].submit();
+            }
+        });
+
+
+        $('body').on('click', '.change-seriousness', function (e) {
+            e.preventDefault();
+
+            var topicId = $(this).data('id');
+            var newSeriousness = $(this).data('value');
+
+            if (confirm('Are you sure you want to change seriousness to ' + newSeriousness + '?')) {
+                // Select the form by dynamic ID
+                var $form = $('.seriousnessForm-' + topicId);
+                // Set input values by name attribute
+                $form.find('input[name="seriousness"]').val(newSeriousness);
+                // Submit the form
+                $form[0].submit();
+            }
+        });
+
+
+        let currentlyEditingTopicId = null; // To track which topic is being edited
+
+        $('body').on('click', '.edit-topic-inline-btn', function() {
+            const topicId = $(this).data('topic-id');
+            currentlyEditingTopicId = topicId; // Set the ID of the topic being edited
+            const $col = $(this).closest('.col-md-9');
+            const $input = $col.find('.topic-name-input[data-topic-id="' + topicId + '"]');
+            const $display = $col.find('.topic-name-display[data-topic-id="' + topicId + '"]');
+
+            $display.addClass('d-none');
+            $input.removeClass('d-none').focus().select();
+        });
+
+        // Save when clicking outside the input field OR when Enter is pressed
+        $(document).on('click keypress', function(event) {
+            if (currentlyEditingTopicId !== null) {
+                const $target = $(event.target);
+                const $editInput = $('.topic-name-input[data-topic-id="' + currentlyEditingTopicId + '"]');
+
+                const isOutsideClick = !$target.is($editInput) && !$target.closest('.edit-topic-inline-btn[data-topic-id="' + currentlyEditingTopicId + '"]').length;
+                const isEnterKey = event.type === 'keypress' && event.which === 13; // Check for Enter key
+
+                if (isOutsideClick || isEnterKey) {
+                    const topicId = currentlyEditingTopicId;
+                    const newName = $editInput.val();
+
+                    // Reset the currently editing ID
+                    currentlyEditingTopicId = null;
+
+                    $.ajax({
+                        url: '/topic/updateName',
+                        type: 'POST',
+                        data: { id: topicId, topicName: newName },
+                        success: function(response) {
+                            location.reload();
+                        },
+                        error: function() {
+                            alert('Something went wrong while updating the topic.');
+                        }
+                    });
+                }
+            }
+        });
+
+        // Prevent immediate blur when clicking the edit button itself
+        $('body').on('mousedown', '.edit-topic-inline-btn', function(event) {
+            event.preventDefault(); // Prevent the document click from firing immediately
+        });
+
+    });
+
+</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 

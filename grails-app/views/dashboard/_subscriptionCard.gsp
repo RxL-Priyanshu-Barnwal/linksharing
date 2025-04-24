@@ -23,14 +23,18 @@
                         <div class="col-md-9">
                             <h5 class="card-title mb-1">
 
-                                <g:link controller="topic" action="index" params="[id: subscribedTopic.topic.id]" style="color: inherit; text-decoration: none;">
-                                    <span id="topicName-${subscribedTopic.topic.id}">${subscribedTopic.topic.name}</span>
+                                <g:link controller="topic" action="index" params="[id: subscribedTopic.topic.id]" style="color: inherit; text-decoration: none;" class="me-2">
+                                    <span class="topic-name-display" data-topic-id="${subscribedTopic.topic.id}">
+                                        ${subscribedTopic.topic.name}
+                                    </span>
                                 </g:link>
-                                <input type="text" id="topicNameInput-${subscribedTopic.topic.id}" value="${subscribedTopic.topic.name}" style="display: none;">
+                                <input type="text" class="form-control topic-name-input d-none" id="topicNameInput-${subscribedTopic.topic.id}" data-topic-id="${subscribedTopic.topic.id}" value="${subscribedTopic.topic.name}">
 
                             </h5>
 
-                            <p class="text-secondary small mb-3">${subscribedTopic.topic.user.username}</p>
+                            <g:link controller="profile" action="userProfile" params="[id: subscribedTopic.topic.user.id]" style="color: inherit; text-decoration: none;">
+                                <p class="text-secondary small mb-3">${subscribedTopic.topic.user.username}</p>
+                            </g:link>
 
                             <div class="d-flex justify-content-between mb-3">
                                 <p class="mb-0 text-secondary">Subscriptions: <span>${subscribedTopic.topic.subscriptions?.size() ?: 0}</span></p>
@@ -80,16 +84,16 @@
 
 
                                 <!-- Icons -->
-                                <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>
 
                                 <g:if test="${subscribedTopic.topic.user?.id == session.user?.id || session.user?.admin}">
 
-                                    <i class="bi bi-pencil-square fs-5" title="Edit" role="button"></i>
+                                    <i class="bi bi-pencil-square fs-5 edit-topic-inline-btn" title="Edit" role="button" data-topic-id="${subscribedTopic.topic.id}"></i>
                                     <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${subscribedTopic.topic.id}" title="Delete" role="button"></i>
 
                                 </g:if>
+<!--                                <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>-->
 
-                                <g:if test="${subscribedTopic.user?.id != session.user?.id}">
+                                <g:if test="${subscribedTopic.topic.user?.id != session.user?.id}">
 
                                     <form method="post" action="${createLink(controller: 'topic', action: 'unsubscribe')}" class="mb-0">
                                         <input type="hidden" name="topicId" value="${subscribedTopic.topic.id}">
@@ -97,6 +101,7 @@
                                     </form>
 
                                 </g:if>
+
 
 
                             </div>
@@ -195,6 +200,57 @@
                 $('#seriousnessForm')[0].submit();
             }
         });
+
+        let currentlyEditingTopicId = null; // To track which topic is being edited
+
+        $('body').on('click', '.edit-topic-inline-btn', function() {
+            const topicId = $(this).data('topic-id');
+            currentlyEditingTopicId = topicId; // Set the ID of the topic being edited
+            const $row = $(this).closest('.row');
+            const $container = $row.find('.card-title');
+            const $input = $container.find('.topic-name-input[data-topic-id="' + topicId + '"]');
+            const $display = $container.find('.topic-name-display[data-topic-id="' + topicId + '"]');
+
+            $display.addClass('d-none');
+            $input.removeClass('d-none').focus().select();
+        });
+
+        // Save when clicking outside the input field OR when Enter is pressed
+        $(document).on('click keypress', function(event) {
+            if (currentlyEditingTopicId !== null) {
+                const $target = $(event.target);
+                const $editInput = $('.topic-name-input[data-topic-id="' + currentlyEditingTopicId + '"]');
+
+                const isOutsideClick = !$target.is($editInput) && !$target.closest('.edit-topic-inline-btn[data-topic-id="' + currentlyEditingTopicId + '"]').length;
+                const isEnterKey = event.type === 'keypress' && event.which === 13; // Check for Enter key
+
+                if (isOutsideClick || isEnterKey) {
+                    const topicId = currentlyEditingTopicId;
+                    const newName = $editInput.val();
+
+                    // Reset the currently editing ID
+                    currentlyEditingTopicId = null;
+
+                    $.ajax({
+                        url: '/topic/updateName',
+                        type: 'POST',
+                        data: { id: topicId, topicName: newName },
+                        success: function(response) {
+                            location.reload();
+                        },
+                        error: function() {
+                            alert('Something went wrong while updating the topic.');
+                        }
+                    });
+                }
+            }
+        });
+
+        // Prevent immediate blur when clicking the edit button itself
+        $('body').on('mousedown', '.edit-topic-inline-btn', function(event) {
+            event.preventDefault(); // Prevent the document click from firing immediately
+        });
+
     });
 
 </script>

@@ -44,6 +44,15 @@ class TopicService {
             throw new Exception("Topic not found")
         }
 
+        topic.resources.each {
+            ResourceRating.findAllByResource(it)*.delete()
+            ReadingItem.findAllByResource(it)*.delete()
+        }
+
+        topic.resources*.delete()
+
+        topic.subscriptions*.delete()
+
         topic.delete(flush: true, failOnError: true)
     }
 
@@ -65,6 +74,27 @@ class TopicService {
         } catch (Exception e) {
             println("cannot update visibility in service. Error: $e.message")
             throw new RuntimeException("Error updating visibility", e)
+        }
+    }
+
+    def updateName(Long topicId, String newName) {
+        Topic topic = Topic.get(topicId)
+
+        if (!newName?.trim()) {
+            return [success: false, message: "Name cannot be blank"]
+        }
+
+        if (topic.name == newName) {
+            return [success: true] // No change needed
+        }
+
+        try {
+            topic.name = newName.trim()
+            topic.save(flush: true, failOnError: true)
+            return [success: true]
+        } catch (Exception e) {
+            log.error("Failed to update topic name", e)
+            return [success: false, message: "Name update failed: ${e.message}"]
         }
     }
 }

@@ -19,8 +19,6 @@ class Resource {
     static mapping = {
         autoTimestamp true
         table 'resource_table'
-        topic cascade: "delete"
-        user cascade: "delete"
     }
 
     // define methods to update descriptions

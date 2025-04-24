@@ -48,7 +48,9 @@ class ResourceService {
     def deleteResource(Long id) {
         Resource resource = Resource.get(id)
         try{
-            resource.delete(flush: true, failOnError: true)
+            resource.withNewTransaction {
+                resource.delete(flush: true, failOnError: true)
+            }
         }
         catch(Exception e) {
             println "${e.message}"
@@ -57,6 +59,49 @@ class ResourceService {
 
     def editResource(Long id) {
         Resource resource = Resource.get(id)
+    }
 
+    def rating(Long resourceId, Integer score, Long userId) {
+        User user = User.get(userId)
+        Resource resource = Resource.get(resourceId)
+
+        ResourceRating existingRating = ResourceRating.findByResourceAndUser(resource, user)
+
+        if (existingRating) {
+            // Update the existing rating
+            existingRating.score = score
+            try {
+                existingRating.save(flush: true)
+                println "Rating for resource ${resourceId} by user ${userId} updated to ${score} stars."
+            } catch (Exception e) {
+                println "Couldn't update rating: ${e.message}"
+                throw e
+            }
+        } else {
+            // Create a new rating
+            ResourceRating newRating = new ResourceRating(resource: resource, user: user, score: score)
+            try {
+                newRating.save(flush: true)
+                println "${score} stars rating stored for resource ${resourceId} by user ${userId}."
+            } catch (Exception e) {
+                println "Couldn't store new rating: ${e.message}"
+                throw e
+            }
+        }
+    }
+
+    def getResourcesWithRating() {
+        return Resource.findAll().collect { resource ->
+            def averageRating = ResourceRating.withCriteria {
+                eq("resource", resource)
+                projections {
+                    avg("score")
+                }
+            }.first() ?: 0
+            [
+                resource: resource,
+                averageRating: averageRating,
+            ]
+        }
     }
 }

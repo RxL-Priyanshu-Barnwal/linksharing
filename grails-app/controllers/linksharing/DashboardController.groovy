@@ -24,31 +24,37 @@ class DashboardController {
 
         def topicNames = Topic.list()*.name
 
-        [user: user, subscribedTopics: subscribedTopics, readingItems: readingItems, trendingTopics: trendingTopics, dashboard: true, topicNames: topicNames]
+        [user: user, subscribedTopics: subscribedTopics, readingItems: readingItems, trendingTopics: trendingTopics, topicNames: topicNames]
     }
 
 
     def deleteTopic() {
-        println("Topic delete id is ${params.id}")
-
         Long id = params.id as Long
         Topic topic = Topic.get(id)
 
-        if(!request.xhr) {
-            render status: 400, text: "Bad Request"
-            return
-        }
-
         try {
             topicService.deleteTopic(topic)
-            render status: 200, text: "Topic Deleted"
-        }
-        catch (Exception e) {
-            println("Failed to delete topic")
+
+            if (request.xhr) {
+                render status: 200, text: "Topic Deleted"
+            } else {
+                flash.message = "Topic deleted successfully"
+                redirect(controller: 'dashboard', action: 'index')
+            }
+
+        } catch (Exception e) {
+            println "Error message:: ${e.message}"
             log.error("Failed to delete topic", e)
-            render status: 500, text: "Error deleting topic"
+
+            if (request.xhr) {
+                render status: 500, text: "Error deleting topic"
+            } else {
+                flash.error = "Error deleting topic"
+                redirect(uri: request.getHeader("referer"))
+            }
         }
     }
+
 
 
     def updateVisibility() {
@@ -63,7 +69,7 @@ class DashboardController {
             flash.error = "Error updating visibility: ${e.message}"
         }
 
-        redirect(action: "index")
+        redirect(uri: request.getHeader("referer"))
     }
 
 
@@ -81,7 +87,7 @@ class DashboardController {
             flash.error = "Error updating seriousness: ${e.message}"
         }
 
-        redirect(action: "index")
+        redirect(uri: request.getHeader("referer"))
     }
 
 
