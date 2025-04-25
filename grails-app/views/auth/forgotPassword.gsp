@@ -67,14 +67,14 @@
             <p style="color: red;">${flash.message}</p>
         </g:if>
 
-        <form>
+        <g:form controller="auth" action="forgotPasswordOnSubmit">
             <div class="form-group">
-                <input type="text" class="form-control" id="email" placeholder="Enter your email">
+                <input type="text" class="form-control" name="email" id="email" placeholder="Enter your email">
             </div>
 
 
             <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
-        </form>
+        </g:form>
         <p class="mt-2 text-center">Don't have an account? <g:link uri="/auth/register" style="color: #f8f9fa;">Register</g:link></p>
         <p class="mt-2 text-center"><g:link uri="/auth/login" style="color: #f8f9fa;">Back to login</g:link></p>
     </div>

@@ -1,7 +1,10 @@
 package linksharing
 
+import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+import groovy.time.TimeCategory
 
+@Transactional
 class AuthService {
     // Inject messageSource for i18n
     def messageSource
@@ -73,7 +76,43 @@ class AuthService {
         }
     }
 
-    def resetPassword(params) {
+    def generateResetToken(User user) {
+        // Generate secure random token
+        String rawToken = UUID.randomUUID().toString() + System.currentTimeMillis()
 
+//        String hashedToken = PasswordResetToken.hashToken(rawToken)
+
+        Date expiryDate
+        use(TimeCategory) {
+            expiryDate = new Date() + 1.hour
+        }
+
+        PasswordResetToken token = new PasswordResetToken(
+                token: rawToken,
+//                hashedToken: hashedToken,
+                expiryDate: expiryDate,
+                user: user
+        )
+
+        // Invalidate previous tokens
+        PasswordResetToken.where { user == token.user }.deleteAll()
+
+        println "Raw Token:: ${rawToken} \n expiryDate:: ${expiryDate}"
+
+        token.save(flush:true, failOnError: true)
+        return token
+    }
+
+    def resetPassword(String rawToken, String newPassword) {
+        def token = PasswordResetToken.findByToken(rawToken)
+
+        if (!token || token.expiryDate < new Date()) {
+            return false
+        }
+
+        token.user.password = newPassword
+        token.user.save(flush: true)
+        token.delete(flush: true)
+        return true
     }
 }
