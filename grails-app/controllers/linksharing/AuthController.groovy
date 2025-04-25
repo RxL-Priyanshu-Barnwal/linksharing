@@ -80,13 +80,17 @@ class AuthController {
     }
 
     def forgotPasswordOnSubmit() {
+        if(!params.email) {
+            redirect(controller: 'auth', action: 'login')
+            return
+        }
         User user = User.findByEmail(params.email)
         if(user) {
             PasswordResetToken token = authService.generateResetToken(user)
 
             //Send token.token to user.email
 //            def baseUrl = Holders.grailsApplication.config.grails.app.baseUrl
-            def resetLink = "https://localhost:8080/auth/resetPasswordForm?token=${token.token}"
+            def resetLink = "http://localhost:8080/auth/resetPasswordForm?token=${token.token}"
 
             mailService.sendMail {
                 to user.email
