@@ -3,11 +3,13 @@ package linksharing
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 import groovy.time.TimeCategory
+import org.springframework.web.multipart.MultipartFile
 
 @Transactional
 class AuthService {
     // Inject messageSource for i18n
     def messageSource
+    SubscribeService subscribeService
 
     def registerUser(params) {
         def user = new User(params)
@@ -41,7 +43,15 @@ class AuthService {
             User.withNewTransaction {
                 user.save(flush: true, failOnError: true)
             }
-            println("saved successfully")
+
+            if(params.inviteToken) {
+                InviteToken invitation = InviteToken.findByTokenAndInvitedEmail(params.inviteToken, user.email)
+                if(invitation) {
+                    subscribeService.createSubscription(user: user, topic: invitation.topic)
+                    invitation.used = true
+                }
+            }
+
             return [success: true, user: user]
         } catch (Exception e) {
             println("cannot save to db")
@@ -115,4 +125,17 @@ class AuthService {
         token.delete(flush: true)
         return true
     }
+
+//    def getTopPosts(int max = 2) {
+//        return Resource.executeQuery("""
+//        SELECT r
+//        FROM Resource r
+//        INNER JOIN r.ratings rr
+//        WHERE r.topic.visibility = :visibility
+//        GROUP BY r
+//        ORDER BY AVG(rr.score) DESC
+//    """,
+//                [visibility: Topic.Visibility.PUBLIC],
+//                [max: max])
+//    }
 }

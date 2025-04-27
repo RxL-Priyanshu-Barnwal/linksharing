@@ -11,7 +11,7 @@ class Resource {
     static hasMany = [ratings: ResourceRating, readingItems: ReadingItem]
 
     static constraints = {
-        description blank: false, maxSize: 1000
+        description blank: false, maxSize: 300
         user nullable: false
         topic nullable: false
     }

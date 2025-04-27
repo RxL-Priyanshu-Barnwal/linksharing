@@ -1,17 +1,19 @@
 package linksharing
 
 import grails.converters.JSON
+import groovy.time.TimeCategory
 
 class TopicController {
     TopicService topicService
     SubscribeService subscribeService
+    def mailService
     //bean injection: bean is a application specific instance of service
 
     def index() {
         Topic topic = Topic.get(params.id)
 
         if (!topic) {
-            flash.error = "Topic not found"
+            flash.message = "Topic not found"
             redirect(controller: 'dashboard', action: 'index')
             return
         }
@@ -100,6 +102,42 @@ class TopicController {
         } catch (Exception e) {
             log.error("Error in updateName", e)
             render([success: false, message: "Server error occurred"] as JSON)
+        }
+    }
+
+    def sendInvite() {
+        String invitedEmail = params.invitedEmail
+        String topicName = params.topic
+
+        if(!invitedEmail || !topicName) {
+            flash.message = "Email and topic are required."
+            redirect(uri: request.getHeader("referer") ?: "/")
+            return
+        }
+
+        Topic topic = Topic.findByName(topicName)
+        println ("${topic}")
+
+        if(topic) {
+            InviteToken invitation = topicService.generateInviteToken(invitedEmail, topic)
+            String inviteLink = "http://localhost:8080/auth/acceptInvite?token=${invitation.token}"
+            mailService.sendMail {
+                to invitation.invitedEmail
+                subject "Invitation to subscribe to ${topicName}"
+                html """
+                    <p>You've been invited to join the topic <strong>${topicName}</strong>.</p>
+                    <p>Click the link below to accept the invitation:</p>
+                    <p><a href="${inviteLink}">${inviteLink}</a></p>
+                    <p>This link is valid for 1 hour.</p>
+                """
+            }
+            println "Invite Mail sent"
+            redirect(uri: request.getHeader("referer") ?: "/")
+        }
+        else {
+            flash.message = "Topic does not exist."
+            redirect(uri: request.getHeader("referer") ?: "/")
+            return
         }
     }
 }

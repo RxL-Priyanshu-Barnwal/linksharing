@@ -15,7 +15,7 @@ class Topic {
     static belongsTo = [user: User]
 
     static constraints = {
-        name nullable: false, blank: false, unique: 'user'
+        name nullable: false, blank: false, unique: 'user', maxSize: 12
         user nullable: false, blank: false
         visibility nullable: false
     }
@@ -24,6 +24,8 @@ class Topic {
         email updateable: false
         username updateable: false
         autoTimestamp true
+        resources cascade: 'all-delete-orphan'
+        subscriptions cascade: 'all-delete-orphan'
     }
 
     // define methods for changing visibility, adding resource,

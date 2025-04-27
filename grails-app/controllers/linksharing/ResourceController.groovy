@@ -66,7 +66,7 @@ class ResourceController {
         }
         else {
             println("Unable to mark the resource as read.")
-            flash.error = "Unable to mark the resource as read."
+            flash.message = "Unable to mark the resource as read."
         }
         redirect(uri: request.getHeader("referer") ?: "/dashboard/index")
     }
@@ -80,7 +80,7 @@ class ResourceController {
             if (request.xhr) {
                 render status: 404, text: "Resource not found"
             } else {
-                flash.error = "Resource not found"
+                flash.message = "Resource not found"
                 redirect(controller: 'dashboard', action: 'index')
             }
             return
@@ -90,7 +90,7 @@ class ResourceController {
             if (request.xhr) {
                 render status: 403, text: "Unauthorized to delete this resource"
             } else {
-                flash.error = "Unauthorized access"
+                flash.message = "Unauthorized access"
                 redirect(controller: 'dashboard', action: 'index')
             }
             return
@@ -109,7 +109,7 @@ class ResourceController {
             if (request.xhr) {
                 render status: 500, text: "Error deleting resource: ${e.message}"
             } else {
-                flash.error = "Error deleting resource"
+                flash.message = "Error deleting resource"
                 redirect(controller: 'dashboard', action: 'index')
             }
         }

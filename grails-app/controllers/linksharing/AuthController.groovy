@@ -5,15 +5,22 @@ import grails.util.Holders
 
 class AuthController {
     AuthService authService
+    SubscribeService subscribeService
     def mailService
+
+    def index() {
+        redirect(controller: 'auth', action: 'login')
+    }
 
     def login() {
         def getRecentPosts = authService.getRecentPosts()
+//        def getTopPosts = authService.getTopPosts()
         render(view: "login", model: [getRecentPosts: getRecentPosts])
     }
 
     def register() {
         def getRecentPosts = authService.getRecentPosts()
+//        def getTopPosts = authService.getTopPosts()
         render(view: "register", model: [getRecentPosts: getRecentPosts])
     }
 
@@ -42,8 +49,6 @@ class AuthController {
     }
 
     def registerUser() {
-        println(params)
-
         def res = authService.registerUser(params)
 
         if(res.success) {
@@ -51,7 +56,7 @@ class AuthController {
             redirect(controller: "auth", action: "login")
         }
         else {
-            flash.error = res.message
+            flash.message = res.message
             render(view: "register", model: [user: res.user])
         }
     }
@@ -179,5 +184,33 @@ class AuthController {
         session.invalidate()
         println("Logged out successfully")
         redirect(controller:"auth", action:"login")
+    }
+
+    def acceptInvite() {
+        InviteToken invitation = InviteToken.findByToken(params.token)
+
+        if(!invitation || (invitation.expiryDate && invitation.expiryDate < new Date()) || invitation.used) {
+            flash.message = "Invalid or expired invitation"
+            redirect(controller: 'dashboard', action: 'index')
+            return
+        }
+
+        //If user exists
+        User user = User.findByEmail(invitation.invitedEmail)
+        if (user) {
+            InviteToken.withTransaction { status ->
+                try {
+                    subscribeService.createSubscription(user, invitation.topic, Subscription.Seriousness.CASUAL)
+                    invitation.used = true
+                    invitation.save() // Transactional save
+                } catch (Exception e) {
+                    status.setRollbackOnly()
+                    flash.message = "Failed to process invitation: ${e.message}"
+                }
+            }
+            redirect(controller: 'dashboard')
+        } else {
+            redirect(controller: 'auth', action: 'register', params: [inviteToken: params.token])
+        }
     }
 }

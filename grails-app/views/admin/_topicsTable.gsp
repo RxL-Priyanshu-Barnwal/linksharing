@@ -213,38 +213,56 @@
         });
 
         // Replace existing .edit-topic-inline-btn click handler with this:
+        let currentlyEditingTopicId = null; // To track which topic is being edited
+
+        // Start editing when edit button is clicked
         $('#topicTable').on('click', '.edit-topic-inline-btn', function() {
             const topicId = $(this).data('topic-id');
-            const $row = $(this).closest('tr'); // Get parent row
-            const $input = $row.find('.topic-name-input[data-topic-id="' + topicId + '"]');
+            currentlyEditingTopicId = topicId; // Set the ID of the topic being edited
+            const $row = $(this).closest('tr');
             const $display = $row.find('.topic-name-display[data-topic-id="' + topicId + '"]');
+            const $input = $row.find('.topic-name-input[data-topic-id="' + topicId + '"]');
 
             $display.addClass('d-none');
-            $input.removeClass('d-none').focus();
+            $input.removeClass('d-none').focus().select();
         });
 
-        $('.topic-name-input').on('keypress', function (e) {
-            if (e.which === 13) {
-                const topicId = $(this).data('topic-id');
-                const newName = $(this).val();
+        // Save when clicking outside the input field OR when Enter is pressed
+        $(document).on('click keypress', function(event) {
+            if (currentlyEditingTopicId !== null) {
+                const $target = $(event.target);
+                const $editInput = $('.topic-name-input[data-topic-id="' + currentlyEditingTopicId + '"]');
 
-                $.ajax({
-                    url: '/topic/updateName',
-                    type: 'POST',
-                    data: {
-                        id: topicId,
-                        topicName: newName
-                    },
-                    success: function(response) {
-                        alert(response);
-                        location.reload();
-                    },
-                    error: function () {
-                        alert('Something went wrong while updating the topic.');
-                    }
-                });
+                const isOutsideClick = !$target.is($editInput) && !$target.closest('.edit-topic-inline-btn[data-topic-id="' + currentlyEditingTopicId + '"]').length;
+                const isEnterKey = event.type === 'keypress' && event.which === 13; // Enter key
+
+                if (isOutsideClick || isEnterKey) {
+                    const topicId = currentlyEditingTopicId;
+                    const newName = $editInput.val();
+
+                    // Reset the currently editing ID
+                    currentlyEditingTopicId = null;
+
+                    $.ajax({
+                        url: '/topic/updateName',
+                        type: 'POST',
+                        data: { id: topicId, topicName: newName },
+                        success: function(response) {
+                            location.reload();
+                        },
+                        error: function() {
+                            alert('Something went wrong while updating the topic.');
+                        }
+                    });
+                }
             }
         });
+
+        // Prevent immediate blur when clicking the edit button itself
+        $('#topicTable').on('mousedown', '.edit-topic-inline-btn', function(event) {
+            event.preventDefault(); // Prevent the document click from firing immediately
+        });
+
 
     });
 

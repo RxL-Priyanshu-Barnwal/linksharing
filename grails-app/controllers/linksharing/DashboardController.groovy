@@ -32,8 +32,14 @@ class DashboardController {
         Long id = params.id as Long
         Topic topic = Topic.get(id)
 
+        println ("Topic name is: ${topic.name}")
+
         try {
+            println "Trying to delete topic."
+
             topicService.deleteTopic(topic)
+
+            println "Topic deleted."
 
             if (request.xhr) {
                 render status: 200, text: "Topic Deleted"
@@ -49,7 +55,7 @@ class DashboardController {
             if (request.xhr) {
                 render status: 500, text: "Error deleting topic"
             } else {
-                flash.error = "Error deleting topic"
+                flash.message = "Error deleting topic"
                 redirect(uri: request.getHeader("referer"))
             }
         }
@@ -66,7 +72,7 @@ class DashboardController {
             flash.message = "Visibility updated successfully."
         }
         catch (Exception e) {
-            flash.error = "Error updating visibility: ${e.message}"
+            flash.message = "Error updating visibility: ${e.message}"
         }
 
         redirect(uri: request.getHeader("referer"))
@@ -84,7 +90,7 @@ class DashboardController {
             flash.message = "Seriousness updated successfully."
         }
         catch (Exception e) {
-            flash.error = "Error updating seriousness: ${e.message}"
+            flash.message = "Error updating seriousness: ${e.message}"
         }
 
         redirect(uri: request.getHeader("referer"))

@@ -13,7 +13,7 @@
 
                     <div class="mb-3">
                         <label for="topicName" class="form-label">Name:</label>
-                        <input type="text" class="form-control" id="topicName" name="name" placeholder="Enter topic name" required>
+                        <input type="text" class="form-control" id="topicName" name="name" placeholder="Enter topic name" required maxlength="12">
                         <g:if test="${flash.topicMessage}">
                             <p style="color: red;">${flash.topicMessage}</p>
                         </g:if>
@@ -54,7 +54,7 @@
 <div class="modal fade" id="sendInvite" tabindex="-1" aria-labelledby="sendInviteLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <g:form controller="invite" action="sendInvite">
+            <g:form controller="topic" action="sendInvite">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="sendInviteLabel">Send Invitation</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -63,7 +63,7 @@
                     <!-- Email Field -->
                     <div class="mb-3">
                         <label for="emailInput" class="form-label">Email:</label>
-                        <input type="email" class="form-control" id="emailInput" name="email" placeholder="Enter email address" required>
+                        <input type="email" class="form-control" id="emailInput" name="invitedEmail" placeholder="Enter email address" required maxlength="50">
                     </div>
                     <!-- Topic Dropdown -->
                     <div class="mb-3">
@@ -123,13 +123,13 @@
                     <!-- Link Field -->
                     <div class="mb-3">
                         <label for="linkInput" class="form-label">Link:</label>
-                        <input type="text" class="form-control" id="linkInput" name="url" placeholder="Enter URL" required>
+                        <input type="text" class="form-control" id="linkInput" name="url" placeholder="Enter URL" required maxlength="300">
                     </div>
 
                     <!-- Description Field -->
                     <div class="mb-3">
                         <label for="descriptionInput" class="form-label">Description:</label>
-                        <textarea class="form-control" id="descriptionInput" name="description" rows="4" placeholder="Enter description" required></textarea>
+                        <textarea class="form-control" id="descriptionInput" name="description" rows="4" placeholder="Enter description" required maxlength="300"></textarea>
                     </div>
 
                     <!-- Topic Dropdown -->
@@ -208,7 +208,7 @@
                     <!-- Description Field -->
                     <div class="mb-3">
                         <label for="descriptionInputDoc" class="form-label">Description:</label>
-                        <textarea class="form-control" id="descriptionInputDoc" rows="4" name="description" placeholder="Enter description" required></textarea>
+                        <textarea class="form-control" id="descriptionInputDoc" rows="4" name="description" placeholder="Enter description" required maxlength="300"></textarea>
                     </div>
 
                     <!-- Topic Dropdown -->

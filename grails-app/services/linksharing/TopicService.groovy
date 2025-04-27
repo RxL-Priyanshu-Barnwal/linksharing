@@ -1,4 +1,6 @@
 package linksharing
+
+import groovy.time.TimeCategory
 import linksharing.Topic
 import grails.gorm.transactions.Transactional
 
@@ -39,22 +41,19 @@ class TopicService {
     }
 
     def deleteTopic(Topic topic) {
-        if(!topic) {
-            println("Topic not found")
-            throw new Exception("Topic not found")
+        if (!topic) throw new Exception("Topic not found")
+
+        Topic.withTransaction { status ->
+            try {
+                // Cascading deletes resources/subscriptions via Hibernate
+                topic.delete(flush: true, failOnError: true)
+            } catch (Exception e) {
+                status.setRollbackOnly()
+                throw e
+            }
         }
-
-        topic.resources.each {
-            ResourceRating.findAllByResource(it)*.delete()
-            ReadingItem.findAllByResource(it)*.delete()
-        }
-
-        topic.resources*.delete()
-
-        topic.subscriptions*.delete()
-
-        topic.delete(flush: true, failOnError: true)
     }
+
 
     def updateVisibility(Long topicId, String newVisibility) {
         try {
@@ -96,5 +95,24 @@ class TopicService {
             log.error("Failed to update topic name", e)
             return [success: false, message: "Name update failed: ${e.message}"]
         }
+    }
+
+    def generateInviteToken(String invitedEmail, Topic topic) {
+        String token = UUID.randomUUID().toString()
+
+        Date expiryDate
+        use(TimeCategory) {
+            expiryDate = new Date() + 1.hour
+        }
+
+        InviteToken invitation = new InviteToken(
+                token: token,
+                invitedEmail: invitedEmail,
+                topic: topic,
+                expiryDate: expiryDate
+        )
+
+        invitation.save(flush: true)
+        return invitation
     }
 }

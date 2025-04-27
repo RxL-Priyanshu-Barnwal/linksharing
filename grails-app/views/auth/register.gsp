@@ -75,8 +75,8 @@
         <h2 class="text-center mb-4">Register</h2>
 
 <!--        show errors-->
-        <g:if test="${flash.error}">
-            <div class="alert alert-danger">${flash.error}</div>
+        <g:if test="${flash.message}">
+            <div class="alert alert-danger">${flash.message}</div>
         </g:if>
 
         <g:hasErrors bean="${user}">
@@ -90,23 +90,26 @@
         </g:hasErrors>
 
         <g:form controller="auth" action="registerUser">
+
+            <g:hiddenField name="inviteToken" value="${params.inviteToken}"/>
+
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="firstName">First Name</label>
-                    <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Enter first name" value="${user?.firstName}" required>
+                    <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Enter first name" value="${user?.firstName}" required maxlength="12">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="lastName">Last Name</label>
-                    <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Enter last name" value="${user?.lastName}" required>
+                    <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Enter last name" value="${user?.lastName}" maxlength="12">
                 </div>
             </div>
             <div class="form-group">
                 <label for="email">Email address</label>
-                <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email" required>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email" required maxlength="50">
             </div>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" name="username" id="username" placeholder="Enter a username" required>
+                <input type="text" class="form-control" name="username" id="username" placeholder="Enter a username" required maxLength="16">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
