@@ -89,7 +89,7 @@
             </div>
         </g:hasErrors>
 
-        <g:form controller="auth" action="registerUser">
+        <g:form controller="auth" action="registerUser" enctype="multipart/form-data">
 
             <g:hiddenField name="inviteToken" value="${params.inviteToken}"/>
 
@@ -119,13 +119,15 @@
                 <label for="confirmPassword">Confirm Password</label>
                 <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm your password" required>
             </div>
+
             <div class="form-group">
                 <label for="photo">Photo</label>
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" name="photo" id="photo" value="${user?.photo}">
+                    <input type="file" class="custom-file-input" name="photo" id="photo">
                     <label class="custom-file-label" for="photo">Choose file</label>
                 </div>
             </div>
+
             <button type="submit" class="btn btn-primary btn-block">Register</button>
         </g:form>
         <p class="mt-2 text-center">Already have an account? <g:link uri="/auth/login" style="color: #f8f9fa;">Login</g:link></p>

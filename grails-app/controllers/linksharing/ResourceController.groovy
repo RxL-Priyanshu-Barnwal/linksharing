@@ -42,19 +42,21 @@ class ResourceController {
     def createDocResource() {
         println(params)
 
-        def res = resourceService.createDocResource(params, session.user)
+        Long userId = session.user.id
 
-        if(res instanceof DocumentResource) {
-            println("Link Resource created successfully.")
+        def res = resourceService.createDocResource(params, userId)
+
+        if(res.success) {
+            flash.message = res.message
+            println("Document Resource created successfully.")
         }
         else {
-            flash.docResourceMessage = res
+            flash.message = res.message
             flash.showDocModal = true
+            println("Document cannot be saved")
+            println("${res.message}")
         }
-
         redirect(uri: request.getHeader("referer"))
-        //Redirects to the same page user was on
-
     }
 
     def markAsRead() {
@@ -125,31 +127,19 @@ class ResourceController {
         redirect(uri: request.getHeader("referer"))
     }
 
-    def download() {
-        Long id = params.id as Long
-        def documentResource = DocumentResource.get(id)
-        if (!documentResource) {
-            render status: 404, text: 'File not found'
+    def download(Long id) {
+        def downloadInfo = resourceService.prepareDocumentForDownload(id)
+        if (!downloadInfo?.fileExists) {
+            flash.message = "Requested file not found."
+            redirect(controller: 'dashboard', action: 'index')
             return
         }
-
-        File file = new File(documentResource.filePath)
-
-        if (!file.exists()) {
-            render status: 404, text: 'File not found'
-            return
-        }
-
-        // Detect content type or default to binary
-        String contentType = grailsApplication.mainContext.getResource(documentResource.filePath)?.URL?.openConnection()?.contentType
-        response.setContentType(contentType ?: "application/octet-stream")
-
-        // Serve as inline so browser opens it if supported (e.g. PDF, images)
-        response.setHeader("Content-Disposition", "inline; filename=\"${file.name}\"")
-
-        response.outputStream << new FileInputStream(file)
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", "attachment; filename=${downloadInfo.filename}")
+        response.outputStream << downloadInfo.bytes
         response.outputStream.flush()
     }
+
 
     def rating() {
         // resourceId, score are expected as request parameters

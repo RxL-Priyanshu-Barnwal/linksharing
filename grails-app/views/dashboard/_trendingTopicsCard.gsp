@@ -50,7 +50,7 @@
                                 <!-- Hidden form for visibility -->
                                 <form id="visibilityForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
                                     <input type="hidden" name="id" value="${topic.id}">
-                                    <input type="hidden" name="visibility" class="visibility-value">
+                                    <input type="hidden" name="visibility" class="visibilityValue">
                                 </form>
 
 
@@ -78,7 +78,7 @@
                                 <!-- Hidden form for seriousness -->
                                 <form id="seriousnessForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
                                     <input type="hidden" name="id" value="${topic.id}">
-                                    <input type="hidden" name="seriousness" class="seriousness-value">
+                                    <input type="hidden" name="seriousness" class="seriousnessValue">
                                 </form>
 
 

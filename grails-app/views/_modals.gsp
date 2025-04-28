@@ -186,7 +186,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <g:form controller="resource" action="createDocResource">
+            <g:uploadForm controller="resource" action="createDocResource" method="POST">
 
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="createDocResourceLabel">Create Document Resource</h1>
@@ -202,7 +202,7 @@
                     <!-- Document Upload Field -->
                     <div class="mb-3">
                         <label for="documentInput" class="form-label">Document:</label>
-                        <input type="file" class="form-control" id="documentInput" name="filePath" accept=".pdf,.doc,.docx,.txt,.rtf,.odt" required>
+                        <input type="file" class="form-control" id="documentInput" name="document" required>
                     </div>
 
                     <!-- Description Field -->
@@ -242,7 +242,7 @@
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
 
-            </g:form>
+            </g:uploadForm>
 
         </div>
     </div>
@@ -258,3 +258,35 @@
         });
     </script>
 </g:if>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('#createDocResource form');
+        const fileInput = document.getElementById('documentInput');
+        const errorMsgId = 'fileSizeErrorMsg';
+
+        form.addEventListener('submit', function (e) {
+            // Remove previous error message if present
+            const prevError = document.getElementById(errorMsgId);
+            if (prevError) prevError.remove();
+
+            const file = fileInput.files[0];
+            if (file) {
+                const maxSize = 25 * 1024 * 1024; // 25MB in bytes
+                if (file.size > maxSize) {
+                    e.preventDefault();
+
+                    // Show error message above the file input
+                    const errorMsg = document.createElement('p');
+                    errorMsg.id = errorMsgId;
+                    errorMsg.style.color = 'red';
+                    errorMsg.textContent = 'File size must not exceed 25MB.';
+                    fileInput.parentNode.insertBefore(errorMsg, fileInput.nextSibling);
+
+                    // Optionally, clear the file input
+                    fileInput.value = "";
+                }
+            }
+        });
+    });
+</script>

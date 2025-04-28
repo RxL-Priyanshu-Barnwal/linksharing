@@ -11,8 +11,12 @@ class AuthService {
     def messageSource
     SubscribeService subscribeService
 
-    def registerUser(params) {
+    def registerUser(params, String photoPath = null) {
         def user = new User(params)
+
+        if(photoPath) {
+            user.photo = photoPath
+        }
 
         if (params.password != params.confirmPassword) {
             user.errors.rejectValue("password", "user.password.mismatch", "Passwords do not match")

@@ -73,7 +73,7 @@
 <div class="container-fluid " style="padding: 3rem;">
     <div class="row gx-5">
 
-        <div class="col-md-7 px-5">
+        <div class="col-md-8 px-5">
 
 
             <g:if test="resource">
@@ -120,7 +120,6 @@
                             <div class="p-1">
 
                                 <g:if test="${resource?.user?.id == session.user?.id || session.user?.admin}">
-                                    <g:link controller="resource" action="editResource" id="${resource?.id}" class="btn btn-sm btn-outline-info ms-2">Edit</g:link>
                                     <g:link controller="resource" action="deleteResource" id="${resource?.id}" class="btn btn-sm btn-outline-danger ms-2" onclick="return confirm('Are you sure you want to delete this resource?')">Delete</g:link>
                                 </g:if>
 
@@ -139,14 +138,6 @@
 
             </g:if>
 
-
-        </div>
-
-        <div class="col-md-5">
-
-            <div class="trendingTopics-body">
-                <g:render template="/dashboard/trendingTopicsCard" model="[trendingTopics: trendingTopics]"/>
-            </div>
 
         </div>
 
@@ -201,12 +192,13 @@
         // Function to initialize the star rating based on existing rating
         function initializeRating(resourceId, userRating) {
             var ratingContainer = $('#resource-' + resourceId + '-rating');
-            ratingContainer.find('.star').each(function() {
+            ratingContainer.find('.star').each(function () {
                 if ($(this).data('value') <= userRating) {
                     $(this).addClass('selected');
                 }
             });
         }
+
 
         // Fetch the user's rating for the current resource on page load
         <g:if test="${resource?.id && session?.user?.id}">
@@ -260,11 +252,11 @@
 
             if (confirm('Are you sure you want to change visibility to ' + newVisibility + '?')) {
                 // Set values in the hidden form
-                $('#visibilityTopicId').val(topicId);
-                $('#visibilityValue').val(newVisibility);
+                $('#visibilityTopicId-' + topicId).val(topicId);
+                $('.visibilityValue').val(newVisibility);
 
                 // Submit the form
-                $('#visibilityForm')[0].submit();
+                $('#visibilityForm-' + topicId)[0].submit();
             }
         });
 
@@ -276,11 +268,11 @@
 
             if (confirm('Are you sure you want to change visibility to ' + newSeriousness + '?')) {
                 // Set values in the hidden form
-                $('#seriousnessTopicId').val(topicId);
-                $('#seriousnessValue').val(newSeriousness);
+                $('#seriousnessTopicId-' + topicId).val(topicId);
+                $('.seriousnessValue').val(newSeriousness);
 
                 // Submit the form
-                $('#seriousnessForm')[0].submit();
+                $('#seriousnessForm-' + topicId)[0].submit();
             }
         });
 

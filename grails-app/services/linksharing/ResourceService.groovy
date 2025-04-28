@@ -1,5 +1,6 @@
 package linksharing
 import grails.gorm.transactions.Transactional
+import org.springframework.web.multipart.MultipartFile
 
 @Transactional
 class ResourceService {
@@ -25,23 +26,78 @@ class ResourceService {
         }
     }
 
-    def createDocResource(params, User user) {
+//    def createDocResource(params, User user) {
+//        def topicInstance = Topic.findByName(params.topic)
+//
+//        def docResource = new DocumentResource(filePath: params.filePath, description: params.description, topic: topicInstance, user: user)
+//
+//        if(docResource.save(flush: true)) {
+//            readingItemService.createReadingItem(docResource, user)
+//            return docResource
+//        }
+//        else {
+//            docResource.errors.allErrors.each {
+//                println "Validation error: ${it}"
+//            }
+//            return docResource.errors.allErrors.collect {
+//                it.defaultMessage
+//            }.join(', ')
+//        }
+//    }
 
-        def topicInstance = Topic.findByName(params.topic)
+    def createDocResource(params, Long userId) {
+        User user = User.get(userId)
+        MultipartFile file = params.document
+        String description = params.description
+        String topicName = params.topic
 
-        def docResource = new DocumentResource(filePath: params.filePath, description: params.description, topic: topicInstance, user: user)
+        println "Username: ${user.username} \n Description: ${description} \n Topic name: ${topicName}"
 
-        if(docResource.save(flush: true)) {
-            readingItemService.createReadingItem(docResource, user)
-            return docResource
+        if(!file || file.empty) {
+            return [success: false, message: "No file uploaded."]
+        }
+
+        String originalFileName = file.originalFilename?.toLowerCase()
+        if(!originalFileName) {
+            return [success: false, message: "Invalid file name"]
+        }
+
+        List<String> allowedExtensions = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'txt', 'csv', 'xlsx']
+
+        String extension = originalFileName.tokenize('.').last()
+
+        if(!allowedExtensions.contains(extension)) {
+            return [success: false, message: "File type .$extension is not allowed"]
+        }
+
+        Topic topic = Topic.findByName(topicName)
+        if(!topic) {
+            return [success: false, message: "Invalid topic selected."]
+        }
+
+        String uploadDir = "/home/priyanshubarnwal/Documents/Training/'Link Sharing'/linksharing/grails-app/assets/uploads"
+
+        File dir = new File(uploadDir)
+        if(!dir.exists()) {
+            dir.mkdirs()
+        }
+
+        String filePath = "${uploadDir}/${System.currentTimeMillis()}_${originalFileName}"
+        file.transferTo(new File(filePath))
+
+        DocumentResource documentResource = new DocumentResource(
+                filePath: filePath,
+                description: description,
+                topic: topic,
+                user: user
+        )
+
+        if(documentResource.validate()) {
+            documentResource.save(flush: true)
+            return [success: true, message: "Document Resources saved successfully."]
         }
         else {
-            docResource.errors.allErrors.each {
-                println "Validation error: ${it}"
-            }
-            return docResource.errors.allErrors.collect {
-                it.defaultMessage
-            }.join(', ')
+            return [success: false, message: "Validation failed: ${documentResource.errors.allErrors*.defaultMessage.join(', ')}"]
         }
     }
 
@@ -104,4 +160,18 @@ class ResourceService {
             ]
         }
     }
+
+    def prepareDocumentForDownload(Long id) {
+        DocumentResource documentResource = DocumentResource.get(id)
+        if (!documentResource || !new File(documentResource.filePath).exists()) {
+            return [fileExists: false]
+        }
+        File file = new File(documentResource.filePath)
+        return [
+                fileExists: true,
+                filename  : file.name,
+                bytes     : file.bytes
+        ]
+    }
+
 }

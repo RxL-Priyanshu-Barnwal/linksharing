@@ -46,7 +46,11 @@
                     </div>
                 </td>
 
-                <td>${topic.user.firstName} ${topic.user.lastName}</td>
+                <td>
+                    <g:link controller="topic" action="index" params="[id: topic.user.id]" style="color: inherit; text-decoration: none;">
+                        ${topic.user.firstName} ${topic.user.lastName}
+                    </g:link>
+                </td>
 
                 <td>
 <!--                    Visibility Dropdown -->

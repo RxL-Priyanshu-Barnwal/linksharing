@@ -138,7 +138,7 @@
                                                         </div>
 
                                                         <!-- Hidden form to send data -->
-                                                        <form id="visibilityForm" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
+                                                        <form id="visibilityForm-${subscribedTopic.topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
                                                             <input type="hidden" name="id" id="visibilityTopicId">
                                                             <input type="hidden" name="visibility" id="visibilityValue">
                                                         </form>
@@ -158,7 +158,7 @@
                                                     </div>
 
                                                     <!-- Hidden form to send data -->
-                                                    <form id="seriousnessForm" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
+                                                    <form id="seriousnessForm-${subscribedTopic.topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
                                                         <input type="hidden" name="id" id="seriousnessTopicId">
                                                         <input type="hidden" name="seriousness" id="seriousnessValue">
                                                     </form>
@@ -643,6 +643,164 @@
     </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script>
+
+    $(document).ready(function() {
+        // DELETE TOPIC
+        $('body').on('click', '.delete-topic', function() {
+            var topicId = $(this).data('id');
+            if (confirm('Are you sure you want to delete this topic?')) {
+                $.ajax({
+                    url: '/dashboard/deleteTopic',
+                    type: 'POST',
+                    data: { id: topicId },
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        alert('Error deleting topic: ' + xhr.responseText);
+                    }
+                });
+            }
+        });
+
+        // CHANGE VISIBILITY (handles both unique and shared forms)
+        $('body').on('click', '.change-visibility', function(e) {
+            e.preventDefault();
+            var topicId = $(this).data('id');
+            var newVisibility = $(this).data('value');
+
+            if (confirm('Are you sure you want to change visibility to ' + newVisibility + '?')) {
+                // Try unique form first
+                var $form = $('#visibilityForm-' + topicId);
+                if ($form.length) {
+                    $form.find('.visibilityValue').val(newVisibility);
+                    $form[0].submit();
+                } else {
+                    // Fallback to shared form (subscriptions)
+                    $('#visibilityTopicId').val(topicId);
+                    $('#visibilityValue').val(newVisibility);
+                    $('#visibilityForm')[0].submit();
+                }
+            }
+        });
+
+        // CHANGE SERIOUSNESS (handles both unique and shared forms)
+        $('body').on('click', '.change-seriousness', function(e) {
+            e.preventDefault();
+            var topicId = $(this).data('id');
+            var newSeriousness = $(this).data('value');
+
+            if (confirm('Are you sure you want to change seriousness to ' + newSeriousness + '?')) {
+                // Try unique form first
+                var $form = $('#seriousnessForm-' + topicId);
+                if ($form.length) {
+                    $form.find('.seriousnessValue').val(newSeriousness);
+                    $form[0].submit();
+                } else {
+                    // Fallback to shared form (subscriptions)
+                    $('#seriousnessTopicId').val(topicId);
+                    $('#seriousnessValue').val(newSeriousness);
+                    $('#seriousnessForm')[0].submit();
+                }
+            }
+        });
+
+        // INLINE EDIT FOR TOPICS (created topics section)
+        let currentlyEditingTopicId = null;
+        $('body').on('click', '.edit-topic-inline-btn', function() {
+            const topicId = $(this).data('topic-id');
+            currentlyEditingTopicId = topicId;
+            const $row = $(this).closest('.row');
+            const $container = $row.find('.card-title');
+            const $input = $container.find('.topic-name-input[data-topic-id="' + topicId + '"]');
+            const $display = $container.find('.topic-name-display[data-topic-id="' + topicId + '"]');
+            $display.addClass('d-none');
+            $input.removeClass('d-none').focus().select();
+        });
+
+        // Save inline edit on blur or Enter (created topics)
+        $(document).on('click keypress', function(event) {
+            if (currentlyEditingTopicId !== null) {
+                const $target = $(event.target);
+                const $editInput = $('.topic-name-input[data-topic-id="' + currentlyEditingTopicId + '"]');
+                const isOutsideClick = !$target.is($editInput) && !$target.closest('.edit-topic-inline-btn[data-topic-id="' + currentlyEditingTopicId + '"]').length;
+                const isEnterKey = event.type === 'keypress' && event.which === 13;
+                if (isOutsideClick || isEnterKey) {
+                    const topicId = currentlyEditingTopicId;
+                    const newName = $editInput.val();
+                    currentlyEditingTopicId = null;
+                    $.ajax({
+                        url: '/topic/updateName',
+                        type: 'POST',
+                        data: { id: topicId, topicName: newName },
+                        success: function(response) {
+                            location.reload();
+                        },
+                        error: function() {
+                            alert('Something went wrong while updating the topic.');
+                        }
+                    });
+                }
+            }
+        });
+
+        // Prevent immediate blur when clicking the edit button
+        $('body').on('mousedown', '.edit-topic-inline-btn', function(event) {
+            event.preventDefault();
+        });
+
+        // INLINE EDIT FOR TRENDING TOPICS (if present)
+        let currentlyEditingTrendingTopicId = null;
+        $('body').on('click', '.edit-trending-topic-btn', function() {
+            const topicId = $(this).data('trending-topic-id');
+            currentlyEditingTrendingTopicId = topicId;
+            const $trendingCard = $(this).closest('.row.align-items-center');
+            const $display = $trendingCard.find('.trending-topic-name-display[data-trending-topic-id="' + topicId + '"]');
+            const $input = $trendingCard.find('.trending-topic-name-input[data-trending-topic-id="' + topicId + '"]');
+            $display.addClass('d-none');
+            $input.removeClass('d-none').focus().select();
+        });
+
+        // Save inline edit on blur or Enter (trending topics)
+        $(document).on('click keypress', function(event) {
+            if (currentlyEditingTrendingTopicId !== null) {
+                const $target = $(event.target);
+                const $editInput = $('.trending-topic-name-input[data-trending-topic-id="' + currentlyEditingTrendingTopicId + '"]');
+                const isOutsideClick = !$target.is($editInput) && !$target.closest('.edit-trending-topic-btn[data-trending-topic-id="' + currentlyEditingTrendingTopicId + '"]').length;
+                const isEnterKey = event.type === 'keypress' && event.which === 13;
+                if (isOutsideClick || isEnterKey) {
+                    const topicId = currentlyEditingTrendingTopicId;
+                    const newName = $editInput.val();
+                    currentlyEditingTrendingTopicId = null;
+                    $.ajax({
+                        url: '/topic/updateName',
+                        type: 'POST',
+                        data: { id: topicId, topicName: newName },
+                        success: function(response) {
+                            location.reload();
+                        },
+                        error: function() {
+                            alert('Something went wrong while updating the topic.');
+                        }
+                    });
+                }
+            }
+        });
+
+        // Prevent immediate blur when clicking the trending edit button
+        $('body').on('mousedown', '.edit-trending-topic-btn', function(event) {
+            event.preventDefault();
+        });
+    });
+
+
+</script>
 
 </body>
 </html>

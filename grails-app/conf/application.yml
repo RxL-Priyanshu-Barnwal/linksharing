@@ -4,6 +4,10 @@ info:
     version: '@info.app.version@'
     grailsVersion: '@info.app.grailsVersion@'
 grails:
+  controllers:
+    upload:
+      maxFileSize: 26214400
+      maxRequestSize: 26214400
   mail:
     host: smtp.gmail.com
     port: 465
@@ -77,3 +81,9 @@ hibernate:
     queries: false
     use_second_level_cache: false
     use_query_cache: false
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 26214400
+      max-request-size: 26214400
