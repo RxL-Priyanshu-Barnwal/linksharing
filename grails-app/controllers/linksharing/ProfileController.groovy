@@ -2,18 +2,20 @@ package linksharing
 
 class ProfileController {
 
+    ProfileService profileService
+
     def editProfile() {
         def currentUser = session.user
 
         def user = User.get(currentUser?.id)
 
-        def subscribedTopics = Subscription.findAllByUser(currentUser, [sort: 'dateCreated', order: 'desc'])
+//        def subscribedTopics = Subscription.findAllByUser(currentUser, [sort: 'dateCreated', order: 'desc'])
 
         def topicNames = Topic.list()*.name
 
         List<Topic> topics = user.topics?.toList() ?: []
 
-        [user: user, subscribedTopics: subscribedTopics, topicNames: topicNames, topics: topics]
+        [user: user, topicNames: topicNames, topics: topics]
     }
 
     def userProfile() {
@@ -39,5 +41,29 @@ class ProfileController {
             response.outputStream << user.photo
             response.outputStream.flush()
         }
+    }
+
+    def updateDetails() {
+        Long userId = session.user.id
+        def res = profileService.updateDetails(params, userId)
+
+        if(res) {
+            flash.message = "Details updated successfully"
+        }
+        else {
+            flash.message = "Cannot update details."
+        }
+
+        redirect(controller: 'profile', action: 'editProfile')
+    }
+
+    def updatePassword() {
+        Long userId = session.user.id
+
+        def res = profileService.updatePassword(params, userId)
+
+        flash.message1 = res.message
+
+        redirect(controller: 'profile', action: 'editProfile')
     }
 }

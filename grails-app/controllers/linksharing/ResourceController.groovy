@@ -19,7 +19,9 @@ class ResourceController {
 
         def topicNames = Topic.list()*.name
 
-        [trendingTopics: trendingTopics, topicNames: topicNames, resource: resource]
+        def userRating = ResourceRating.findByResourceAndUser(resource, session.user)?.score ?: 0
+
+        [trendingTopics: trendingTopics, topicNames: topicNames, resource: resource, userRating: userRating]
     }
 
     def createLinkResource() {

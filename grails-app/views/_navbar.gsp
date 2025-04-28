@@ -7,23 +7,23 @@
         <div class="collapse navbar-collapse" id="navbarNav">
 
             <div class="navbar-nav ms-auto align-items-center d-flex" style="gap: 1.5rem;">
-                <form class="d-flex" style="flex-grow: 1; max-width: 400px;">
-                    <input class="form-control rounded-pill bg-secondary text-white border-0" type="search" placeholder="Search" aria-label="Search" style="width: 400px;">
-                </form>
 
+                <g:form controller="search" action="index" class="d-flex" style="flex-grow: 1; max-width: 400px;">
+                    <input class="form-control rounded-pill bg-secondary text-white border-0" type="search" name="query" placeholder="Search" aria-label="Search" style="width: 400px;" required>
+                </g:form>
 
                 <ul class="icon-container text-white">
 
-                        <li class="nav-item">
-                            <button class="icon-button" data-bs-toggle="modal" data-bs-target="#createTopic">
-                                <i class="bi bi-patch-plus"></i>
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="icon-button" data-bs-toggle="modal" data-bs-target="#sendInvite">
-                                <i class="bi bi-envelope"></i>
-                            </button>
-                        </li>
+                    <li class="nav-item">
+                        <button class="icon-button" data-bs-toggle="modal" data-bs-target="#createTopic">
+                            <i class="bi bi-patch-plus"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="icon-button" data-bs-toggle="modal" data-bs-target="#sendInvite">
+                            <i class="bi bi-envelope"></i>
+                        </button>
+                    </li>
 
                     <li class="nav-item">
                         <button class="icon-button" data-bs-toggle="modal" data-bs-target="#createLinkResource">

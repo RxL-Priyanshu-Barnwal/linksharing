@@ -425,15 +425,12 @@
                     </style>
                 </div>
 
+
                 <div class="createdTopics-body">
-
                     <div class="card custom-card mt-5">
-
                         <div class="card-header">
                             <h5 class="mb-0">Topics</h5>
                         </div>
-
-
                         <div class="card-body scroll-area" style="max-height: 350px; overflow-y: auto; overflow-x: hidden; padding-right: 10px">
 
                             <g:each in="${topics}" var="topic">

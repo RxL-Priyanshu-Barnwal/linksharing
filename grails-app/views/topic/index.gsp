@@ -247,23 +247,19 @@
 
 <!--            Subscribed users sections ends -->
 
-
         <div class="col-md-7 px-5">
 
             <div class="card custom-card mb-4">
 
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span class="mb-0" style="font-size: 1.3em">Posts</span>
-                    <div class="w-50">
-                        <input type="text" id="searchBox" placeholder="Search posts..." class="form-control form-control-sm rounded-pill" aria-label="Search" />
-                    </div>
+<!--                    <div class="w-50">-->
+<!--                        <input type="text" id="searchBox" placeholder="Search posts..." class="form-control form-control-sm rounded-pill" aria-label="Search" />-->
+<!--                    </div>-->
                 </div>
-
                 <div class="card-body" style="max-height: 500px; overflow-y: auto; overflow-x: hidden; padding-right: 15px">
-
                     <g:if test="${resources}">
                         <g:each in="${resources}" var="resource">
-
                             <!-- Individual Post Item -->
                             <div class="post-item d-flex mb-2">
                                 <!-- Profile photo on the left -->
@@ -272,7 +268,6 @@
                                         <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: resource?.user.id])}" alt="${resource?.user.firstName}" class="img-fluid rounded p-3">
                                     </g:if>
                                 </div>
-
                                 <!-- post item content on the right -->
                                 <div class="post-item-content ms-3 w-100">
                                     <!-- Header: Creator's Name, Username, Topic Name -->
@@ -289,7 +284,7 @@
 <!--                                        </div>-->
                                     </div>
                                     <!-- Description -->
-                                    <p class="mt-2">${resource.description}</p>
+                                    <p class="mt-2 post-description">${resource.description}</p>
                                     <!-- Action Buttons -->
                                     <div class="d-flex gap-2 mt-3 justify-content-end">
 
@@ -308,10 +303,8 @@
                                     </div>
                                 </div>
                             </div>
-
                         </g:each>
                     </g:if>
-
                 </div>
             </div>
 
@@ -326,6 +319,22 @@
 
     $(document).ready(function() {
 
+        $('#searchBox').on('input', function() {
+            var query = $(this).val().toLowerCase();
+
+            $('.post-item').each(function() {
+                var description = $(this).find('.post-description').text().toLowerCase();
+
+                if(description.indexOf(query) > -1) {
+                    console.log('showing')
+                    $(this).show();
+                } else {
+                    console.log('hiding')
+                    $(this).hide();
+                }
+            })
+        });
+
         $('body').on('click', '.change-visibility', function (e) {
             e.preventDefault();
 
@@ -338,7 +347,6 @@
                 $form[0].submit();
             }
         });
-
 
         $('body').on('click', '.change-seriousness', function (e) {
             e.preventDefault();
@@ -355,7 +363,6 @@
                 $form[0].submit();
             }
         });
-
 
         let currentlyEditingTopicId = null; // To track which topic is being edited
 

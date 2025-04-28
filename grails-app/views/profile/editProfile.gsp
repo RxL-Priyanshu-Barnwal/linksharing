@@ -59,7 +59,6 @@
                             <h5 class="mb-0">Topics</h5>
                         </div>
 
-
                         <div class="card-body scroll-area" style="max-height: 520px; overflow-y: auto; overflow-x: hidden; padding-right: 10px">
 
                             <g:each in="${topics}" var="topic">
@@ -271,37 +270,42 @@
                         <div class="card-header">
                             <h5 class="mb-0">Edit Profile</h5>
                         </div>
+
+                        <g:if test="${flash.message}">
+                            <p class="ms-2" style="color: red;">${flash.message}</p>
+                        </g:if>
+
                         <div class="card-body px-4">
-                            <form id="editProfileForm">
+                            <g:uploadForm controller="profile" action="updateDetails" id="editProfileForm">
                                 <div class="row mb-3 align-items-center">
                                     <label for="firstName" class="col-sm-3 col-form-label">First Name:</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="firstName" name="firstName">
+                                        <input type="text" class="form-control" id="firstName" name="firstName" maxLength="12">
                                     </div>
                                 </div>
                                 <div class="row mb-3 align-items-center">
                                     <label for="lastName" class="col-sm-3 col-form-label">Last Name:</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="lastName" name="lastName">
+                                        <input type="text" class="form-control" id="lastName" name="lastName" maxlength="12">
                                     </div>
                                 </div>
                                 <div class="row mb-3 align-items-center">
                                     <label for="username" class="col-sm-3 col-form-label">Username:</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="username" name="username">
+                                        <input type="text" class="form-control" id="username" name="username" maxlength="16">
                                     </div>
                                 </div>
                                 <div class="row mb-3 align-items-center">
                                     <label for="photo" class="col-sm-3 col-form-label">Photo:</label>
                                     <div class="col-sm-9">
-                                        <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+                                        <input type="file" class="form-control" id="photo" name="photo">
                                     </div>
                                 </div>
 
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary">Update</button>
                                 </div>
-                            </form>
+                            </g:uploadForm>
                         </div>
                     </div>
                 </div>
@@ -312,18 +316,23 @@
                         <div class="card-header">
                             <h5 class="mb-0">Change Password</h5>
                         </div>
+
+                            <g:if test="${flash.message1}">
+                                <p class="ms-2" style="color: red;">${flash.message1}</p>
+                            </g:if>
+
                         <div class="card-body px-4">
-                            <form id="editPasswordForm">
+                            <g:form controller="profile" action="updatePassword" id="editPasswordForm">
                                 <div class="row mb-3 align-items-center">
                                     <label for="firstName" class="col-sm-3 col-form-label">Password:</label>
                                     <div class="col-sm-9">
-                                        <input type="password" class="form-control" id="password" name="firstName">
+                                        <input type="password" class="form-control" id="password" name="password" required minlength="6">
                                     </div>
                                 </div>
                                 <div class="row mb-3 align-items-center">
                                     <label for="username" class="col-sm-3 col-form-label">Confirm Password:</label>
                                     <div class="col-sm-9">
-                                        <input type="password" class="form-control" id="confirmPassword" name="username" required>
+                                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required minlength="6">
                                     </div>
                                 </div>
 
@@ -331,7 +340,7 @@
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary">Update</button>
                                 </div>
-                            </form>
+                            </g:form>
                         </div>
                     </div>
 

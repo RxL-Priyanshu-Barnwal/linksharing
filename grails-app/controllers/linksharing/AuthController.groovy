@@ -14,14 +14,14 @@ class AuthController {
 
     def login() {
         def getRecentPosts = authService.getRecentPosts()
-//        def getTopPosts = authService.getTopPosts()
-        render(view: "login", model: [getRecentPosts: getRecentPosts])
+        def getTopPosts = authService.getTopPosts()
+        render(view: "login", model: [getRecentPosts: getRecentPosts, getTopPosts: getTopPosts])
     }
 
     def register() {
         def getRecentPosts = authService.getRecentPosts()
-//        def getTopPosts = authService.getTopPosts()
-        render(view: "register", model: [getRecentPosts: getRecentPosts])
+        def getTopPosts = authService.getTopPosts()
+        render(view: "register", model: [getRecentPosts: getRecentPosts, getTopPosts: getTopPosts])
     }
 
     def forgotPassword() { }

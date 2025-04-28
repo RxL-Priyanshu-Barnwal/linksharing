@@ -6,13 +6,9 @@
             ID <i class="bi bi-arrow-down-up ms-1"></i>
         </th>
 
-        <th>
-            Resource <i class="bi bi-arrow-down-up"></i>
-        </th>
+        <th>Resource</th>
 
-        <th>
-            Description <i class="bi bi-arrow-down-up"></i>
-        </th>
+        <th>Description</th>
 
         <th onclick="sortTable(3)" style="cursor:pointer;">
             Topic <i class="bi bi-arrow-down-up"></i>
@@ -130,6 +126,50 @@
 
 <script>
 
+    // Columns sortable: 0 (ID), 3 (Topic), 4 (Created By), 5 (Rating)
+    // Columns 0 and 5 are numeric, others are text
+
+    let sortDirectionsResource = [true, false, false, true, true, true];
+
+    function sortTable(n) {
+        const table = document.getElementById("resourceTable");
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.rows);
+
+        // Numeric columns: ID (0), Rating (5)
+        const numericColumns = [0, 5];
+        const isNumeric = numericColumns.includes(n);
+
+        // Toggle sort direction
+        sortDirectionsResource[n] = !sortDirectionsResource[n];
+        const direction = sortDirectionsResource[n] ? 1 : -1;
+
+        // Remove active sort classes from all headers
+        const ths = table.tHead.rows[0].cells;
+        for (let i = 0; i < ths.length; i++) {
+            ths[i].classList.remove('active-sort-asc', 'active-sort-desc');
+        }
+        ths[n].classList.add(sortDirectionsResource[n] ? 'active-sort-asc' : 'active-sort-desc');
+
+        rows.sort((a, b) => {
+            let x = a.cells[n].innerText.trim();
+            let y = b.cells[n].innerText.trim();
+            if (isNumeric) {
+                x = parseFloat(x);
+                y = parseFloat(y);
+                if (isNaN(x)) x = 0;
+                if (isNaN(y)) y = 0;
+                return (x - y) * direction;
+            } else {
+                return x.localeCompare(y) * direction;
+            }
+        });
+
+        // Re-append sorted rows
+        rows.forEach(row => tbody.appendChild(row));
+    }
+
+
     $(document).ready(function() {
         $('body').on('click', '.delete-resource', function () {
             var resourceId = $(this).data('id');
@@ -154,7 +194,6 @@
                 });
             }
         });
-
 
     });
 

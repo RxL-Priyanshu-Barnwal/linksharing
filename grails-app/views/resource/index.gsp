@@ -92,7 +92,9 @@
                                         <span class="fw-bold">${resource?.user?.firstName} ${resource?.user?.lastName}</span>
                                     </div>
                                     <div>
-                                        <span class="secondary">Topic: ${resource?.topic?.name}</span>
+                                        <g:link controller="topic" action="index" params="[id: resource.topic.id]" style="color: inherit; text-decoration: none;">
+                                            <span class="secondary">Topic: ${resource?.topic?.name}</span>
+                                        </g:link>
                                     </div>
                                 </div>
                             </div>
@@ -110,7 +112,7 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
 
-                            <div class="star-rating" id="resource-${resource?.id}-rating" data-resource-id="${resource?.id}">
+                            <div class="star-rating" id="resource-${resource?.id}-rating" data-resource-id="${resource?.id}" data-user-rating="${userRating}">
                                 <span class="star" data-value="1">★</span>
                                 <span class="star" data-value="2">★</span>
                                 <span class="star" data-value="3">★</span>
@@ -147,59 +149,20 @@
 </div>
 
 
-<style>
-
-    /* Container for inline stars */
-    .star-rating {
-        display: inline-block; /* Or flex for more control */
-        font-size: 2em; /* Adjust size as needed */
-        cursor: pointer;
-    }
-
-    /* Individual star styling */
-    .star-rating .star {
-        color: #ccc; /* Default color (light grey instead of white for visibility) */
-        transition: color 0.2s ease-in-out; /* Smooth color transition */
-        margin-right: 2px; /* Spacing between stars */
-    }
-
-    /* Hover effect: Color the hovered star and all previous stars yellow */
-    .star-rating:hover .star {
-        color: #ccc; /* Reset all stars first on container hover */
-    }
-    .star-rating .star:hover,
-    .star-rating .star:hover ~ .star {
-        /* Stars after the hovered one stay grey */
-    }
-    .star-rating .star:hover,
-        /* Selects the hovered star AND stars before it using JS (simpler than complex CSS selectors) */
-    .star-rating .star.hovered {
-        color: #ffcc00; /* Yellow color on hover */
-    }
-
-
-    /* Selected state: Keep stars yellow up to the selected one */
-    .star-rating .star.selected {
-        color: #ffcc00; /* Yellow color for selected stars */
-    }
-
-
-
-</style>
-
-
 <script>
     $(document).ready(function() {
 
         // Function to initialize the star rating based on existing rating
-        function initializeRating(resourceId, userRating) {
-            var ratingContainer = $('#resource-' + resourceId + '-rating');
-            ratingContainer.find('.star').each(function () {
-                if ($(this).data('value') <= userRating) {
-                    $(this).addClass('selected');
-                }
-            });
-        }
+        $('.star-rating').each(function() {
+            var userRating = $(this).data('user-rating');
+            if (userRating) {
+                $(this).find('.star').each(function() {
+                    if ($(this).data('value') <= userRating) {
+                        $(this).addClass('selected');
+                    }
+                });
+            }
+        });
 
         $('body').on('click', '.delete-topic', function() {
             var topicId = $(this).data('id');
@@ -384,6 +347,48 @@
     });
 
 </script>
+
+
+<style>
+
+    /* Container for inline stars */
+    .star-rating {
+        display: inline-block; /* Or flex for more control */
+        font-size: 2em; /* Adjust size as needed */
+        cursor: pointer;
+    }
+
+    /* Individual star styling */
+    .star-rating .star {
+        color: #ccc; /* Default color (light grey instead of white for visibility) */
+        transition: color 0.2s ease-in-out; /* Smooth color transition */
+        margin-right: 2px; /* Spacing between stars */
+    }
+
+    /* Hover effect: Color the hovered star and all previous stars yellow */
+    .star-rating:hover .star {
+        color: #ccc; /* Reset all stars first on container hover */
+    }
+    .star-rating .star:hover,
+    .star-rating .star:hover ~ .star {
+        /* Stars after the hovered one stay grey */
+    }
+    .star-rating .star:hover,
+        /* Selects the hovered star AND stars before it using JS (simpler than complex CSS selectors) */
+    .star-rating .star.hovered {
+        color: #ffcc00; /* Yellow color on hover */
+    }
+
+
+    /* Selected state: Keep stars yellow up to the selected one */
+    .star-rating .star.selected {
+        color: #ffcc00; /* Yellow color for selected stars */
+    }
+
+
+
+</style>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 

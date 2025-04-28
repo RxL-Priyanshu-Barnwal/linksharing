@@ -133,16 +133,21 @@ class AuthService {
         return true
     }
 
-//    def getTopPosts(int max = 2) {
-//        return Resource.executeQuery("""
-//        SELECT r
-//        FROM Resource r
-//        INNER JOIN r.ratings rr
-//        WHERE r.topic.visibility = :visibility
-//        GROUP BY r
-//        ORDER BY AVG(rr.score) DESC
-//    """,
-//                [visibility: Topic.Visibility.PUBLIC],
-//                [max: max])
-//    }
+    def getTopPosts(int max = 2) {
+        // Step 1: Get resource IDs and average scores
+        def resourceIdsWithAvg = ResourceRating.executeQuery("""
+        SELECT rr.resource.id, AVG(rr.score) 
+        FROM ResourceRating rr 
+        WHERE rr.resource.topic.visibility = :visibility 
+        GROUP BY rr.resource.id 
+        ORDER BY AVG(rr.score) DESC
+    """, [visibility: Topic.Visibility.PUBLIC], [max: max])
+
+        // Step 2: Extract IDs and fetch Resources in order
+        def resourceIds = resourceIdsWithAvg.collect { it[0] }
+        Resource.getAll(resourceIds)
+    }
+
+
+
 }
