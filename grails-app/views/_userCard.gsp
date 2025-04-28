@@ -2,7 +2,9 @@
     <div class="card-body">
         <div class="row align-items-center">
             <div class="col-md-3">
-                <img src="" alt="User Profile Picture" class="img-fluid">
+                <g:if test="${user?.photo}">
+                    <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: user.id])}" alt="${user.firstName}" class="img-fluid rounded p-3">
+                </g:if>
             </div>
             <div class="col-md-9">
                 <div>

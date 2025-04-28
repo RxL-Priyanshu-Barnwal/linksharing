@@ -140,7 +140,6 @@ class ResourceController {
         response.outputStream.flush()
     }
 
-
     def rating() {
         // resourceId, score are expected as request parameters
         Long resourceId = params.resourceId as Long

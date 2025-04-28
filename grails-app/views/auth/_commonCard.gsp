@@ -10,7 +10,11 @@
 
                     <div class="col-12 d-flex align-items-center" style="background-color: #212529; border-radius: 8px; padding: 15px;">
                         <div style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; margin-right: 15px;">
-                            <img src="${post?.user?.photo?: ''}" alt="User Photo" style="width: 100%; height: 100%; object-fit: cover;">
+
+                            <g:if test="${post.user?.photo}">
+                                <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: post.user.id])}" alt="${post.user.firstName}" style="width: 100%; height: 100%; object-fit: cover;">
+                            </g:if>
+
                         </div>
                         <div style="flex-grow: 1;">
                             <div class="d-flex align-items-baseline">
@@ -38,7 +42,9 @@
 
                     <div class="col-12 d-flex align-items-center" style="background-color: #212529; border-radius: 8px; padding: 15px;">
                         <div style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; margin-right: 15px;">
-                            <img src="${post?.user?.photo?: ''}" alt="User Photo" style="width: 100%; height: 100%; object-fit: cover;">
+                            <g:if test="${post.user?.photo}">
+                                <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: post.user.id])}" alt="${post.user.firstName}" style="width: 100%; height: 100%; object-fit: cover;">
+                            </g:if>
                         </div>
                         <div style="flex-grow: 1; min-width: 0;">
                             <div class="d-flex align-items-baseline">

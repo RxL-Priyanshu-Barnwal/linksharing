@@ -31,4 +31,13 @@ class ProfileController {
 
         [user: user, topicNames: topicNames, resources: resources, topics: topics, subscribedTopics: subscribedTopics]
     }
+
+    def renderImage(Long id) {
+        User user = User.get(id)
+        if(user?.photo) {
+            response.contentType = 'image/jpeg'
+            response.outputStream << user.photo
+            response.outputStream.flush()
+        }
+    }
 }

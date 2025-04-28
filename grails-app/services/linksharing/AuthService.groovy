@@ -11,11 +11,14 @@ class AuthService {
     def messageSource
     SubscribeService subscribeService
 
-    def registerUser(params, String photoPath = null) {
-        def user = new User(params)
+    def registerUser(Map params) {
 
-        if(photoPath) {
-            user.photo = photoPath
+        def photoFile = params.remove('photo')
+        User user = new User(params)
+        println(user.photo)
+
+        if(photoFile && !photoFile.empty) {
+            user.photo = photoFile.bytes
         }
 
         if (params.password != params.confirmPassword) {

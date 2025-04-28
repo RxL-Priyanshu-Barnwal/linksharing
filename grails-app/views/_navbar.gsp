@@ -41,7 +41,9 @@
                 <div class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle profile-name " href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="profile-container">
-                            <img src="" alt="Profile" class="profile-pic">
+                            <g:if test="${session.user?.photo}">
+                                <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: session.user.id])}" alt="${session.user.firstName}" class="profile-pic">
+                            </g:if>
                             ${session.user.firstName} ${session.user.lastName}
                         </div>
                     </a>

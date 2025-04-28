@@ -82,7 +82,9 @@
                     <div class="card-body">
                         <div class="row align-items-center mb-2">
                             <div class="col-auto">
-                                <img src="${resource?.user?.photo}" alt="User Photo" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
+                                <g:if test="${resource?.user?.photo}">
+                                    <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: resource.user.id])}" alt="${resource.user.firstName}" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
+                                </g:if>
                             </div>
                             <div class="col">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -198,27 +200,6 @@
                 }
             });
         }
-
-
-        // Fetch the user's rating for the current resource on page load
-        <g:if test="${resource?.id && session?.user?.id}">
-            $.ajax({
-            url: '/resource/getUserRating', // Controller action to fetch user's rating
-            type: 'GET',
-            data: { resourceId: '${resource.id}', userId: '${session.user.id}' },
-            success: function(response) {
-            if (response.rating) {
-            initializeRating('${resource.id}', response.rating);
-            // Optionally disable further rating if already rated
-            // $('#resource-' + '${resource.id}' + '-rating').off('mouseenter mouseleave click').css('cursor', 'default');
-        }
-        },
-            error: function(xhr, status, error) {
-            console.error('Error fetching user rating:', error);
-        }
-        });
-        </g:if>
-
 
         $('body').on('click', '.delete-topic', function() {
             var topicId = $(this).data('id');

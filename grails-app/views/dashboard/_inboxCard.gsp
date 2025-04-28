@@ -12,9 +12,9 @@
                 <!-- Individual Inbox Item -->
                 <div class="inbox-item d-flex mb-2">
                     <!-- Profile photo on the left -->
-                    <div class="inbox-item-avatar">
-                        <img src="${item.resource?.user?.photo}" alt="${item.resource?.user?.username} Photo" class="rounded-circle" width="50" height="50"/>
-                    </div>
+                    <g:if test="${item.resource?.user?.photo}">
+                        <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: item.resource?.user?.id])}" alt="${item.resource?.user?.firstName}" class="img-fluid">
+                    </g:if>
 
                     <!-- Inbox item content on the right -->
                     <div class="inbox-item-content ms-3 w-100">

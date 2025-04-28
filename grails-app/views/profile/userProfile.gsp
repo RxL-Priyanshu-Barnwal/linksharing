@@ -97,9 +97,12 @@
                                         <div class="row align-items-center">
 
                                             <!-- Profile Image -->
-                                            <div class="col-md-3 mb-3 mb-md-0">
-                                                <img src="${subscribedTopic.topic.user.photo}" alt="Profile Picture" class="img-fluid rounded">
-                                            </div>
+
+                                            <g:if test="${subscribedTopic.topic.user?.photo}">
+                                                <div class="col-md-3 mb-3 mb-md-0">
+                                                    <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: subscribedTopic.topic.user.id])}" alt="${subscribedTopic.topic.user.firstName}" class="img-fluid">
+                                                </div>
+                                            </g:if>
 
                                             <div class="col-md-9">
                                                 <h5 class="card-title mb-1">
@@ -345,10 +348,12 @@
                                 <g:each in="${resources}" var="resource">
 
                                     <!-- Individual Inbox Item -->
-                                    <div class="inbox-item d-flex mb-2">
+                                    <div class="inbox-item d-flex mb-1">
                                         <!-- Profile photo on the left -->
                                         <div class="inbox-item-avatar">
-                                            <img src="${resource?.user?.photo}" alt="${resource?.user?.username} Photo" class="rounded-circle" width="50" height="50"/>
+                                            <g:if test="${resource.user?.photo}">
+                                                <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: resource.user.id])}" alt="${resource.user.firstName}" class="img-fluid"/>
+                                            </g:if>
                                         </div>
 
                                         <!-- Inbox item content on the right -->
@@ -436,8 +441,10 @@
                                 <div class="row align-items-center">
 
                                     <!-- Profile Image -->
-                                    <div class="col-md-3 mb-3 mb-md-0">
-                                        <img src="${topic?.user?.photo}" alt="Profile Picture" class="img-fluid rounded">
+                                    <div class="col-md-3 mb-2 mb-md-0">
+                                        <g:if test="${topic.user?.photo}">
+                                            <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: topic.user.id])}" alt="${topic.user.firstName}" class="img-fluid rounded p-3">
+                                        </g:if>
                                     </div>
 
                                     <div class="col-md-9">

@@ -89,7 +89,9 @@
                     <div class="row align-items-center p-3">
                         <!-- Profile Image -->
                         <div class="col-md-3 mb-3 mb-md-0">
-                            <img src="${topic?.user?.photo}" alt="Profile Picture" class="img-fluid rounded">
+                            <g:if test="${topic.user?.photo}">
+                                <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: topic.user.id])}" alt="${topic.user.firstName}" class="img-fluid">
+                            </g:if>
                         </div>
                         <div class="col-md-9">
                             <g:link controller="topic" action="index" params="[id: topic.id]" style="color: inherit; text-decoration: none;">
@@ -215,7 +217,9 @@
                         <g:each in="${subscribedUsers}" var="user">
                             <div class="row align-items-center mb-3 p-2">
                                 <div class="col-md-3">
-                                    <img src="user?.photo" alt="${user?.username} photo" class="img-fluid">
+                                    <g:if test="${user?.photo}">
+                                        <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: user.id])}" alt="${user.firstName}" class="img-fluid">
+                                    </g:if>
                                 </div>
                                 <div class="col-md-9">
                                     <div>
@@ -264,7 +268,9 @@
                             <div class="post-item d-flex mb-2">
                                 <!-- Profile photo on the left -->
                                 <div class="post-item-avatar">
-                                    <img src="resource.user.photo" alt="Creator's Photo" class="rounded-circle" width="50" height="50"/>
+                                    <g:if test="${resource?.user?.photo}">
+                                        <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: resource?.user.id])}" alt="${resource?.user.firstName}" class="img-fluid rounded p-3">
+                                    </g:if>
                                 </div>
 
                                 <!-- post item content on the right -->

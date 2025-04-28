@@ -17,7 +17,9 @@
 
                         <!-- Profile Image -->
                         <div class="col-md-3 mb-3 mb-md-0">
-                            <img src="${subscribedTopic.topic.user.photo}" alt="Profile Picture" class="img-fluid rounded">
+                            <g:if test="${subscribedTopic.topic.user?.photo}">
+                                <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: subscribedTopic.topic.user.id])}" alt="${subscribedTopic.topic.user.firstName}" class="img-fluid">
+                            </g:if>
                         </div>
 
                         <div class="col-md-9">

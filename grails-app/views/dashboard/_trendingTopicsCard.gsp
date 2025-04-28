@@ -13,7 +13,9 @@
 
                 <!-- Profile Image -->
                 <div class="col-md-3 mb-3 mb-md-0">
-                    <img src="${topic?.user?.photo}" alt="Profile Picture" class="img-fluid rounded">
+                    <g:if test="${topic.user?.photo}">
+                        <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: topic.user.id])}" alt="${topic.user.firstName}" class="img-fluid">
+                    </g:if>
                 </div>
 
                 <div class="col-md-9">

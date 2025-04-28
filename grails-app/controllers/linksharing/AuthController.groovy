@@ -49,25 +49,8 @@ class AuthController {
     }
 
     def registerUser() {
-        def photoFile = params.photo
-        String photoPath = null
 
-        if(photoFile && !photoFile.empty) {
-            // Generate a unique filename
-            String uniqueFileName= "${UUID.randomUUID()}_${photoFile.originalFilename}"
-            // Choose your upload directory (ensure it's web-accessible)
-            File uploadDir = new File(servletContext.getRealPath('/uploads/profile-photos/'))
-            uploadDir.mkdirs()
-            File serverFile = new File(uploadDir, uniqueFileName)
-            photoFile.transferTo(serverFile)
-            // Save the relative path
-            photoPath = "/uploads/profile-photos/${uniqueFileName}"
-        }
-
-        def userParams = new HashMap(params)
-        userParams.remove('photo')
-
-        def res = authService.registerUser(userParams, photoPath)
+        def res = authService.registerUser(params)
 
         if(res.success) {
             println("Registration Successful")
