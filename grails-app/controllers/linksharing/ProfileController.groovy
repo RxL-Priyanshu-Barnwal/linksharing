@@ -9,13 +9,17 @@ class ProfileController {
 
         def user = User.get(currentUser?.id)
 
-//        def subscribedTopics = Subscription.findAllByUser(currentUser, [sort: 'dateCreated', order: 'desc'])
+        if(user.username == "adminuser") {
+            redirect(controller: 'profile', action: 'userProfile', params: [id: user.id])
+        }
+
+        def subscribedTopics = Subscription.findAllByUser(currentUser, [sort: 'dateCreated', order: 'desc'])
 
         def topicNames = Topic.list()*.name
 
         List<Topic> topics = user.topics?.toList() ?: []
 
-        [user: user, topicNames: topicNames, topics: topics]
+        [user: user, topicNames: topicNames, topics: topics, subscribedTopics: subscribedTopics]
     }
 
     def userProfile() {
@@ -25,22 +29,13 @@ class ProfileController {
 
         def topicNames = Topic.list()*.name
 
-        List<Resource> resources = user.resources?.toList() ?: []
+        List<Resource> resources = user?.resources?.toList() ?: []
 
-        List<Topic> topics = user.topics?.toList() ?: []
+        List<Topic> topics = user?.topics?.toList() ?: []
 
         def subscribedTopics = Subscription.findAllByUser(user, [sort: 'dateCreated', order: 'desc'])
 
         [user: user, topicNames: topicNames, resources: resources, topics: topics, subscribedTopics: subscribedTopics]
-    }
-
-    def renderImage(Long id) {
-        User user = User.get(id)
-        if(user?.photo) {
-            response.contentType = 'image/jpeg'
-            response.outputStream << user.photo
-            response.outputStream.flush()
-        }
     }
 
     def updateDetails() {

@@ -214,4 +214,13 @@ class AuthController {
             redirect(controller: 'auth', action: 'register', params: [inviteToken: params.token])
         }
     }
+
+    def renderImage(Long id) {
+        User user = User.get(id)
+        if(user?.photo) {
+            response.contentType = 'image/jpeg'
+            response.outputStream << user.photo
+            response.outputStream.flush()
+        }
+    }
 }

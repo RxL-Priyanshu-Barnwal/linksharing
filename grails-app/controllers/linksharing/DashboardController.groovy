@@ -24,9 +24,13 @@ class DashboardController {
 
         def topicNames = Topic.list()*.name
 
-        [user: user, subscribedTopics: subscribedTopics, readingItems: readingItems, trendingTopics: trendingTopics, topicNames: topicNames]
-    }
+        def publicTopics = Topic.createCriteria().list {
+            eq('visibility', Topic.Visibility.PUBLIC)
+            order('name', 'asc')
+        }
 
+        [user: user, subscribedTopics: subscribedTopics, readingItems: readingItems, trendingTopics: trendingTopics, topicNames: topicNames, publicTopics: publicTopics]
+    }
 
     def deleteTopic() {
         Long id = params.id as Long
@@ -61,8 +65,6 @@ class DashboardController {
         }
     }
 
-
-
     def updateVisibility() {
         Long topicId = params.id as Long
         String newVisibility = params.visibility?.toUpperCase()
@@ -77,7 +79,6 @@ class DashboardController {
 
         redirect(uri: request.getHeader("referer"))
     }
-
 
     def updateSeriousness() {
         println(params)
@@ -95,6 +96,4 @@ class DashboardController {
 
         redirect(uri: request.getHeader("referer"))
     }
-
-
 }

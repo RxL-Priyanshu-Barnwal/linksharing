@@ -22,9 +22,11 @@ class TopicController {
 
         def resources = topic.resources?.toList() ?: []
 
+        def subscribedTopics = Subscription.findAllByUser(session.user, [sort: 'dateCreated', order: 'desc'])
+
         def topicNames = Topic.list()*.name
 
-        [topic: topic, subscribedUsers: subscribedUsers, resources: resources, topicNames: topicNames]
+        [topic: topic, subscribedUsers: subscribedUsers, resources: resources, topicNames: topicNames, subscribedTopics: subscribedTopics]
 
     }
 

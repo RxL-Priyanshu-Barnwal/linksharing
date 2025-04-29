@@ -83,7 +83,7 @@
                         <div class="row align-items-center mb-2">
                             <div class="col-auto">
                                 <g:if test="${resource?.user?.photo}">
-                                    <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: resource.user.id])}" alt="${resource.user.firstName}" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
+                                    <img src="${createLink(controller: 'auth', action: 'renderImage', params: [id: resource.user.id])}" alt="${resource.user.firstName}" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
                                 </g:if>
                             </div>
                             <div class="col">

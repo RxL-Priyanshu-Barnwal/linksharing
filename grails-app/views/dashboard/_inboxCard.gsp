@@ -13,7 +13,7 @@
                 <div class="inbox-item d-flex mb-2">
                     <!-- Profile photo on the left -->
                     <g:if test="${item.resource?.user?.photo}">
-                        <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: item.resource?.user?.id])}" alt="${item.resource?.user?.firstName}" class="img-fluid">
+                        <img src="${createLink(controller: 'auth', action: 'renderImage', params: [id: item.resource?.user?.id])}" alt="${item.resource?.user?.firstName}" class="img-fluid">
                     </g:if>
 
                     <!-- Inbox item content on the right -->

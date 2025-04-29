@@ -18,7 +18,7 @@
                         <!-- Profile Image -->
                         <div class="col-md-3 mb-3 mb-md-0">
                             <g:if test="${subscribedTopic.topic.user?.photo}">
-                                <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: subscribedTopic.topic.user.id])}" alt="${subscribedTopic.topic.user.firstName}" class="img-fluid">
+                                <img src="${createLink(controller: 'auth', action: 'renderImage', params: [id: subscribedTopic.topic.user.id])}" alt="${subscribedTopic.topic.user.firstName}" class="img-fluid">
                             </g:if>
                         </div>
 
@@ -93,7 +93,6 @@
                                     <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${subscribedTopic.topic.id}" title="Delete" role="button"></i>
 
                                 </g:if>
-<!--                                <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>-->
 
                                 <g:if test="${subscribedTopic.topic.user?.id != session.user?.id}">
 

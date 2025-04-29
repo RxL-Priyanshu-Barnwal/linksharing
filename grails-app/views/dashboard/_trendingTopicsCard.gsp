@@ -1,7 +1,8 @@
 <div class="card custom-card mt-5">
 
-    <div class="card-header">
+    <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Trending Topics</h5>
+        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#allPublicTopics">View All</button>
     </div>
 
 
@@ -14,7 +15,7 @@
                 <!-- Profile Image -->
                 <div class="col-md-3 mb-3 mb-md-0">
                     <g:if test="${topic.user?.photo}">
-                        <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: topic.user.id])}" alt="${topic.user.firstName}" class="img-fluid">
+                        <img src="${createLink(controller: 'auth', action: 'renderImage', params: [id: topic.user.id])}" alt="${topic.user.firstName}" class="img-fluid">
                     </g:if>
                 </div>
 

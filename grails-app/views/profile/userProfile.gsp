@@ -59,9 +59,10 @@
 
     </style>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
-
     <!-- Navbar -->
     <div>
         <g:render template="/navbar"/>
@@ -98,11 +99,10 @@
 
                                             <!-- Profile Image -->
 
-                                            <g:if test="${subscribedTopic.topic.user?.photo}">
                                                 <div class="col-md-3 mb-3 mb-md-0">
-                                                    <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: subscribedTopic.topic.user.id])}" alt="${subscribedTopic.topic.user.firstName}" class="img-fluid">
+                                                    <img src="${createLink(controller: 'auth', action: 'renderImage', params: [id: subscribedTopic.topic.user.id])}" alt="${subscribedTopic.topic.user.firstName}" class="img-fluid">
                                                 </div>
-                                            </g:if>
+
 
                                             <div class="col-md-9">
                                                 <h5 class="card-title mb-1">
@@ -142,8 +142,8 @@
 
                                                         <!-- Hidden form to send data -->
                                                         <form id="visibilityForm-${subscribedTopic.topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
-                                                            <input type="hidden" name="id" id="visibilityTopicId">
-                                                            <input type="hidden" name="visibility" id="visibilityValue">
+                                                            <input type="hidden" name="id" class="visibilityTopicId">
+                                                            <input type="hidden" name="visibility" class="visibilityValue">
                                                         </form>
 
                                                     </g:if>
@@ -162,8 +162,8 @@
 
                                                     <!-- Hidden form to send data -->
                                                     <form id="seriousnessForm-${subscribedTopic.topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
-                                                        <input type="hidden" name="id" id="seriousnessTopicId">
-                                                        <input type="hidden" name="seriousness" id="seriousnessValue">
+                                                        <input type="hidden" name="id" class="seriousnessTopicId">
+                                                        <input type="hidden" name="seriousness" class="seriousnessValue">
                                                     </form>
 
 
@@ -175,15 +175,11 @@
                                                         <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${subscribedTopic.topic.id}" title="Delete" role="button"></i>
 
                                                     </g:if>
-                                                    <!--                                <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>-->
-
                                                     <g:if test="${subscribedTopic.topic.user?.id != session.user?.id}">
-
                                                         <form method="post" action="${createLink(controller: 'topic', action: 'unsubscribe')}" class="mb-0">
                                                             <input type="hidden" name="topicId" value="${subscribedTopic.topic.id}">
                                                             <button type="submit" class="btn btn-sm btn-danger">Unsubscribe</button>
                                                         </form>
-
                                                     </g:if>
                                                 </div>
                                             </div>
@@ -195,140 +191,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <style>
-
-                        .scroll-area::-webkit-scrollbar {
-                            width: 0px;  /* Slim scrollbar */
-                        }
-
-                        .scroll-area:hover::-webkit-scrollbar {
-                            width: 3px;
-                        }
-
-                        .scroll-area::-webkit-scrollbar-track {
-                            background: transparent;
-                        }
-
-                        .scroll-area::-webkit-scrollbar-thumb {
-                            background-color: #ccc;
-                            border-radius: 4px;
-                        }
-
-                    </style>
-                    <script>
-
-                        $(document).ready(function() {
-                            $('body').on('click', '.delete-topic', function() {
-                                var topicId = $(this).data('id');
-
-                                console.log("topicID from Javascript: " + topicId);
-
-                                if (confirm('Are you sure you want to delete this topic?')) {
-                                    $.ajax({
-                                        url: '/dashboard/deleteTopic',
-                                        type: 'POST',
-                                        data: { id: topicId },
-                                        headers: {
-                                            'X-Requested-With': 'XMLHttpRequest'
-                                        },
-                                        success: function(response) {
-                                            alert(response);
-                                            location.reload();
-                                        },
-                                        error: function(xhr) {
-                                            alert('Error deleting topic: ' + xhr.responseText);
-                                        }
-                                    });
-                                }
-                            });
-
-                            $('body').on('click', '.change-visibility', function (e) {
-                                e.preventDefault();
-
-                                var topicId = $(this).data('id');
-                                var newVisibility = $(this).data('value');
-
-                                if (confirm('Are you sure you want to change visibility to ' + newVisibility + '?')) {
-                                    // Set values in the hidden form
-                                    $('#visibilityTopicId').val(topicId);
-                                    $('#visibilityValue').val(newVisibility);
-
-                                    // Submit the form
-                                    $('#visibilityForm')[0].submit();
-                                }
-                            });
-
-                            $('body').on('click', '.change-seriousness', function (e) {
-                                e.preventDefault();
-
-                                var topicId = $(this).data('id');
-                                var newSeriousness = $(this).data('value');
-
-                                if (confirm('Are you sure you want to change visibility to ' + newSeriousness + '?')) {
-                                    // Set values in the hidden form
-                                    $('#seriousnessTopicId').val(topicId);
-                                    $('#seriousnessValue').val(newSeriousness);
-
-                                    // Submit the form
-                                    $('#seriousnessForm')[0].submit();
-                                }
-                            });
-
-                            let currentlyEditingTopicId = null; // To track which topic is being edited
-
-                            $('body').on('click', '.edit-topic-inline-btn', function() {
-                                const topicId = $(this).data('topic-id');
-                                currentlyEditingTopicId = topicId; // Set the ID of the topic being edited
-                                const $row = $(this).closest('.row');
-                                const $container = $row.find('.card-title');
-                                const $input = $container.find('.topic-name-input[data-topic-id="' + topicId + '"]');
-                                const $display = $container.find('.topic-name-display[data-topic-id="' + topicId + '"]');
-
-                                $display.addClass('d-none');
-                                $input.removeClass('d-none').focus().select();
-                            });
-
-                            // Save when clicking outside the input field OR when Enter is pressed
-                            $(document).on('click keypress', function(event) {
-                                if (currentlyEditingTopicId !== null) {
-                                    const $target = $(event.target);
-                                    const $editInput = $('.topic-name-input[data-topic-id="' + currentlyEditingTopicId + '"]');
-
-                                    const isOutsideClick = !$target.is($editInput) && !$target.closest('.edit-topic-inline-btn[data-topic-id="' + currentlyEditingTopicId + '"]').length;
-                                    const isEnterKey = event.type === 'keypress' && event.which === 13; // Check for Enter key
-
-                                    if (isOutsideClick || isEnterKey) {
-                                        const topicId = currentlyEditingTopicId;
-                                        const newName = $editInput.val();
-
-                                        // Reset the currently editing ID
-                                        currentlyEditingTopicId = null;
-
-                                        $.ajax({
-                                            url: '/topic/updateName',
-                                            type: 'POST',
-                                            data: { id: topicId, topicName: newName },
-                                            success: function(response) {
-                                                location.reload();
-                                            },
-                                            error: function() {
-                                                alert('Something went wrong while updating the topic.');
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-
-                            // Prevent immediate blur when clicking the edit button itself
-                            $('body').on('mousedown', '.edit-topic-inline-btn', function(event) {
-                                event.preventDefault(); // Prevent the document click from firing immediately
-                            });
-
-                        });
-
-                    </script>
-
                 </div>
             </div>
 
@@ -351,9 +213,9 @@
                                     <div class="inbox-item d-flex mb-1">
                                         <!-- Profile photo on the left -->
                                         <div class="inbox-item-avatar">
-                                            <g:if test="${resource.user?.photo}">
-                                                <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: resource.user.id])}" alt="${resource.user.firstName}" class="img-fluid"/>
-                                            </g:if>
+
+                                            <img src="${createLink(controller: 'auth', action: 'renderImage', params: [id: resource.user.id])}" alt="${resource.user.firstName}" class="img-fluid"/>
+
                                         </div>
 
                                         <!-- Inbox item content on the right -->
@@ -439,9 +301,7 @@
 
                                     <!-- Profile Image -->
                                     <div class="col-md-3 mb-2 mb-md-0">
-                                        <g:if test="${topic.user?.photo}">
-                                            <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: topic.user.id])}" alt="${topic.user.firstName}" class="img-fluid rounded p-3">
-                                        </g:if>
+                                        <img src="${createLink(controller: 'auth', action: 'renderImage', params: [id: topic.user.id])}" alt="${topic.user.firstName}" class="img-fluid rounded p-3">
                                     </div>
 
                                     <div class="col-md-9">
@@ -477,8 +337,8 @@
 
                                                 <!-- Hidden form for visibility -->
                                                 <form id="visibilityForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
-                                                    <input type="hidden" name="id" value="${topic.id}">
-                                                    <input type="hidden" name="visibility" class="visibility-value">
+                                                    <input type="hidden" name="id" value="${topic.id}" class="visibilityTopicId">
+                                                    <input type="hidden" name="visibility" class="visibilityValue">
                                                 </form>
 
 
@@ -505,15 +365,14 @@
 
                                                 <!-- Hidden form for seriousness -->
                                                 <form id="seriousnessForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
-                                                    <input type="hidden" name="id" value="${topic.id}">
-                                                    <input type="hidden" name="seriousness" class="seriousness-value">
+                                                    <input type="hidden" name="id" value="${topic.id}" class="seriousnessTopicId">
+                                                    <input type="hidden" name="seriousness" class="seriousnessValue">
                                                 </form>
 
 
                                                 <i class="bi bi-pencil-square fs-5 edit-trending-topic-btn" title="Edit" role="button" data-trending-topic-id="${topic.id}"></i>
                                                 <i class="bi bi-trash fs-5 text-danger delete-topic" data-id="${topic.id}" title="Delete" role="button"></i>
                                             </g:if>
-
 
 
                                             <g:if test="${!topic.subscriptions?.any { it.user?.id == session.user?.id }}">
@@ -526,9 +385,7 @@
                                             </g:if>
 
                                             <g:else>
-
                                                 <!--                            <i class="bi bi-envelope fs-5" title="Invite" role="button" data-bs-toggle="modal" data-bs-target="#sendInvite"></i>-->
-
                                                 <!-- Show Unsubscribe Button if User is Subscribed and not the creator -->
                                                 <g:if test="${topic.user?.id != session.user?.id}">
 
@@ -551,28 +408,19 @@
                                                                 <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="SERIOUS" href="#">SERIOUS</a></li>
                                                                 <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="VERY_SERIOUS" href="#">VERY_SERIOUS</a></li>
                                                             </ul>
-
                                                         </div>
                                                     </g:if>
-
                                                     <form method="post" action="${createLink(controller: 'topic', action: 'unsubscribe')}" class="mb-0">
                                                         <input type="hidden" name="topicId" value="${topic.id}">
                                                         <button type="submit" class="btn btn-sm btn-danger">Unsubscribe</button>
                                                     </form>
                                                 </g:if>
-
-
                                             </g:else>
-
-
                                         </div>
                                     </div>
                                 </div>
-
                             </g:each>
-
                         </div>
-
                     </div>
 
                     <script>
@@ -635,11 +483,11 @@
                 </div>
 
                 <div class="mt-3 me-1 d-flex justify-content-end">
-                    <g:if test="${user.id == session.user.id}">
-                    <g:link controller="profile" action="editProfile" class="btn btn-sm btn-primary" style="font-size: 1.5em;">
-                        Edit
-                    </g:link>
-                </g:if>
+                    <g:if test="${user.id == session.user.id && user.username != 'adminuser'}">
+                        <g:link controller="profile" action="editProfile" class="btn btn-sm btn-primary" style="font-size: 1.5em;">
+                            Edit
+                        </g:link>
+                    </g:if>
                 </div>
             </div>
 
@@ -648,12 +496,35 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
+<style>
+
+    .scroll-area::-webkit-scrollbar {
+        width: 0px;  /* Slim scrollbar */
+    }
+
+    .scroll-area:hover::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .scroll-area::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .scroll-area::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 4px;
+    }
+
+</style>
+
 <script>
 
     $(document).ready(function() {
-        // DELETE TOPIC
         $('body').on('click', '.delete-topic', function() {
             var topicId = $(this).data('id');
+
+            console.log("topicID from Javascript: " + topicId);
+
             if (confirm('Are you sure you want to delete this topic?')) {
                 $.ajax({
                     url: '/dashboard/deleteTopic',
@@ -673,72 +544,68 @@
             }
         });
 
-        // CHANGE VISIBILITY (handles both unique and shared forms)
-        $('body').on('click', '.change-visibility', function(e) {
+        $('body').on('click', '.change-visibility', function (e) {
             e.preventDefault();
+
             var topicId = $(this).data('id');
             var newVisibility = $(this).data('value');
 
             if (confirm('Are you sure you want to change visibility to ' + newVisibility + '?')) {
-                // Try unique form first
-                var $form = $('#visibilityForm-' + topicId);
-                if ($form.length) {
-                    $form.find('.visibilityValue').val(newVisibility);
-                    $form[0].submit();
-                } else {
-                    // Fallback to shared form (subscriptions)
-                    $('#visibilityTopicId').val(topicId);
-                    $('#visibilityValue').val(newVisibility);
-                    $('#visibilityForm')[0].submit();
-                }
+                // Set values in the hidden form
+                $('.visibilityTopicId').val(topicId);
+                $('.visibilityValue').val(newVisibility);
+
+                // Submit the form
+                $('#visibilityForm-' + topicId)[0].submit();
             }
         });
 
-        // CHANGE SERIOUSNESS (handles both unique and shared forms)
-        $('body').on('click', '.change-seriousness', function(e) {
+        $('body').on('click', '.change-seriousness', function (e) {
             e.preventDefault();
+
             var topicId = $(this).data('id');
             var newSeriousness = $(this).data('value');
 
-            if (confirm('Are you sure you want to change seriousness to ' + newSeriousness + '?')) {
-                // Try unique form first
-                var $form = $('#seriousnessForm-' + topicId);
-                if ($form.length) {
-                    $form.find('.seriousnessValue').val(newSeriousness);
-                    $form[0].submit();
-                } else {
-                    // Fallback to shared form (subscriptions)
-                    $('#seriousnessTopicId').val(topicId);
-                    $('#seriousnessValue').val(newSeriousness);
-                    $('#seriousnessForm')[0].submit();
-                }
+            if (confirm('Are you sure you want to change visibility to ' + newSeriousness + '?')) {
+                // Set values in the hidden form
+                $('.seriousnessTopicId').val(topicId);
+                $('.seriousnessValue').val(newSeriousness);
+
+                // Submit the form
+                $('#seriousnessForm-' + topicId)[0].submit();
             }
         });
 
-        // INLINE EDIT FOR TOPICS (created topics section)
-        let currentlyEditingTopicId = null;
+        let currentlyEditingTopicId = null; // To track which topic is being edited
+
         $('body').on('click', '.edit-topic-inline-btn', function() {
             const topicId = $(this).data('topic-id');
-            currentlyEditingTopicId = topicId;
+            currentlyEditingTopicId = topicId; // Set the ID of the topic being edited
             const $row = $(this).closest('.row');
             const $container = $row.find('.card-title');
             const $input = $container.find('.topic-name-input[data-topic-id="' + topicId + '"]');
             const $display = $container.find('.topic-name-display[data-topic-id="' + topicId + '"]');
+
             $display.addClass('d-none');
             $input.removeClass('d-none').focus().select();
-        });
+        });f
 
-        // Save inline edit on blur or Enter (created topics)
+        // Save when clicking outside the input field OR when Enter is pressed
         $(document).on('click keypress', function(event) {
             if (currentlyEditingTopicId !== null) {
                 const $target = $(event.target);
                 const $editInput = $('.topic-name-input[data-topic-id="' + currentlyEditingTopicId + '"]');
+
                 const isOutsideClick = !$target.is($editInput) && !$target.closest('.edit-topic-inline-btn[data-topic-id="' + currentlyEditingTopicId + '"]').length;
-                const isEnterKey = event.type === 'keypress' && event.which === 13;
+                const isEnterKey = event.type === 'keypress' && event.which === 13; // Check for Enter key
+
                 if (isOutsideClick || isEnterKey) {
                     const topicId = currentlyEditingTopicId;
                     const newName = $editInput.val();
+
+                    // Reset the currently editing ID
                     currentlyEditingTopicId = null;
+
                     $.ajax({
                         url: '/topic/updateName',
                         type: 'POST',
@@ -754,57 +621,15 @@
             }
         });
 
-        // Prevent immediate blur when clicking the edit button
+        // Prevent immediate blur when clicking the edit button itself
         $('body').on('mousedown', '.edit-topic-inline-btn', function(event) {
-            event.preventDefault();
+            event.preventDefault(); // Prevent the document click from firing immediately
         });
 
-        // INLINE EDIT FOR TRENDING TOPICS (if present)
-        let currentlyEditingTrendingTopicId = null;
-        $('body').on('click', '.edit-trending-topic-btn', function() {
-            const topicId = $(this).data('trending-topic-id');
-            currentlyEditingTrendingTopicId = topicId;
-            const $trendingCard = $(this).closest('.row.align-items-center');
-            const $display = $trendingCard.find('.trending-topic-name-display[data-trending-topic-id="' + topicId + '"]');
-            const $input = $trendingCard.find('.trending-topic-name-input[data-trending-topic-id="' + topicId + '"]');
-            $display.addClass('d-none');
-            $input.removeClass('d-none').focus().select();
-        });
-
-        // Save inline edit on blur or Enter (trending topics)
-        $(document).on('click keypress', function(event) {
-            if (currentlyEditingTrendingTopicId !== null) {
-                const $target = $(event.target);
-                const $editInput = $('.trending-topic-name-input[data-trending-topic-id="' + currentlyEditingTrendingTopicId + '"]');
-                const isOutsideClick = !$target.is($editInput) && !$target.closest('.edit-trending-topic-btn[data-trending-topic-id="' + currentlyEditingTrendingTopicId + '"]').length;
-                const isEnterKey = event.type === 'keypress' && event.which === 13;
-                if (isOutsideClick || isEnterKey) {
-                    const topicId = currentlyEditingTrendingTopicId;
-                    const newName = $editInput.val();
-                    currentlyEditingTrendingTopicId = null;
-                    $.ajax({
-                        url: '/topic/updateName',
-                        type: 'POST',
-                        data: { id: topicId, topicName: newName },
-                        success: function(response) {
-                            location.reload();
-                        },
-                        error: function() {
-                            alert('Something went wrong while updating the topic.');
-                        }
-                    });
-                }
-            }
-        });
-
-        // Prevent immediate blur when clicking the trending edit button
-        $('body').on('mousedown', '.edit-trending-topic-btn', function(event) {
-            event.preventDefault();
-        });
     });
 
-
 </script>
+
 
 </body>
 </html>

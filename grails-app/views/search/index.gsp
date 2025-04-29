@@ -87,7 +87,7 @@
                                 <!-- Profile Image -->
                                 <div class="col-md-3 mb-3 mb-md-0">
                                     <g:if test="${topic.user?.photo}">
-                                        <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: topic.user.id])}" alt="${topic.user.firstName}" class="img-fluid">
+                                        <img src="${createLink(controller: 'auth', action: 'renderImage', params: [id: topic.user.id])}" alt="${topic.user.firstName}" class="img-fluid">
                                     </g:if>
                                 </div>
                                 <div class="col-md-9">
@@ -137,7 +137,7 @@
                                 <div class="inbox-item d-flex mb-2 p-3">
                                     <!-- Profile photo on the left -->
                                     <g:if test="${resource?.user?.photo}">
-                                        <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: resource?.user?.id])}" alt="${resource?.user?.firstName}" class="img-fluid">
+                                        <img src="${createLink(controller: 'auth', action: 'renderImage', params: [id: resource?.user?.id])}" alt="${resource?.user?.firstName}" class="img-fluid">
                                     </g:if>
                                     <!-- Inbox item content on the right -->
                                     <div class="inbox-item-content ms-3 w-100">

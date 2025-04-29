@@ -61,13 +61,10 @@
 
 </head>
 <body>
-
 <!-- Navbar -->
-
 <div class="navigation-bar">
     <g:render template="/navbar"/>
 </div>
-
 <div class="modals">
     <g:render template="/modals" model="topicNames: topicNames"/>
 </div>
@@ -75,14 +72,11 @@
 <div class="container-fluid " style="padding: 3rem;">
 
     <div class="row gx-5">
-
         <div class="col-md-5 px-5">
 
             <div class="topic-card card custom-card">
 
                 <g:if test="${topic}">
-
-
                     <div class="card-header">
                         <h5 class="mb-0">Topic</h5>
                     </div>
@@ -90,7 +84,7 @@
                         <!-- Profile Image -->
                         <div class="col-md-3 mb-3 mb-md-0">
                             <g:if test="${topic.user?.photo}">
-                                <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: topic.user.id])}" alt="${topic.user.firstName}" class="img-fluid">
+                                <img src="${createLink(controller: 'auth', action: 'renderImage', params: [id: topic.user.id])}" alt="${topic.user.firstName}" class="img-fluid">
                             </g:if>
                         </div>
                         <div class="col-md-9">
@@ -218,7 +212,7 @@
                             <div class="row align-items-center mb-3 p-2">
                                 <div class="col-md-3">
                                     <g:if test="${user?.photo}">
-                                        <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: user.id])}" alt="${user.firstName}" class="img-fluid">
+                                        <img src="${createLink(controller: 'auth', action: 'renderImage', params: [id: user.id])}" alt="${user.firstName}" class="img-fluid">
                                     </g:if>
                                 </div>
                                 <div class="col-md-9">
@@ -265,7 +259,7 @@
                                 <!-- Profile photo on the left -->
                                 <div class="post-item-avatar">
                                     <g:if test="${resource?.user?.photo}">
-                                        <img src="${createLink(controller: 'profile', action: 'renderImage', params: [id: resource?.user.id])}" alt="${resource?.user.firstName}" class="img-fluid rounded p-3">
+                                        <img src="${createLink(controller: 'auth', action: 'renderImage', params: [id: resource?.user.id])}" alt="${resource?.user.firstName}" class="img-fluid rounded p-3">
                                     </g:if>
                                 </div>
                                 <!-- post item content on the right -->
