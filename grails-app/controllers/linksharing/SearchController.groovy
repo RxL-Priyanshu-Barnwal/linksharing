@@ -18,6 +18,8 @@ class SearchController {
         def topics = res.topics
         def resources = res.resources
 
-        [topics: topics, resources: resources, query: query, topicNames: topicNames]
+        def subscribedTopics = Subscription.findAllByUser(session.user, [sort: 'dateCreated', order: 'desc'])
+
+        [topics: topics, resources: resources, query: query, topicNames: topicNames, subscribedTopics: subscribedTopics]
     }
 }

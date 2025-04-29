@@ -1,7 +1,7 @@
 <div class="container my-4" style="width: 80%;">
 
 
-    <div class="mb-3 shadow-lg" style="background-color: #212529; border-radius: 10px;">
+    <div class="mb-5 shadow-lg me-5" style="background-color: #212529; border-radius: 10px;">
         <h2 class="text-white p-3" style="background-color: #1C1F24; border-top-left-radius: 10px; border-top-right-radius: 10px">Top Posts</h2>
         <div class="row p-3">
             <g:if test="${getTopPosts}">
@@ -44,7 +44,7 @@
                                 <span class="text-muted">  @ ${post?.user?.username}</span>
                                 <span class="badge bg-warning ml-auto text-dark">${post?.topic?.name}</span>
                             </div>
-                            <p class="text-white-50 mb-0" style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;">${post?.description}</p>
+                            <p class="text-white-50 mb-0 " style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;">${post?.description}</p>
                         </div>
                     </div>
                 </g:each>

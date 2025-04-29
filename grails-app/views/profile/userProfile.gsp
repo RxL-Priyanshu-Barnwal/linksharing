@@ -200,7 +200,7 @@
 
                     <div class="card custom-card mb-4">
                         <div class="card-header">
-                            <h5 class="mb-0">Inbox</h5>
+                            <h5 class="mb-0">Posts</h5>
                         </div>
                         <div class="card-body" style="max-height: 260px; overflow-y: auto; overflow-x: hidden; padding-right: 15px">
 

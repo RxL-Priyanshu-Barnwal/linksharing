@@ -13,7 +13,7 @@
 
                     <div class="mb-3">
                         <label for="topicName" class="form-label">Name:</label>
-                        <input type="text" class="form-control" id="topicName" name="name" placeholder="Enter topic name" required maxlength="12">
+                        <input type="text" class="form-control" id="topicName" name="name" placeholder="Enter topic name" required maxlength="40">
                         <g:if test="${flash.topicMessage}">
                             <p style="color: red;">${flash.topicMessage}</p>
                         </g:if>

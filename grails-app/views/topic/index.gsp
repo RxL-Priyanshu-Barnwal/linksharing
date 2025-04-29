@@ -55,6 +55,30 @@
             padding-bottom: 0;
         }
 
+        <style>
+
+         .scroll-area::-webkit-scrollbar {
+             display: none;
+         }
+         .scroll-area::-webkit-scrollbar {
+             width: 0px;  /* Slim scrollbar */
+         }
+
+        .scroll-area:hover::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .scroll-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scroll-area::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 4px;
+        }
+
+    </style>
+
     </style>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -103,7 +127,7 @@
                             </div>
                             <!-- Bottom Controls -->
                             <div class="d-flex align-items-center gap-3 flex-wrap mb-4">
-                                <g:if test="${topic.user?.id == session.user?.id}">
+                                <g:if test="${topic.user?.id == session.user?.id || session.user.admin}">
                                     <!-- Visibility -->
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -118,27 +142,6 @@
                                     <form id="visibilityForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateVisibility')}" style="display: none;">
                                         <input type="hidden" name="id" value="${topic.id}">
                                         <input type="hidden" name="visibility" class="visibility-value">
-                                    </form>
-                                    <%
-                                    // Get the subscription for the current user (if any)
-                                    def userSubscription = topic.subscriptions?.find { it.user?.id == session.user?.id }
-                                    def seriousnessText = userSubscription ? userSubscription.seriousness.toString() : 'CASUAL'
-                                    %>
-                                    <!-- Seriousness -->
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            ${seriousnessText}
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="CASUAL" href="#">CASUAL</a></li>
-                                            <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="SERIOUS" href="#">SERIOUS</a></li>
-                                            <li><a class="dropdown-item change-seriousness" data-id="${topic.id}" data-value="VERY_SERIOUS" href="#">VERY_SERIOUS</a></li>
-                                        </ul>
-                                    </div>
-                                    <!-- Hidden form for seriousness -->
-                                    <form class="seriousnessForm-${topic.id}" method="post" action="${createLink(controller: 'dashboard', action: 'updateSeriousness')}" style="display: none;">
-                                        <input type="hidden" name="id" value="${topic.id}">
-                                        <input type="hidden" name="seriousness" class="seriousness-value">
                                     </form>
 
                                     <i class="bi bi-pencil-square fs-5 edit-topic-inline-btn" title="Edit" role="button" data-topic-id="${topic.id}"></i>
@@ -251,7 +254,7 @@
 <!--                        <input type="text" id="searchBox" placeholder="Search posts..." class="form-control form-control-sm rounded-pill" aria-label="Search" />-->
 <!--                    </div>-->
                 </div>
-                <div class="card-body" style="max-height: 500px; overflow-y: auto; overflow-x: hidden; padding-right: 15px">
+                <div class="card-body me-4 scroll-area" style="max-height: 500px; overflow-y: auto; overflow-x: hidden; padding-right: 15px">
                     <g:if test="${resources}">
                         <g:each in="${resources}" var="resource">
                             <!-- Individual Post Item -->
@@ -278,7 +281,7 @@
 <!--                                        </div>-->
                                     </div>
                                     <!-- Description -->
-                                    <p class="mt-2 post-description">${resource.description}</p>
+                                    <p class="mt-2 me-3 post-description overflow-hidden" >${resource.description}</p>
                                     <!-- Action Buttons -->
                                     <div class="d-flex gap-2 mt-3 justify-content-end">
 
@@ -292,7 +295,7 @@
 
 <!--                                        <button type="submit" class="btn btn-sm btn-outline-success">Mark as Read</button>-->
                                         <g:link controller="resource" action="index" params="[id: resource.id]">
-                                            <button class="btn btn-sm btn-outline-info">View Post</button>
+                                            <button class="btn btn-sm btn-outline-info me-1">View Post</button>
                                         </g:link>
                                     </div>
                                 </div>

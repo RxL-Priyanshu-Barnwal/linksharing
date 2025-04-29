@@ -26,25 +26,6 @@ class ResourceService {
         }
     }
 
-//    def createDocResource(params, User user) {
-//        def topicInstance = Topic.findByName(params.topic)
-//
-//        def docResource = new DocumentResource(filePath: params.filePath, description: params.description, topic: topicInstance, user: user)
-//
-//        if(docResource.save(flush: true)) {
-//            readingItemService.createReadingItem(docResource, user)
-//            return docResource
-//        }
-//        else {
-//            docResource.errors.allErrors.each {
-//                println "Validation error: ${it}"
-//            }
-//            return docResource.errors.allErrors.collect {
-//                it.defaultMessage
-//            }.join(', ')
-//        }
-//    }
-
     def createDocResource(params, Long userId) {
         User user = User.get(userId)
         MultipartFile file = params.document

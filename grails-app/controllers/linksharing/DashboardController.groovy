@@ -29,7 +29,9 @@ class DashboardController {
             order('name', 'asc')
         }
 
-        [user: user, subscribedTopics: subscribedTopics, readingItems: readingItems, trendingTopics: trendingTopics, topicNames: topicNames, publicTopics: publicTopics]
+        def createdTopics = Topic.findAllByUser(user, [sort: 'name', order: 'asc'])
+
+        [user: user, subscribedTopics: subscribedTopics, readingItems: readingItems, trendingTopics: trendingTopics, topicNames: topicNames, publicTopics: publicTopics, createdTopics: createdTopics]
     }
 
     def deleteTopic() {
