@@ -49,19 +49,25 @@ class AuthService {
         try {
             User.withNewTransaction {
                 user.save(flush: true, failOnError: true)
+
             }
 
             if(params.inviteToken) {
                 InviteToken invitation = InviteToken.findByTokenAndInvitedEmail(params.inviteToken, user.email)
-                if(invitation) {
-                    subscribeService.createSubscription(user: user, topic: invitation.topic)
+                if(invitation && !invitation.used) {
+                    subscribeService.createSubscription(user, invitation.topic, Subscription.Seriousness.CASUAL)
                     invitation.used = true
+                    println "Subscription created."
+                }
+                else {
+                    println "Invalid or expired invite token."
+                    return [success: true, user: user, message: "Invalid or expired token."]
                 }
             }
-
             return [success: true, user: user]
+
         } catch (Exception e) {
-            println("cannot save to db")
+            println("Cannot save to DB: ${e.message}")
             return [success: false, user: user, fieldErrors: [general: ["Unexpected error: ${e.message}"]]]
         }
     }

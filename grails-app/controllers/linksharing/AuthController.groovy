@@ -21,7 +21,8 @@ class AuthController {
     def register() {
         def getRecentPosts = authService.getRecentPosts()
         def getTopPosts = authService.getTopPosts()
-        render(view: "register", model: [getRecentPosts: getRecentPosts, getTopPosts: getTopPosts])
+        def inviteToken = params.inviteToken ?: null
+        render(view: "register", model: [getRecentPosts: getRecentPosts, getTopPosts: getTopPosts, inviteToken: inviteToken])
     }
 
     def forgotPassword() { }
@@ -54,6 +55,9 @@ class AuthController {
 
         if(res.success) {
             println("Registration Successful")
+            if(res.message) {
+                flash.message = res.message
+            }
             redirect(controller: "auth", action: "login")
         }
         else {

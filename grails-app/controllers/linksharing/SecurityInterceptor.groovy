@@ -16,7 +16,12 @@ class SecurityInterceptor {
                   redirect(controller: "auth", action: "login")
                   return false
             }
-            return true
+            else {
+                  response.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+                  response.setHeader('Pragma', 'no-cache')
+                  response.setDateHeader('Expires', 0)
+                  return true
+            }
       }
 
       boolean after() { true }
