@@ -82,7 +82,7 @@
                                 <div class="row mb-3 align-items-center">
                                     <label for="username" class="col-sm-3 col-form-label">Username:</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="username" name="username" maxlength="16">
+                                        <input type="text" class="form-control" id="username" name="username" maxlength="16" minlength="6">
                                     </div>
                                 </div>
                                 <div class="row mb-3 align-items-center">

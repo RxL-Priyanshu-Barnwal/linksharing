@@ -80,11 +80,11 @@
         <g:form controller="auth" action="authenticateUser">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" name="username" id="username" placeholder="Enter your username" required>
+                <input type="text" class="form-control" name="username" id="username" placeholder="Enter your username" required minlength="6">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required minlength="6">
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">Login</button>

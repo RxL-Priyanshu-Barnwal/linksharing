@@ -109,15 +109,15 @@
             </div>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" name="username" id="username" placeholder="Enter a username" required maxLength="16">
+                <input type="text" class="form-control" name="username" id="username" placeholder="Enter a username" required minlength="6" maxLength="16">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required minlength="6">
             </div>
             <div class="form-group">
                 <label for="confirmPassword">Confirm Password</label>
-                <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm your password" required>
+                <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm your password" required minlength="6">
             </div>
 
             <div class="form-group">
