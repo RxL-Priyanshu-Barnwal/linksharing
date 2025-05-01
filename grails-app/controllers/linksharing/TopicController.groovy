@@ -18,6 +18,15 @@ class TopicController {
             return
         }
 
+        if(topic.visibility.PRIVATE) {
+            // admin, creator, subscriber
+            def subscription = Subscription.findByTopicAndUser(topic, session.user)
+
+            if(!session.user.admin || session.user.id != topic.user.id || !subscription) {
+                redirect(uri: request.getHeader("referer"))
+            }
+        }
+
         List<User> subscribedUsers = topic.subscriptions*.user.unique()
 
         def resources = topic.resources?.toList() ?: []

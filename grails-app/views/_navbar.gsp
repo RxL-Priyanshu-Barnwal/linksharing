@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-        <g:link uri="/dashboard" class="navbar-brand p-3" style="font-size: 2rem">Link Sharing</g:link>
+        <g:link uri="/dashboard" class="navbar-brand p-3" style="font-size: 2rem">Resource Sharing</g:link>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

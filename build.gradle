@@ -65,6 +65,7 @@ dependencies {
     testRuntimeOnly("org.seleniumhq.selenium:selenium-safari-driver:4.19.1")
     testImplementation("io.micronaut:micronaut-http-client")
 
+
     runtimeOnly 'com.oracle.database.jdbc:ojdbc17:23.7.0.25.01'
 
     runtimeOnly 'org.grails.plugins:grails-console:2.1.1'
