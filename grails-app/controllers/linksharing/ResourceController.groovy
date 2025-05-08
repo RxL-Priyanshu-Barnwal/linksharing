@@ -13,6 +13,26 @@ class ResourceController {
 
         def resource = Resource.get(resourceId)
 
+        if(resource?.topic?.visibility?.PRIVATE) {
+            // admin, creator, subscriber
+            User user = session.user
+
+            boolean isAllowed = user && (user.admin || resource.topic?.subscriptions?.any{it.user.id == user.id })
+
+            if(!isAllowed) {
+                println "Not Allowed"
+                flash.message = "You don't have permission to view this private topic"
+
+                println(request.getHeader("referer"))
+
+                redirect(uri: request.getHeader("referer"))
+
+                println "Redirected back."
+
+                return
+            }
+        }
+
         println("${resource?.user?.username} created this resource in topic: ${resource?.topic?.name}")
 
         def trendingTopics = topicService.getTrendingTopics()
@@ -109,7 +129,6 @@ class ResourceController {
                 redirect(controller: 'dashboard', action: 'index')
             }
         } catch (Exception e) {
-            log.error "Error deleting resource ${resourceId}: ${e.message}", e
             if (request.xhr) {
                 render status: 500, text: "Error deleting resource: ${e.message}"
             } else {

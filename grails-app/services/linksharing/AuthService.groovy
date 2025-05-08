@@ -154,6 +154,4 @@ class AuthService {
         Resource.getAll(resourceIds)
     }
 
-
-
 }

@@ -98,8 +98,6 @@ class AuthController {
         if(user) {
             PasswordResetToken token = authService.generateResetToken(user)
 
-            //Send token.token to user.email
-//            def baseUrl = Holders.grailsApplication.config.grails.app.baseUrl
             def resetLink = "http://localhost:8080/auth/resetPasswordForm?token=${token.token}"
 
             mailService.sendMail {
@@ -188,7 +186,7 @@ class AuthController {
     def logout() {
         session.invalidate()
         println("Logged out successfully")
-        redirect(controller:"auth", action:"login")
+        redirect(controller: 'auth', action: 'login')
     }
 
     def acceptInvite() {

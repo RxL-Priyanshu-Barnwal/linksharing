@@ -33,31 +33,39 @@ class TopicService {
     }
 
     List<Topic> getTrendingTopics() {
-        Topic.executeQuery("""
-        select t from Topic t
-        where t.visibility = :visibility
-        order by size(t.resources) desc
-    """, [visibility: Topic.Visibility.PUBLIC], [max: 3])
+
+//        Topic.executeQuery("""
+//        select t from Topic t
+//        where t.visibility = :visibility
+//        order by size(t.resources) desc
+//    """, [visibility: Topic.Visibility.PUBLIC], [max: 3])
+//
+
+        Topic.createCriteria().list(max: 3) {
+            eq("visibility", Topic.Visibility.PUBLIC)
+            projections {
+                groupProperty("id")
+                count("resources", "resourceCount")
+            }
+            order("resourceCount", "desc")
+        }.collect { row ->
+            Topic.get(row[0]) // Load full Topic by ID
+        }
     }
 
     def deleteTopic(Topic topic) {
         if (!topic) throw new Exception("Topic not found")
 
-        Topic.withTransaction { status ->
-            try {
-                // Cascading deletes resources/subscriptions via Hibernate
-                topic.delete(flush: true, failOnError: true)
-            } catch (Exception e) {
-                status.setRollbackOnly()
-                throw e
-            }
+        try {
+            topic.delete(flush: true, failOnError: true)
+        } catch (Exception e) {
+            throw e
         }
     }
 
 
     def updateVisibility(Long topicId, String newVisibility) {
         try {
-            // Find the topic by ID
             Topic topic = Topic.get(topicId)
             println("Topic fetched: ${topicId}")
 
@@ -92,7 +100,6 @@ class TopicService {
             topic.save(flush: true, failOnError: true)
             return [success: true]
         } catch (Exception e) {
-            log.error("Failed to update topic name", e)
             return [success: false, message: "Name update failed: ${e.message}"]
         }
     }

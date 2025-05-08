@@ -6,9 +6,7 @@ class SubscribeService {
 
     def createSubscription = { User user, Topic topic, Subscription.Seriousness seriousness ->
         if (!Subscription.findByUserAndTopic(user, topic)) {
-            Subscription.withTransaction {
-                new Subscription(user: user, topic: topic, seriousness: seriousness).save(flush: true)
-            }
+            new Subscription(user: user, topic: topic, seriousness: seriousness).save(flush: true)
         }
     }
 

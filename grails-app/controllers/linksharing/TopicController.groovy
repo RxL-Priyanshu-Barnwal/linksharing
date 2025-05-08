@@ -2,6 +2,7 @@ package linksharing
 
 import grails.converters.JSON
 import groovy.time.TimeCategory
+import net.bytebuddy.description.modifier.Visibility
 
 class TopicController {
     TopicService topicService
@@ -20,11 +21,16 @@ class TopicController {
 
         if(topic.visibility.PRIVATE) {
             // admin, creator, subscriber
-            def subscription = Subscription.findByTopicAndUser(topic, session.user)
+            User user = session.user
 
-            if(!session.user.admin || session.user.id != topic.user.id || !subscription) {
+            boolean isAllowed = user && (user.admin || topic.subscriptions.any{it.user.id == user.id })
+
+            if(!isAllowed) {
+                flash.message = "You don't have permission to view this private topic"
+                println(request.getHeader("referer"))
                 redirect(uri: request.getHeader("referer"))
-            }
+                return
+             }
         }
 
         List<User> subscribedUsers = topic.subscriptions*.user.unique()

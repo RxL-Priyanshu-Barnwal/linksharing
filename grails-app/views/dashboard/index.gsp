@@ -11,7 +11,8 @@
     <style>
         body {
             background-color: #101214;
-            overflow-y: auto
+            overflow-y: hidden;
+            overflow-x: hidden
         }
 
         /* Card Styles */

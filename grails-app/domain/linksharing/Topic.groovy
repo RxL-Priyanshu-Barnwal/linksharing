@@ -28,5 +28,4 @@ class Topic {
         subscriptions cascade: 'all-delete-orphan'
     }
 
-    // define methods for changing visibility, adding resource,
 }

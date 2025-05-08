@@ -92,7 +92,7 @@
                                         <span class="fw-bold">${resource?.user?.firstName} ${resource?.user?.lastName}</span>
                                     </div>
                                     <div>
-                                        <g:link controller="topic" action="index" params="[id: resource.topic.id]" style="color: inherit; text-decoration: none;">
+                                        <g:link controller="topic" action="index" params="[id: resource?.topic?.id]" style="color: inherit; text-decoration: none;">
                                             <span class="secondary">Topic: ${resource?.topic?.name}</span>
                                         </g:link>
                                     </div>

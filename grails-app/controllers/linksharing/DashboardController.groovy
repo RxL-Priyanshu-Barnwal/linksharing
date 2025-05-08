@@ -20,6 +20,8 @@ class DashboardController {
             }
         }
 
+//        def readingItems = ReadingItem.findAllByUserAndIsRead(currentUser, false, )
+
         def trendingTopics = topicService.getTrendingTopics()
 
         def topicNames = Topic.list()*.name
@@ -28,6 +30,8 @@ class DashboardController {
             eq('visibility', Topic.Visibility.PUBLIC)
             order('name', 'asc')
         }
+
+        def pt = Topic.findAllByVisibility(Topic.Visibility.PUBLIC)
 
         def createdTopics = Topic.findAllByUser(user, [sort: 'name', order: 'asc'])
 

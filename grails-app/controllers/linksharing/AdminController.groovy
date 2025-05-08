@@ -13,9 +13,7 @@ class AdminController {
             redirect(uri: request.getHeader("referer") ?: "/")
             return
         }
-
         def topicNames = Topic.list()*.name
-
         def users = User.list()
 
         [users: users, topicNames: topicNames]
@@ -26,14 +24,12 @@ class AdminController {
         Long userId = params.id as Long
 
         def res = adminService.toggleUserStatus(userId)
-
         if(res) {
             println "User status updated"
         }
         else {
             println "Error updating user status"
         }
-
         redirect(uri: request.getHeader("referer"))
     }
 
@@ -83,3 +79,7 @@ class AdminController {
         [topicNames: topicNames, resources: resourceWithRating]
     }
 }
+
+
+
+
